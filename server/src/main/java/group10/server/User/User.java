@@ -11,19 +11,19 @@ public class User {
     @Column(name="user_id")
     private Integer id;
 
-    @Column(name ="username")
+    @Column(name ="username", nullable = false, unique = true, updatable = false)
     private String username;
 
-    @Column(name="password")
+    @Column(name="password", nullable = false)
     private String password;
 
-    @Column(name="name")
+    @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name="surname")
+    @Column(name="surname", nullable = false)
     private String surname;
 
-    @Column(name="email")
+    @Column(name="email", nullable = false, unique = true)
     private String email;
 
 
