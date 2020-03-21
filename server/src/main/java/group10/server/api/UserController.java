@@ -1,6 +1,6 @@
 package group10.server.api;
 
-import group10.server.service.UserServiceImpl;
+import group10.server.service.UserService;
 import group10.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,33 +12,38 @@ import java.util.List;
 @RestController
 public class UserController {
 
+
+    private UserService userService;
+
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     public List<User> getUsers(){
-        return userServiceImpl.getAllUsers();
+        return userService.getAllUsers();
     }
 
 
     @GetMapping("/users/{id}")
     public User getUsersById(@PathVariable(value = "id") Long userId) {
-        return userServiceImpl.getUser(userId);
+        return userService.getUser(userId);
     }
 
     @PutMapping("/users/{id}")
     public void updateUser(@RequestBody User userDetails, @PathVariable(value = "id") Long userId) {
-        userServiceImpl.updateUser(userId,userDetails);
+        userService.updateUser(userId,userDetails);
     }
 
     @PostMapping("/users")
     public void createUser(@Valid @RequestBody User user) {
-        userServiceImpl.addUser(user);
+        userService.addUser(user);
     }
 
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable(value = "id") Long userId){
-        userServiceImpl.deleteUser(userId);
+        userService.deleteUser(userId);
     }
 
 
