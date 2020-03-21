@@ -1,5 +1,7 @@
-package group10.server.User;
+package group10.server.api;
 
+import group10.server.service.UserService;
+import group10.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package group10.server.User;
+package group10.server.model;
 
 import javax.persistence.*;
 
