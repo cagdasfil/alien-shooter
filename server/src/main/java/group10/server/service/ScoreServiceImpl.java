@@ -14,19 +14,23 @@ public class ScoreServiceImpl implements ScoreService {
     @Autowired
     private ScoreRepository scoreRepository;
 
+    @Override
     public List<Score> getAllScores(){
         return scoreRepository.findAll();
     }
 
+    @Override
     public void addScore(Score score){
         scoreRepository.save(score);
     }
 
+    @Override
     public Score getScore(Long scoreId ){
         Optional<Score> scores = scoreRepository.findById(scoreId);
         return scores.get();
     }
 
+    @Override
     public void deleteScore(Long scoreId) {
         scoreRepository.deleteById(scoreId);
     }
