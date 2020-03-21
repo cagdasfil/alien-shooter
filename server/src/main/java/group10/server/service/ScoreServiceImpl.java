@@ -5,14 +5,19 @@ import group10.server.repository.ScoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ScoreServiceImpl implements ScoreService {
 
-    @Autowired
     private ScoreRepository scoreRepository;
+
+    @Autowired
+    public ScoreServiceImpl(ScoreRepository scoreRepository) {
+        this.scoreRepository = scoreRepository;
+    }
 
     @Override
     public List<Score> getAllScores(){
@@ -26,8 +31,14 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public Score getScore(Long scoreId ){
-        Optional<Score> scores = scoreRepository.findById(scoreId);
-        return scores.get();
+        Optional<Score> score = scoreRepository.findById(scoreId);
+
+        if(score.isPresent()){
+            return score.get();
+        }
+        else{
+            throw new EntityNotFoundException();
+        }
     }
 
     @Override

@@ -6,14 +6,19 @@ import group10.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public List<User> getAllUsers(){
@@ -27,9 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(Long id ){
-       Optional<User> users = userRepository.findById(id);
-       return users.get();
+       Optional<User> user = userRepository.findById(id);
 
+       if(user.isPresent()){
+           return user.get();
+       }
+       else{
+           throw new EntityNotFoundException();
+       }
     }
 
     @Override
