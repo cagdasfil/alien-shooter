@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 public class ScoreController {
 
-    private ScoreService scoreService;
+    private final ScoreService scoreService;
 
     @Autowired
     public ScoreController(ScoreService scoreService) {

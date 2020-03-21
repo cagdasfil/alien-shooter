@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class ScoreServiceImpl implements ScoreService {
 
-    private ScoreRepository scoreRepository;
+    private final ScoreRepository scoreRepository;
 
     @Autowired
     public ScoreServiceImpl(ScoreRepository scoreRepository) {
