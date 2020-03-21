@@ -28,7 +28,7 @@ public class ScoreController {
         scoreService.addScore(score);
     }
 
-    @DeleteMapping("/users/{scoreId}")
+    @DeleteMapping("/scores/{scoreId}")
     public void deleteScore(@PathVariable(value = "scoreId") Long scoreId){
         scoreService.deleteScore(scoreId);
     }
