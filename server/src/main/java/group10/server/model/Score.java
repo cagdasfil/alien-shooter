@@ -1,4 +1,4 @@
-package group10.server.Score;
+package group10.server.model;
 
 import org.springframework.data.annotation.CreatedDate;
 

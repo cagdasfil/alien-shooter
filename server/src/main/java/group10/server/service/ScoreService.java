@@ -1,5 +1,7 @@
-package group10.server.Score;
+package group10.server.service;
 
+import group10.server.model.Score;
+import group10.server.repository.ScoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,7 @@
-package group10.server.Score;
+package group10.server.api;
 
+import group10.server.service.ScoreService;
+import group10.server.model.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
