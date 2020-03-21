@@ -1,6 +1,8 @@
-package group10.server.User;
+package group10.server.service;
 
 
+import group10.server.model.User;
+import group10.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
