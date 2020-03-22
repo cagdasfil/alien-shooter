@@ -20,7 +20,7 @@ public class ScoreController {
     }
 
     @GetMapping("/scores")
-    public List<Score> getUsers(){
+    public List<Score> getScores(){
         return scoreService.getAllScores();
     }
 
