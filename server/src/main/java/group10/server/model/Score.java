@@ -3,7 +3,7 @@ package group10.server.model;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name="score")
@@ -23,13 +23,13 @@ public class Score {
 
     @Column(name = "created_at", nullable = false)
     @CreatedDate
-    private Date createdAt;
+    private LocalDate createdAt;
 
     public Score() {
 
     }
 
-    public Score(User user, Long score, Date createdAt) {
+    public Score(User user, Long score, LocalDate createdAt) {
         this.user = user;
         this.score = score;
         this.createdAt = createdAt;
@@ -55,11 +55,11 @@ public class Score {
         this.score = score;
     }
 
-    public Date getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 }

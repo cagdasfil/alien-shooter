@@ -24,6 +24,11 @@ public class ScoreController {
         return scoreService.getAllScores();
     }
 
+    @GetMapping("/scores/weekly")
+    public List<Score> getScoresWeekly(){
+        return scoreService.getAllScoresWeekly();
+    }
+
     @GetMapping("/scores/{scoreId}")
     public Score getScoresById(@PathVariable(value = "scoreId") Long scoreId) { return scoreService.getScore(scoreId); }
 

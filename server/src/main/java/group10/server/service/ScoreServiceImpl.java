@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,13 +29,19 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
+    public List<Score> getAllScoresWeekly(){
+        LocalDate date = LocalDate.now();
+        return scoreRepository.findAllWeekly(date.minusDays(7));
+    }
+
+    @Override
     public void addScore(Score score, Long userId){
         //find given user by ID and set in score table as foreign key.
         User u = userService.getUser(userId);
         score.setUser(u);
 
         //get current Date and set in score table.
-        java.util.Date date = new java.util.Date();
+        LocalDate date = LocalDate.now();
         score.setCreatedAt(date);
 
         scoreRepository.save(score);
