@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ScoreService {
     List<Score> getAllScores();
-    void addScore(Score score);
+    void addScore(Score score, Long userId);
     Score getScore(Long scoreId );
     void deleteScore(Long scoreId);
 }

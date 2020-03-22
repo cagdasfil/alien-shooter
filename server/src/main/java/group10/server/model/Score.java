@@ -14,8 +14,9 @@ public class Score {
     @Column(name="score_id")
     private Long scoreId;
 
-    @Column(name ="username", nullable = false, updatable = false)
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name="score", nullable = false, updatable = false)
     private Long score;
@@ -28,9 +29,8 @@ public class Score {
 
     }
 
-    public Score(Long scoreId, String username, Long score, Date createdAt) {
-        this.scoreId = scoreId;
-        this.username = username;
+    public Score(User user, Long score, Date createdAt) {
+        this.user = user;
         this.score = score;
         this.createdAt = createdAt;
     }
@@ -43,13 +43,9 @@ public class Score {
         this.scoreId = scoreId;
     }
 
-    public String getUsername() {
-        return username;
-    }
+    public User getUser() { return user; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void setUser(User user) { this.user = user; }
 
     public Long getScore() {
         return score;

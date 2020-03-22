@@ -27,9 +27,9 @@ public class ScoreController {
     @GetMapping("/scores/{scoreId}")
     public Score getScoresById(@PathVariable(value = "scoreId") Long scoreId) { return scoreService.getScore(scoreId); }
 
-    @PostMapping("/scores")
-    public void createScore(@Valid @RequestBody Score score) {
-        scoreService.addScore(score);
+    @PostMapping("/scores/{userId}")
+    public void createScore(@Valid @RequestBody Score score, @PathVariable(value = "userId") Long userId) {
+        scoreService.addScore(score,userId);
     }
 
     @DeleteMapping("/scores/{scoreId}")
