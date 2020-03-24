@@ -37,7 +37,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public List<Score> getAllScoresMonthly(){
         LocalDate date = LocalDate.now();
-        return scoreRepository.findAllWeekly(date.minusDays(30));
+        return scoreRepository.findAllMonthly(date.minusDays(30));
     }
 
     @Override
