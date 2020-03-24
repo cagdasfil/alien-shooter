@@ -3,6 +3,7 @@ package group10.server.api;
 import group10.server.service.UserService;
 import group10.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    //@PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/users")
     public List<User> getUsers(){
         return userService.getAllUsers();
@@ -36,7 +38,7 @@ public class UserController {
         userService.updateUser(userId,userDetails);
     }
 
-    @PostMapping("/users")
+    @PostMapping("/sign_up")
     public void createUser(@Valid @RequestBody User user) {
         userService.addUser(user);
     }
