@@ -21,18 +21,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    //@PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/users")
     public List<User> getUsers(){
         return userService.getAllUsers();
     }
 
-
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/users/{id}")
     public User getUsersById(@PathVariable(value = "id") Long userId) {
         return userService.getUser(userId);
     }
 
+    @PreAuthorize("hasAnyRole('USER')")
     @PutMapping("/users/{id}")
     public void updateUser(@RequestBody User userDetails, @PathVariable(value = "id") Long userId) {
         userService.updateUser(userId,userDetails);
@@ -43,6 +44,7 @@ public class UserController {
         userService.addUser(user);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable(value = "id") Long userId){
         userService.deleteUser(userId);
