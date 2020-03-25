@@ -6,6 +6,8 @@ import group10.server.model.User;
 import group10.server.repository.RoleRepository;
 import group10.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,11 +21,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,8 +39,9 @@ public class UserServiceImpl implements UserService {
     public void addUser(User user){
 
         user.setActive(1); // active user
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Optional<Role> role = roleRepository.findById((long) 2);
+        Optional<Role> role = roleRepository.findById((long) 2); // 1 for admin, 2 for user.
 
         if(role.isPresent()){
             Set<Role> roles = new HashSet<>();
@@ -57,7 +62,7 @@ public class UserServiceImpl implements UserService {
            return user.get();
        }
        else{
-           throw new EntityNotFoundException();
+           throw new EntityNotFoundException("Invalid user ID");
        }
     }
 
