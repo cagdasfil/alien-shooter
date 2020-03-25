@@ -59,4 +59,21 @@ public class ApiException {
             return new ResponseEntity<>(error, error.getStatus());
         }
     }
+
+
+    public static class ScoreNotFound extends RuntimeException {
+        public ScoreNotFound(String message, Long id) {
+            super(message + " " + id.toString());
+        }
+    }
+
+    @ControllerAdvice
+    public static class ScoreNotFoundHandler extends EntityNotFoundException {
+        @ExceptionHandler(ApiException.ScoreNotFound.class)
+        public ResponseEntity<Object> handleUserExists(ApiException.ScoreNotFound e) {
+            Error error = new Error(HttpStatus.NOT_FOUND,e.getMessage());
+
+            return new ResponseEntity<>(error, error.getStatus());
+        }
+    }
 }

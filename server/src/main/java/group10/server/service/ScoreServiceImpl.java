@@ -1,5 +1,6 @@
 package group10.server.service;
 
+import group10.server.exception.ApiException;
 import group10.server.model.Score;
 import group10.server.model.User;
 import group10.server.repository.ScoreRepository;
@@ -61,7 +62,7 @@ public class ScoreServiceImpl implements ScoreService {
             return score.get();
         }
         else{
-            throw new EntityNotFoundException();
+            throw new ApiException.ScoreNotFound("Score does not exist with the given ID :",scoreId);
         }
     }
 
