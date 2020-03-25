@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Set;
 
 @Entity
@@ -27,6 +28,7 @@ public class User {
     @Column(name="surname", nullable = false)
     private String surname;
 
+    @Email
     @Column(name="email", nullable = false, unique = true)
     private String email;
 
