@@ -1,7 +1,5 @@
 package group10.server.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -34,9 +32,8 @@ public class User {
 
     @Column(name = "active")
     private int active;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     public int getActive() {
