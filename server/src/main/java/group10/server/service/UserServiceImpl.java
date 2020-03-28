@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+
+/**
+ * Concrete class which implements {@link UserService} interface.
+ */
+
 @Service
 public class UserServiceImpl implements UserService {
 
