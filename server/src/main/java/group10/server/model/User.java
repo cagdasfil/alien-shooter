@@ -36,23 +36,8 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     public User() {
+
     }
 
     public User(User user) {
@@ -65,53 +50,115 @@ public class User {
         this.password = user.getPassword();
     }
 
-
+    /**
+     * @return id   id of the user
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * @return username   username of the user
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @return password   password of the user
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * @return name   name of the user
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return surname   surname of the user
+     */
     public String getSurname() {
         return surname;
     }
 
+    /**
+     * @return email   email of the user
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * @return active   active of the user
+     */
+    public int getActive() {
+        return active;
+    }
 
+    /**
+     * @return roles   roles of the user
+     */
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    /**
+     * @param id   the id to set
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * @param username   the username to set
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * @param password   the password to set
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * @param name   the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @param surname   the surname to set
+     */
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
+    /**
+     * @param email   the email to set
+     */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * @param active   the active to set
+     */
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    /**
+     * @param roles   the roles to set
+     */
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
