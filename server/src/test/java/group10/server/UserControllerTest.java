@@ -23,7 +23,7 @@ public class UserControllerTest extends ServerTest{
                 .content("{\"username\":\"testusername\"," +
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
-                        "\"surname\":\"testusername\"," +
+                        "\"surname\":\"testsurname\"," +
                         "\"email\":\"test@test.com\"," +
                         "\"active\":1," +
                         "\"role\":\"USER\"}")
@@ -46,7 +46,7 @@ public class UserControllerTest extends ServerTest{
                 .content("{\"username\":\"testusername2\"," +
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
-                        "\"surname\":\"testusername\"," +
+                        "\"surname\":\"testsurname\"," +
                         "\"email\":\"test2@test.com\"," +
                         "\"active\":1," +
                         "\"role\":\"USER\"}")
@@ -71,7 +71,7 @@ public class UserControllerTest extends ServerTest{
                 .content("{\"username\":\"testusername3\"," +
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
-                        "\"surname\":\"testusername\"," +
+                        "\"surname\":\"testsurname\"," +
                         "\"email\":\"test3@test.com\"," +
                         "\"active\":1," +
                         "\"role\":\"USER\"}")
@@ -88,7 +88,7 @@ public class UserControllerTest extends ServerTest{
                 .content("{\"username\":\"testusername3\"," +
                         "\"password\":\"changed\"," +
                         "\"name\":\"testname\"," +
-                        "\"surname\":\"testusername\"," +
+                        "\"surname\":\"testsurname\"," +
                         "\"email\":\"test3@test.com\"," +
                         "\"active\":1," +
                         "\"role\":\"USER\"}")
