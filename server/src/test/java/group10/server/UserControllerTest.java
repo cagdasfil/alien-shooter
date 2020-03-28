@@ -102,7 +102,7 @@ public class UserControllerTest extends ServerTest{
 
     @Test
     public void getAllUsers() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/")).andExpect(status().isOk())
+        mockMvc.perform(MockMvcRequestBuilders.get("/users")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
