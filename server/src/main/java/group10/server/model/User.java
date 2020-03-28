@@ -36,10 +36,16 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    /**
+     * Empty class constructor
+     */
     public User() {
 
     }
 
+    /**
+     * @param user   user object for copy constructor
+     */
     public User(User user) {
         this.active = user.getActive();
         this.email = user.getEmail();
