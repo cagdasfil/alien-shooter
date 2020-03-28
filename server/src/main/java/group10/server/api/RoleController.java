@@ -21,13 +21,13 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    //@PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/roles")
     public List<Role> getRoles(){
         return roleService.getAllRoles();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    //@PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/roles")
     public void createRole(@RequestBody Role role) {
         roleService.createRole(role);
