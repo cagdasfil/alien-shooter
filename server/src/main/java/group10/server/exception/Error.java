@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
+/**
+ * Custom error class to be able to show exceptions in json format.
+ */
 
 public class Error {
 

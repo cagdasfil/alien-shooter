@@ -12,6 +12,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Concrete class which implements {@link ScoreService} interface.
+ */
+
 @Service
 public class ScoreServiceImpl implements ScoreService {
 
@@ -68,6 +73,11 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public void deleteScore(Long scoreId) {
-        scoreRepository.deleteById(scoreId);
+        if(scoreRepository.findById(scoreId).isPresent()){
+            scoreRepository.deleteById(scoreId);
+        }
+        else{
+            throw new ApiException.ScoreNotFound("Score does not exist with the given ID :",scoreId);
+        }
     }
 }

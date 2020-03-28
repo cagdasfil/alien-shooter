@@ -37,13 +37,14 @@ public class User {
     private Set<Role> roles;
 
     /**
-     * Empty class constructor
+     * Empty class constructor for User class.
      */
     public User() {
 
     }
 
     /**
+     * Constructor for User class.
      * @param user   user object for copy constructor
      */
     public User(User user) {
@@ -57,6 +58,7 @@ public class User {
     }
 
     /**
+     * Getter method for id attribute of user.
      * @return id   id of the user
      */
     public Long getId() {
@@ -64,6 +66,7 @@ public class User {
     }
 
     /**
+     * Getter method for username attribute of user.
      * @return username   username of the user
      */
     public String getUsername() {
@@ -71,6 +74,7 @@ public class User {
     }
 
     /**
+     * Getter method for password attribute of user.
      * @return password   password of the user
      */
     public String getPassword() {
@@ -78,6 +82,7 @@ public class User {
     }
 
     /**
+     * Getter method for name attribute of user.
      * @return name   name of the user
      */
     public String getName() {
@@ -85,6 +90,7 @@ public class User {
     }
 
     /**
+     * Getter method for surname attribute of user.
      * @return surname   surname of the user
      */
     public String getSurname() {
@@ -92,6 +98,7 @@ public class User {
     }
 
     /**
+     * Getter method for email attribute of user.
      * @return email   email of the user
      */
     public String getEmail() {
@@ -99,6 +106,7 @@ public class User {
     }
 
     /**
+     * Getter method for active attribute of user.
      * @return active   active of the user
      */
     public int getActive() {
@@ -106,6 +114,7 @@ public class User {
     }
 
     /**
+     * Getter method for roles attribute of user.
      * @return roles   roles of the user
      */
     public Set<Role> getRoles() {
@@ -113,6 +122,7 @@ public class User {
     }
 
     /**
+     * Setter method for id attribute of user. Sets user id with given parameter.
      * @param id   the id to set
      */
     public void setId(Long id) {
@@ -120,6 +130,7 @@ public class User {
     }
 
     /**
+     * Setter method for username attribute of user. Sets username with given parameter.
      * @param username   the username to set
      */
     public void setUsername(String username) {
@@ -127,6 +138,7 @@ public class User {
     }
 
     /**
+     * Setter method for password attribute of user. Sets password with given parameter.
      * @param password   the password to set
      */
     public void setPassword(String password) {
@@ -134,6 +146,7 @@ public class User {
     }
 
     /**
+     * Setter method for name attribute of user. Sets name with given parameter.
      * @param name   the name to set
      */
     public void setName(String name) {
@@ -141,6 +154,7 @@ public class User {
     }
 
     /**
+     * Setter method for surname attribute of user. Sets surname with given parameter.
      * @param surname   the surname to set
      */
     public void setSurname(String surname) {
@@ -148,6 +162,7 @@ public class User {
     }
 
     /**
+     * Setter method for email attribute of user. Sets email with given parameter.
      * @param email   the email to set
      */
     public void setEmail(String email) {
@@ -155,6 +170,7 @@ public class User {
     }
 
     /**
+     * Setter method for active attribute of user. Sets active with given parameter.
      * @param active   the active to set
      */
     public void setActive(int active) {
@@ -162,6 +178,7 @@ public class User {
     }
 
     /**
+     * Setter method for roles attribute of user. Sets roles with given parameter.
      * @param roles   the roles to set
      */
     public void setRoles(Set<Role> roles) {

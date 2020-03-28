@@ -29,13 +29,14 @@ public class Score {
     private LocalDate createdAt;
 
     /**
-     * Empty class constructor
+     * Empty class constructor for Score class.
      */
     public Score() {
 
     }
 
     /**
+     * Constructor for Score class.
      * @param user   user object to set
      * @param score   score to set
      * @param createdAt   date to set
@@ -47,6 +48,7 @@ public class Score {
     }
 
     /**
+     * Getter method for scoreId attribute of Score object.
      * @return scoreId   scoreId of the score object
      */
     public Long getScoreId() {
@@ -54,6 +56,7 @@ public class Score {
     }
 
     /**
+     * Getter method for user attribute of Score object.
      * @return user   user of the score object
      */
     public User getUser() {
@@ -61,6 +64,7 @@ public class Score {
     }
 
     /**
+     * Getter method for score attribute of Score object.
      * @return score   score of the score object
      */
     public Long getScore() {
@@ -68,6 +72,7 @@ public class Score {
     }
 
     /**
+     * Getter method for createdAt attribute of Score object.
      * @return createdAt   createdAt of the score object
      */
     public LocalDate getCreatedAt() {
@@ -75,6 +80,7 @@ public class Score {
     }
 
     /**
+     * Setter method for scoreId attribute of Score object. Sets scoreId of Score object with given parameter.
      * @param scoreId   the scoreId to set
      */
     public void setScoreId(Long scoreId) {
@@ -82,6 +88,7 @@ public class Score {
     }
 
     /**
+     * Setter method for user attribute of Score object. Sets user of Score object with given parameter.
      * @param user   the user to set
      */
     public void setUser(User user) {
@@ -89,6 +96,7 @@ public class Score {
     }
 
     /**
+     * Setter method for score attribute of Score object. Sets score of Score object with given parameter.
      * @param score   the score to set
      */
     public void setScore(Long score) {
@@ -96,6 +104,7 @@ public class Score {
     }
 
     /**
+     * Setter method for createdAt attribute of Score object. Sets createdAt of Score object with given parameter.
      * @param createdAt   the createdAt to set
      */
     public void setCreatedAt(LocalDate createdAt) {

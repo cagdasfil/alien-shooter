@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+/**
+ * Concrete class which implements {@link RoleService} interface.
+ */
 @Service
 public class RoleServiceImp implements  RoleService {
 
