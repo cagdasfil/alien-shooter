@@ -28,40 +28,76 @@ public class Score {
     @CreatedDate
     private LocalDate createdAt;
 
+    /**
+     * Empty class constructor
+     */
     public Score() {
 
     }
 
+    /**
+     * @param user   user object to set
+     * @param score   score to set
+     * @param createdAt   date to set
+     */
     public Score(User user, Long score, LocalDate createdAt) {
         this.user = user;
         this.score = score;
         this.createdAt = createdAt;
     }
 
+    /**
+     * @return scoreId   scoreId of the score object
+     */
     public Long getScoreId() {
         return scoreId;
     }
 
-    public void setScoreId(Long scoreId) {
-        this.scoreId = scoreId;
+    /**
+     * @return user   user of the score object
+     */
+    public User getUser() {
+        return user;
     }
 
-    public User getUser() { return user; }
-
-    public void setUser(User user) { this.user = user; }
-
+    /**
+     * @return score   score of the score object
+     */
     public Long getScore() {
         return score;
     }
 
-    public void setScore(Long score) {
-        this.score = score;
-    }
-
+    /**
+     * @return createdAt   createdAt of the score object
+     */
     public LocalDate getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * @param scoreId   the scoreId to set
+     */
+    public void setScoreId(Long scoreId) {
+        this.scoreId = scoreId;
+    }
+
+    /**
+     * @param user   the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
+     * @param score   the score to set
+     */
+    public void setScore(Long score) {
+        this.score = score;
+    }
+
+    /**
+     * @param createdAt   the createdAt to set
+     */
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
