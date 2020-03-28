@@ -19,8 +19,9 @@ import java.util.Optional;
 
 @Service
 public class ScoreServiceImpl implements ScoreService {
-
+    /* Score Database */
     private final ScoreRepository scoreRepository;
+    /* User Database */
     private final UserService userService;
 
     @Autowired
@@ -31,18 +32,21 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public List<Score> getAllScores(){
+        /* return all scores in database*/
         return scoreRepository.findAll();
     }
 
     @Override
     public List<Score> getAllScoresWeekly(){
         LocalDate date = LocalDate.now();
+        /* return all scores created in the past week */
         return scoreRepository.findAllWeekly(date.minusDays(7));
     }
 
     @Override
     public List<Score> getAllScoresMonthly(){
         LocalDate date = LocalDate.now();
+        /* return all scores created in the past week */
         return scoreRepository.findAllMonthly(date.minusDays(30));
     }
 
@@ -55,28 +59,36 @@ public class ScoreServiceImpl implements ScoreService {
         //get current Date and set in score table.
         LocalDate date = LocalDate.now();
         score.setCreatedAt(date);
-
+        /* add score to database */
         scoreRepository.save(score);
     }
 
     @Override
     public Score getScore(Long scoreId ){
+        /* find the score with given id*/
         Optional<Score> score = scoreRepository.findById(scoreId);
-
+        /* check whether the score is in database or not*/
         if(score.isPresent()){
+            /* return the score if exists*/
             return score.get();
         }
         else{
+            /* throw ScoreNotFound exception if the score cannot found in database*/
             throw new ApiException.ScoreNotFound("Score does not exist with the given ID :",scoreId);
         }
     }
 
     @Override
     public void deleteScore(Long scoreId) {
-        if(scoreRepository.findById(scoreId).isPresent()){
+        /* find the score with given id*/
+        Optional<Score> score = scoreRepository.findById(scoreId);
+        /* check whether the score is in database or not*/
+        if(score.isPresent()){
+            /* delete the score if exists*/
             scoreRepository.deleteById(scoreId);
         }
         else{
+            /* throw ScoreNotFound exception if the score cannot found in database*/
             throw new ApiException.ScoreNotFound("Score does not exist with the given ID :",scoreId);
         }
     }

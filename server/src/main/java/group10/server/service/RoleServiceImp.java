@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 public class RoleServiceImp implements  RoleService {
 
+    /* Role Database */
     @Autowired
     private final RoleRepository roleRepository;
 
@@ -24,11 +25,13 @@ public class RoleServiceImp implements  RoleService {
 
     @Override
     public void createRole(Role role) {
+        /* add the role to the database*/
         roleRepository.save(role);
     }
 
     @Override
     public List<Role> getAllRoles() {
+        /* return all roles in database*/
         return roleRepository.findAll();
     }
 }
