@@ -1,7 +1,7 @@
-## Galaxy Attack: Alien Shooter - Group10
 
-This is  an interactive multiplayer video game .
+## Galaxy Attack: Alien Shooter
 
+This is  an interactive multiplayer two-dimensional shooter game .
 
 ## Developers
 
@@ -10,14 +10,16 @@ This is  an interactive multiplayer video game .
 
 ## Database
 
-You can find our database design [ER_Diagram](http://144.122.71.144:8080/cagdas.fil/group10/src/master/server/docs/ER_Diagram.pdf)
+The database design is available as [ER diagram](http://144.122.71.144:8080/cagdas.fil/group10/src/master/server/docs/ER_Diagram.pdf).
 
 ## Docs
 
-General documentation about of the project : [JAVA-Doc](https://cagdasfil.github.io/server-javadoc/index.html)
+API documentation is available in both [Javadoc](https://cagdasfil.github.io/server-javadoc/index.html) and [Swagger]([http://localhost:8080/swagger-api-docs.html](http://localhost:8080/swagger-api-docs.html)) format.
+
+**Note:**  Swagger link is a localhost link. Please refer to the link after running the server application.
 
 ## Test
 
-Unit tests are implemented for server side. You can find all in [TEST](http://144.122.71.144:8080/cagdas.fil/group10/src/master/server/src/test/java/group10/server)
+Unit tests are implemented for server side. Tests are available at [Test](http://144.122.71.144:8080/cagdas.fil/group10/src/master/server/src/test/java/group10/server).
 
-[Postman collection](www.willbeadded.com) for our Web Service.
+Postman collection is generated as JSON file and placed under **server/src/test/postman** folder. Also, [public link]([https://www.postman.com/collections/d30159534a9079925194](https://www.postman.com/collections/d30159534a9079925194)) for the Postman collection is generated.
