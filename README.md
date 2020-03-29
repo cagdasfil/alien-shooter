@@ -22,4 +22,4 @@ API documentation is available in both [Javadoc](https://cagdasfil.github.io/ser
 
 Unit tests are implemented for server side. Tests are available at [Test](http://144.122.71.144:8080/cagdas.fil/group10/src/master/server/src/test/java/group10/server).
 
-Postman collection is generated as JSON file and placed under **server/src/test/postman** folder. Also, [public link]([https://www.postman.com/collections/d30159534a9079925194](https://www.postman.com/collections/d30159534a9079925194)) for the Postman collection is generated.
+Postman collection is generated as JSON file and placed under **server/src/test/postman** folder. Also, [public link](https://www.postman.com/collections/d30159534a9079925194) for the Postman collection is generated.
