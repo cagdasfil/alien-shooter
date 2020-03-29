@@ -20,13 +20,16 @@ public class RoleControllerTest extends ServerTest{
     @Test
     public void creatingRole() throws Exception{
 
+        /* Create post request for new role */
         MockHttpServletRequestBuilder postRoleRequest = MockMvcRequestBuilders.post("/roles")
                 .content("{\"roleId\":3," +
                         "\"role\":\"TRY\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
+        /* Send request to the server */
         mockMvc.perform(postRoleRequest).andExpect(status().isOk());
 
+        /* Find whether role is created */
         Optional<Role> role = roleRepository.findById(3L);
         assertEquals(role.isPresent(), true);
 
@@ -35,6 +38,7 @@ public class RoleControllerTest extends ServerTest{
     @Test
     public void gettingRoles() throws Exception{
 
+        /* Run get /roles method to get all roles */
         mockMvc.perform(MockMvcRequestBuilders.get("/roles")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -43,11 +47,13 @@ public class RoleControllerTest extends ServerTest{
     @Test
     public void testBadRequestException() throws Exception{
 
+        /* Create erroneous post request for new role */
         MockHttpServletRequestBuilder postRoleRequest = MockMvcRequestBuilders.post("/roles")
                 .content("{\"roleId\":\"random_string\"," +
                         "\"role\":\"TRY\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
+        /* Send request to the server and expect bad request */
         mockMvc.perform(postRoleRequest).andExpect(status().isBadRequest());
 
     }
