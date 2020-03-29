@@ -108,8 +108,49 @@ public class UserControllerTest extends ServerTest{
     @Test
     public void getAllUsers() throws Exception{
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users")).andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(MockMvcRequestBuilders.get("/users")).andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testUserNotFoundException() throws Exception{
+
+        Optional<User> user = userRepository.findById(100L);
+        if (user.isPresent()){
+            mockMvc.perform(MockMvcRequestBuilders.delete("/users/100")).andExpect(status().isOk());
+        }
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/100")).andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void testBadRequestException() throws Exception{
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/random_string")).andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void testUserAlreadyExistsException() throws Exception{
+
+        MockHttpServletRequestBuilder postUserRequest = MockMvcRequestBuilders.post("/sign_up")
+                .content("{\"username\":\"testusername6\"," +
+                        "\"password\":\"testpassword\"," +
+                        "\"name\":\"testname\"," +
+                        "\"surname\":\"testsurname\"," +
+                        "\"email\":\"test6@test.com\"," +
+                        "\"active\":1," +
+                        "\"role\":\"USER\"}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        Optional<User> user = userRepository.findByUsername("testusername6");
+
+        if (!user.isPresent()){
+            mockMvc.perform(postUserRequest).andExpect(status().isOk());
+        }
+
+        mockMvc.perform(postUserRequest).andExpect(status().isConflict());
 
     }
 
