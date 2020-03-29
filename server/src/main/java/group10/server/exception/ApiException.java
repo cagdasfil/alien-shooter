@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
+/**
+ * This class includes exception and handlers for API.
+ */
 public class ApiException {
     public static class UserNotFound extends RuntimeException {
         public UserNotFound(String message, Long id) {
