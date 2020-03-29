@@ -89,7 +89,7 @@ public class UserControllerTest extends ServerTest{
 
         User testUser = user.get();
 
-        MockHttpServletRequestBuilder putUserRequest = MockMvcRequestBuilders.put("/users"+testUser.getId().toString())
+        MockHttpServletRequestBuilder putUserRequest = MockMvcRequestBuilders.put("/users/"+testUser.getId().toString())
                 .content("{\"username\":\"testusername3\"," +
                         "\"password\":\"changed\"," +
                         "\"name\":\"testname\"," +
@@ -99,7 +99,7 @@ public class UserControllerTest extends ServerTest{
                         "\"role\":\"USER\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
-        //mockMvc.perform(putUserRequest).andExpect(status().isOk());
+        mockMvc.perform(putUserRequest).andExpect(status().isOk());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+testUser.getId().toString())).andExpect(status().isOk());
 
@@ -148,6 +148,7 @@ public class UserControllerTest extends ServerTest{
 
         if (user.isEmpty()){
             mockMvc.perform(postUserRequest).andExpect(status().isOk());
+            user = userRepository.findByUsername("testusername6");
         }
 
         mockMvc.perform(postUserRequest).andExpect(status().isConflict());
