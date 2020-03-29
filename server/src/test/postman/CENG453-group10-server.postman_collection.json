@@ -1,0 +1,336 @@
+{
+	"info": {
+		"_postman_id": "78394ca6-3708-48b7-aa4f-3d1d16506bd7",
+		"name": "CENG453-group10-server",
+		"description": "Request collection of CENG 453 Spring 2020 course project, Galaxy Attack: Alien Shhoter.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "Gets all users in the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"2"
+							]
+						},
+						"description": "Gets the user with specified id value."
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"cagdasfil\",\n\t\"password\": \"password\",\n\t\"name\": \"Cagdas\",\n\t\"surname\": \"Fil\",\n\t\"email\": \"cagdas@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sign_up",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sign_up"
+							]
+						},
+						"description": "Creates new user with entered values."
+					},
+					"response": []
+				},
+				{
+					"name": "Update a user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"cagdasfil\",\n\t\"password\": \"newpassword\",\n\t\"name\": \"newCagdas\",\n\t\"surname\": \"newFil\",\n\t\"email\": \"newcagdas@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"3"
+							]
+						},
+						"description": "Update the user with the specified id value."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete specified user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"3"
+							]
+						},
+						"description": "Deletes the user with the sepecified id."
+					},
+					"response": []
+				}
+			],
+			"description": "User related requests.",
+			"protocolProfileBehavior": []
+		},
+		{
+			"name": "Role",
+			"item": [
+				{
+					"name": "Get all roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"roles"
+							]
+						},
+						"description": "Gets all roles in the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Create new role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"role\": \"NEW_ROLE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"roles"
+							]
+						},
+						"description": "Creates new role with entered values."
+					},
+					"response": []
+				}
+			],
+			"description": "Role related requests.",
+			"protocolProfileBehavior": []
+		},
+		{
+			"name": "Score",
+			"item": [
+				{
+					"name": "Get all scores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/scores",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"scores"
+							]
+						},
+						"description": "Gets all scores in the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all scores weekly",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/scores/weekly",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"scores",
+								"weekly"
+							]
+						},
+						"description": "Gets all scores created in last week."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all scores monthly",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/scores/monthly",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"scores",
+								"monthly"
+							]
+						},
+						"description": "Gets all scores created in last month."
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific score",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/scores/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"scores",
+								"1"
+							]
+						},
+						"description": "Gets the score with the specified id."
+					},
+					"response": []
+				},
+				{
+					"name": "Create new score",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"score\":150\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/scores/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"scores",
+								"2"
+							]
+						},
+						"description": "Creates new score with the entered values."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete specified score",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/scores/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"scores",
+								"1"
+							]
+						},
+						"description": "Deletes the user with the specified id."
+					},
+					"response": []
+				}
+			],
+			"description": "Score related requests.",
+			"protocolProfileBehavior": []
+		}
+	],
+	"protocolProfileBehavior": []
+}
