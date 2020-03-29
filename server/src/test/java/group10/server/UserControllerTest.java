@@ -4,6 +4,7 @@ import group10.server.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
@@ -19,6 +21,7 @@ public class UserControllerTest extends ServerTest{
 
     @Test
     public void addNewUserThenDelete() throws Exception{
+
         MockHttpServletRequestBuilder postUserRequest = MockMvcRequestBuilders.post("/sign_up")
                 .content("{\"username\":\"testusername\"," +
                         "\"password\":\"testpassword\"," +
@@ -32,7 +35,7 @@ public class UserControllerTest extends ServerTest{
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
 
         Optional<User> user = userRepository.findByUsername("testusername");
-        assertEquals(user.isPresent(), true);
+        assertTrue(user.isPresent());
 
         User testUser = user.get();
 
@@ -42,6 +45,7 @@ public class UserControllerTest extends ServerTest{
 
     @Test
     public void addNewUserThenGet() throws Exception{
+
         MockHttpServletRequestBuilder postUserRequest = MockMvcRequestBuilders.post("/sign_up")
                 .content("{\"username\":\"testusername2\"," +
                         "\"password\":\"testpassword\"," +
@@ -67,6 +71,7 @@ public class UserControllerTest extends ServerTest{
 
     @Test
     public void addNewUserThenUpdatePassword() throws Exception{
+
         MockHttpServletRequestBuilder postUserRequest = MockMvcRequestBuilders.post("/sign_up")
                 .content("{\"username\":\"testusername3\"," +
                         "\"password\":\"testpassword\"," +
@@ -102,8 +107,10 @@ public class UserControllerTest extends ServerTest{
 
     @Test
     public void getAllUsers() throws Exception{
+
         mockMvc.perform(MockMvcRequestBuilders.get("/users")).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
     }
 
 }

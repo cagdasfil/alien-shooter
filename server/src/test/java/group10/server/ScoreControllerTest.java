@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebAppConfiguration
-public class ScoreController extends ServerTest{
+public class ScoreControllerTest extends ServerTest{
 
     @Test
     public void addNewScoreThenGet() throws Exception{
@@ -79,18 +79,18 @@ public class ScoreController extends ServerTest{
     @Test
     public void addNewScoreThenDelete() throws Exception{
         MockHttpServletRequestBuilder postUserRequest = MockMvcRequestBuilders.post("/sign_up")
-                .content("{\"username\":\"testusername4\"," +
+                .content("{\"username\":\"testusername5\"," +
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test4@test.com\"," +
+                        "\"email\":\"test5@test.com\"," +
                         "\"active\":1," +
                         "\"role\":\"USER\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
 
-        Optional<User> user = userRepository.findByUsername("testusername4");
+        Optional<User> user = userRepository.findByUsername("testusername5");
         assertEquals(user.isPresent(), true);
 
         User testUser = user.get();
