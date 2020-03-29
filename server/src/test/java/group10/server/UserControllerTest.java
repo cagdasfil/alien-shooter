@@ -152,6 +152,10 @@ public class UserControllerTest extends ServerTest{
 
         mockMvc.perform(postUserRequest).andExpect(status().isConflict());
 
+        User testUser = user.get();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+testUser.getId().toString())).andExpect(status().isOk());
+
     }
 
 }
