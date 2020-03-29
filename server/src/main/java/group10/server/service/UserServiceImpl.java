@@ -100,7 +100,9 @@ public class UserServiceImpl implements UserService {
             u.setEmail(userDetails.getEmail());
             u.setName(userDetails.getName());
             u.setSurname(userDetails.getSurname());
-            u.setPassword(userDetails.getPassword());
+            u.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            /* save changes to the database.*/
+            userRepository.save(u);
         }
         else{
             /* throw UserNotFound exception if the given user is not in database*/
