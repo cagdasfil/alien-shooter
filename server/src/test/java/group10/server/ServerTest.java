@@ -39,13 +39,4 @@ public class ServerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
-    public JSONObject stringToJSON(String string) {
-        try {
-            JSONObject jsonObject = new JSONObject(string);
-            return jsonObject;
-        } catch (JSONException err) {
-            System.out.println(err.toString());
-        }
-        return null;
-    }
 }

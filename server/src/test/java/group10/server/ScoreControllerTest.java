@@ -32,9 +32,7 @@ public class ScoreControllerTest extends ServerTest{
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test4@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test4@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
@@ -93,9 +91,7 @@ public class ScoreControllerTest extends ServerTest{
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test5@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test5@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(postUserRequest).andExpect(status().isOk());

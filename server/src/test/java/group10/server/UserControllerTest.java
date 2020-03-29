@@ -27,9 +27,7 @@ public class UserControllerTest extends ServerTest{
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
@@ -51,9 +49,7 @@ public class UserControllerTest extends ServerTest{
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test2@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test2@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
@@ -77,9 +73,7 @@ public class UserControllerTest extends ServerTest{
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test3@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test3@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
@@ -94,9 +88,7 @@ public class UserControllerTest extends ServerTest{
                         "\"password\":\"changed\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test3@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test3@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(putUserRequest).andExpect(status().isOk());
@@ -139,9 +131,7 @@ public class UserControllerTest extends ServerTest{
                         "\"password\":\"testpassword\"," +
                         "\"name\":\"testname\"," +
                         "\"surname\":\"testsurname\"," +
-                        "\"email\":\"test6@test.com\"," +
-                        "\"active\":1," +
-                        "\"role\":\"USER\"}")
+                        "\"email\":\"test6@test.com\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         Optional<User> user = userRepository.findByUsername("testusername6");
