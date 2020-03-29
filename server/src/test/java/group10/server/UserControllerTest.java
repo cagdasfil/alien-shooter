@@ -59,7 +59,7 @@ public class UserControllerTest extends ServerTest{
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
 
         Optional<User> user = userRepository.findByUsername("testusername2");
-        assertEquals(user.isPresent(), true);
+        assertTrue(user.isPresent());
 
         User testUser = user.get();
 
@@ -85,7 +85,7 @@ public class UserControllerTest extends ServerTest{
         mockMvc.perform(postUserRequest).andExpect(status().isOk());
 
         Optional<User> user = userRepository.findByUsername("testusername3");
-        assertEquals(user.isPresent(), true);
+        assertTrue(user.isPresent());
 
         User testUser = user.get();
 
@@ -146,7 +146,7 @@ public class UserControllerTest extends ServerTest{
 
         Optional<User> user = userRepository.findByUsername("testusername6");
 
-        if (!user.isPresent()){
+        if (user.isEmpty()){
             mockMvc.perform(postUserRequest).andExpect(status().isOk());
         }
 

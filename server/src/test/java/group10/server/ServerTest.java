@@ -1,6 +1,7 @@
 package group10.server;
 
 import group10.server.repository.RoleRepository;
+import group10.server.repository.ScoreRepository;
 import group10.server.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.json.JSONException;
@@ -24,6 +25,9 @@ public class ServerTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ScoreRepository scoreRepository;
 
     @Autowired
     RoleRepository roleRepository;
