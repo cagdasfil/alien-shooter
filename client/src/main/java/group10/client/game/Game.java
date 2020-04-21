@@ -30,7 +30,8 @@ public class Game extends Pane {
     private final int H = 600;
 
     private final int S = 40;
-    private final int bulletRadius = 15;
+    private final int playerBulletRadius = 15;
+    private final int monsterBulletRadius = 10;
     private int monsterCount = 8 ;
 
     private int playerBulletMovingRate = 10;
@@ -39,7 +40,7 @@ public class Game extends Pane {
     private int monsterBulletCreatingRate = 4; // second
 
     public Game() {
-
+        this.setStyle("-fx-background-image: url('galaxy.jpg')");
         initPlayer();
         initMonsters();
         playerMovementAnimation();
@@ -50,7 +51,7 @@ public class Game extends Pane {
     }
 
     private void initPlayer(){
-        this.player = new Player(W/2 - S/2,H/ 10 * 9,S,S, Color.BLUE,3);
+        this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,3);
         this.getChildren().add(player);
     }
 
@@ -93,9 +94,9 @@ public class Game extends Pane {
     {
         EventHandler<ActionEvent> createBullet = actionEvent -> {
             int bulletX = (int) (this.player.getX() + this.player.getWidth() / 2);
-            int bulletY = (int) (this.player.getY() - bulletRadius);
+            int bulletY = (int) (this.player.getY() - playerBulletRadius);
 
-            Bullet bullet = new Bullet( bulletX,bulletY,bulletRadius, Color.ORANGE);
+            Bullet bullet = new Bullet( bulletX,bulletY, playerBulletRadius, Color.LIGHTGOLDENRODYELLOW);
             playerBullets.add(bullet);
             this.getChildren().add(bullet);
         };
@@ -141,9 +142,9 @@ public class Game extends Pane {
                 Monster monster = monsterIterator.next();
                 if(monster instanceof ShooterMonster){
                     int bulletX = (int) (monster.getTranslateX() + monster.getWidth() / 2);
-                    int bulletY = (int) (monster.getTranslateY() + bulletRadius);
+                    int bulletY = (int) (monster.getTranslateY() + monsterBulletRadius);
 
-                    Bullet bullet = new Bullet( bulletX,bulletY,bulletRadius, Color.ROSYBROWN);
+                    Bullet bullet = new Bullet( bulletX,bulletY, monsterBulletRadius, Color.ORANGE);
                     monsterBullets.add(bullet);
                     this.getChildren().add(bullet);
                 }
