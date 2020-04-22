@@ -1,9 +1,11 @@
 package group10.client.controller;
 
+import group10.client.game.Game;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -34,6 +36,12 @@ public class LoginController implements Initializable {
     public void buttonClick() throws IOException {
         Parent signUp = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("SignUp.fxml")));
         generalLayout.getChildren().setAll(signUp);
+    }
+
+    @FXML
+    public void playbuttonClick() throws IOException {
+        Game game = new Game();
+        generalLayout.getChildren().setAll(game);
     }
 
 }

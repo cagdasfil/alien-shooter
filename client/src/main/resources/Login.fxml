@@ -9,5 +9,6 @@
     <VBox>
         <Button> Login </Button>
         <Button fx:id="button" onAction="#buttonClick" > Sign Up </Button>
+        <Button fx:id="playbutton" onAction="#playbuttonClick" > Play </Button>
     </VBox>
 </AnchorPane>
