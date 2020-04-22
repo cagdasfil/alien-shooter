@@ -31,7 +31,7 @@ public class ClientApplication extends Application {
         mainStage.setTitle("Galaxy Attack: Alien Shooter");
 
         mainStage.setScene(mainScene);
-        mainStage.setResizable(true);
+        mainStage.setResizable(false);
         mainStage.show();
     }
 

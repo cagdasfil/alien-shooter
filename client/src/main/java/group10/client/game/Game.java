@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -46,7 +47,7 @@ public class Game extends Pane {
     private GameStatus gameStatus;
 
     public Game() {
-        this.setStyle("-fx-background-image: url('galaxy.jpg')");
+        this.setStyle("-fx-background-image: url('galaxy2.gif')");
         initPlayer();
         initMonsters();
         playerMovementAnimation();
@@ -234,11 +235,13 @@ public class Game extends Pane {
         createPlayerBulletAnimation.stop();
         updatePlayerBulletAnimation.stop();
         updateMonsterAnimation.stop();
+        timeLine.stop();
         createMonsterBulletAnimation.getKeyFrames().clear();
         updateMonsterBulletAnimation.getKeyFrames().clear();
         createPlayerBulletAnimation.getKeyFrames().clear();
         updatePlayerBulletAnimation.getKeyFrames().clear();
         updateMonsterAnimation.getKeyFrames().clear();
+        timeLine.getKeyFrames().clear();
 
         int killAllBonus = 0;
 
