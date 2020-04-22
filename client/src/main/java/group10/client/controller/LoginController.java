@@ -19,8 +19,9 @@ import java.util.ResourceBundle;
 public class LoginController implements Initializable {
 
     @FXML public AnchorPane generalLayout;
-    @FXML public Label label;
-    @FXML public Button button;
+    @FXML public Button playButton;
+    @FXML public Button loginButton;
+    @FXML public Button signUpButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -28,15 +29,20 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    public void buttonClick() throws IOException {
+    public void signUpClick() throws IOException {
         Parent signUp = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("SignUp.fxml")));
         generalLayout.getChildren().setAll(signUp);
     }
 
     @FXML
-    public void playbuttonClick() throws IOException {
+    public void playClick() throws IOException {
         Parent game = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Game.fxml")));
         generalLayout.getChildren().setAll(game);
+    }
+
+    @FXML
+    public void loginClick() throws IOException {
+
     }
 
 }
