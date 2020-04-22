@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 public class Player extends Rectangle {
     private int health;
     private Image image;
+    private int kills;
     private int score;
 
     public Player(int x, int y, int width, int height,Color color,int health) {
@@ -17,6 +18,7 @@ public class Player extends Rectangle {
         setTranslateY(y);
 
         this.health = health;
+        this.kills = 0;
         this.score = 0;
 
         image = new javafx.scene.image.Image("spaceShip.png");
@@ -30,6 +32,14 @@ public class Player extends Rectangle {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
     }
 
     public int getScore() {

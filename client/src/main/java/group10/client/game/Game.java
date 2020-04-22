@@ -25,6 +25,8 @@ public class Game extends Pane {
     private Timeline createMonsterBulletAnimation = new Timeline();
     private Timeline updateMonsterBulletAnimation = new Timeline();
     private Timeline updateMonsterAnimation = new Timeline();
+    private Timeline timeLine = new Timeline();
+    private static Integer startTime = 0;
 
 
     private final int W = 800;
@@ -51,8 +53,9 @@ public class Game extends Pane {
         configurePlayerBulletAnimations();
         configureMonsterBulletAnimation();
         monsterMovementAnimation();
-        gameStatus = new GameStatus(player.getScore(),5,player.getHealth());
+        gameStatus = new GameStatus(player.getKills(),5,player.getHealth());
         this.getChildren().add(gameStatus);
+        timer();
 
     }
 
@@ -95,6 +98,16 @@ public class Game extends Pane {
             transition.setToY(e.getY()- S / 2 - player.getY());
             transition.playFromStart();
         });
+    }
+
+    private void timer(){
+        EventHandler<ActionEvent> timer = actionEvent -> {
+            gameStatus.setTime(startTime);
+            startTime += 1;
+        };
+        timeLine.getKeyFrames().add(new KeyFrame(Duration.seconds(1),timer));
+        timeLine.setCycleCount(Timeline.INDEFINITE);
+        timeLine.play();
     }
 
     private void monsterMovementAnimation(){
@@ -145,12 +158,15 @@ public class Game extends Pane {
                         getChildren().remove(bullet);
                         alien.setHealth(alien.getHealth() - 1);
                         if(alien.getHealth() == 0){
-                            player.setScore(player.getScore() +1);
-                            gameStatus.setScore(player.getScore());
+                            player.setKills(player.getKills() +1);
+                            gameStatus.setScore(player.getKills());
 
                             monsterIterator.remove();
                             aliens.remove(alien);
                             getChildren().remove(alien);
+                        }
+                        if(aliens.size() == 0){
+                            gameEnd();
                         }
 
                     }
@@ -223,6 +239,16 @@ public class Game extends Pane {
         createPlayerBulletAnimation.getKeyFrames().clear();
         updatePlayerBulletAnimation.getKeyFrames().clear();
         updateMonsterAnimation.getKeyFrames().clear();
+
+        int killAllBonus = 0;
+
+        if(aliens.size() == 0){
+            killAllBonus += 500;
+        }
+
+        int score = (100/startTime) * player.getKills() + killAllBonus;
+        player.setScore(score);
+        System.out.println("Final score :" + player.getScore());
     }
 
     void debugger(){

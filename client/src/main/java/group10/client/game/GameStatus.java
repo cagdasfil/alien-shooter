@@ -15,8 +15,8 @@ public class GameStatus extends HBox {
     private Label remainingHealthLabel;
 
     public GameStatus(int score, int time, int remainingHealth) {
-        this.scoreLabel = new Label("Score: " + score);
-        this.timeLabel = new Label("Time : " + time);
+        this.scoreLabel = new Label("Kills: " + score);
+        this.timeLabel = new Label("Time : " + time + " seconds");
         this.remainingHealthLabel = new Label("Remaining Health : " + remainingHealth);
 
         //Setting the margin to the nodes
@@ -40,11 +40,11 @@ public class GameStatus extends HBox {
 
 
     public void setScore(int score) {
-        scoreLabel.setText("Score: " +  score);
+        scoreLabel.setText("Kills: " +  score);
     }
 
     public void setTime(int time) {
-        timeLabel.setText("Time : " + time);
+        timeLabel.setText("Time : " + time + " seconds");
     }
 
     public void setRemainingHealth(int remainingHealth) {
