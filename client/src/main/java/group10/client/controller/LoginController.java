@@ -35,7 +35,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void playbuttonClick() throws IOException {
-        Game game = new Game();
+        Parent game = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Game.fxml")));
         generalLayout.getChildren().setAll(game);
     }
 
