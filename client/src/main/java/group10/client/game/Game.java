@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Game extends Pane {
     private Player player = null;
-    private List<Monster> monsters = new ArrayList<>();
+    private List<Alien> aliens = new ArrayList<>();
     private List<Bullet> playerBullets = new ArrayList<>();
     private List<Bullet> monsterBullets = new ArrayList<>();
 
@@ -39,17 +39,20 @@ public class Game extends Pane {
     private int playerBulletCratingRate = 150; // ms
     private int monsterBulletMovingRate = 50;
     private int monsterBulletCreatingRate = 4; // second
-    private int moveDistance = S /4;
+    private int moveDistance = S / 4;
+
+    private GameStatus gameStatus;
 
     public Game() {
         this.setStyle("-fx-background-image: url('galaxy.jpg')");
         initPlayer();
         initMonsters();
         playerMovementAnimation();
-        debugger();
         configurePlayerBulletAnimations();
         configureMonsterBulletAnimation();
         monsterMovementAnimation();
+        gameStatus = new GameStatus(player.getScore(),5,player.getHealth());
+        this.getChildren().add(gameStatus);
 
     }
 
@@ -62,17 +65,17 @@ public class Game extends Pane {
         int gap = (W - 2 * S) / monsterCount;
 
         for(int i = 1 ; i < monsterCount +1; i++){
-            Monster tankMonster = new TankMonster(W- S/2 - i * gap,H/ 10 * 3, S,S,Color.DARKRED);
-            this.monsters.add(tankMonster);
-            this.getChildren().add(tankMonster);
+            Alien tankAlien = new TankAlien(W- S/2 - i * gap,H/ 10 * 3, S,S,Color.DARKRED);
+            this.aliens.add(tankAlien);
+            this.getChildren().add(tankAlien);
 
-            Monster shooterMonster = new ShooterMonster(W- S/2 - i * gap,H/ 10 , S,S,Color.RED);
-            this.monsters.add(shooterMonster);
-            this.getChildren().add(shooterMonster);
+            Alien shooterAlien = new ShooterAlien(W- S/2 - i * gap,H/ 10 , S,S,Color.RED);
+            this.aliens.add(shooterAlien);
+            this.getChildren().add(shooterAlien);
 
-            Monster regularMonster = new Monster(W- S/2 - i * gap,H/ 10 * 2, S,S,Color.GREEN);
-            this.monsters.add(regularMonster);
-            this.getChildren().add(regularMonster);
+            Alien regularAlien = new Alien(W- S/2 - i * gap,H/ 10 * 2, S,S,Color.GREEN);
+            this.aliens.add(regularAlien);
+            this.getChildren().add(regularAlien);
         }
     }
 
@@ -96,10 +99,10 @@ public class Game extends Pane {
 
     private void monsterMovementAnimation(){
         EventHandler<ActionEvent> moveMonster = actionEvent -> {
-            Iterator<Monster> it = monsters.iterator();
+            Iterator<Alien> it = aliens.iterator();
             while(it.hasNext()){
-                Monster monster = it.next();
-                monster.setTranslateX(monster.getTranslateX() + moveDistance);
+                Alien alien = it.next();
+                alien.setTranslateX(alien.getTranslateX() + moveDistance);
             }
             moveDistance -=1;
             if(moveDistance == - S/4 -1){
@@ -133,18 +136,21 @@ public class Game extends Pane {
                 Bullet bullet = it.next();
                 double newY = bullet.getCenterY() - 5;
                 bullet.setCenterY(newY);
-                Iterator<Monster> monsterIterator = this.monsters.iterator();
+                Iterator<Alien> monsterIterator = this.aliens.iterator();
                 while(monsterIterator.hasNext()){
-                    Monster monster = monsterIterator.next();
-                    if(bullet.getBoundsInParent().intersects(monster.getBoundsInParent())){
+                    Alien alien = monsterIterator.next();
+                    if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
                         it.remove();
                         playerBullets.remove(bullet);
                         getChildren().remove(bullet);
-                        monster.setHealth(monster.getHealth() - 1);
-                        if(monster.getHealth() == 0){
+                        alien.setHealth(alien.getHealth() - 1);
+                        if(alien.getHealth() == 0){
+                            player.setScore(player.getScore() +1);
+                            gameStatus.setScore(player.getScore());
+
                             monsterIterator.remove();
-                            monsters.remove(monster);
-                            getChildren().remove(monster);
+                            aliens.remove(alien);
+                            getChildren().remove(alien);
                         }
 
                     }
@@ -159,12 +165,12 @@ public class Game extends Pane {
 
     private void configureMonsterBulletAnimation(){ ;
         EventHandler<ActionEvent> createBullet = actionEvent -> {
-            Iterator<Monster> monsterIterator = this.monsters.iterator();
+            Iterator<Alien> monsterIterator = this.aliens.iterator();
             while(monsterIterator.hasNext()){
-                Monster monster = monsterIterator.next();
-                if(monster instanceof ShooterMonster){
-                    int bulletX = (int) (monster.getTranslateX() + monster.getWidth() / 2);
-                    int bulletY = (int) (monster.getTranslateY() + monsterBulletRadius);
+                Alien alien = monsterIterator.next();
+                if(alien instanceof ShooterAlien){
+                    int bulletX = (int) (alien.getTranslateX() + alien.getWidth() / 2);
+                    int bulletY = (int) (alien.getTranslateY() + monsterBulletRadius);
 
                     Bullet bullet = new Bullet( bulletX,bulletY, monsterBulletRadius, Color.ORANGE);
                     monsterBullets.add(bullet);
@@ -189,13 +195,14 @@ public class Game extends Pane {
                     monsterBullets.remove(bullet);
                     getChildren().remove(bullet);
                     player.setHealth(player.getHealth() - 1);
+
+                    gameStatus.setRemainingHealth(player.getHealth());
+
                     if(player.getHealth() == 0){
                         getChildren().remove(player);
                         gameEnd();
                     }
-
                 }
-
             }
         };
 
@@ -210,16 +217,18 @@ public class Game extends Pane {
         updateMonsterBulletAnimation.stop();
         createPlayerBulletAnimation.stop();
         updatePlayerBulletAnimation.stop();
+        updateMonsterAnimation.stop();
         createMonsterBulletAnimation.getKeyFrames().clear();
         updateMonsterBulletAnimation.getKeyFrames().clear();
         createPlayerBulletAnimation.getKeyFrames().clear();
         updatePlayerBulletAnimation.getKeyFrames().clear();
+        updateMonsterAnimation.getKeyFrames().clear();
     }
 
     void debugger(){
-        Iterator<Monster> it = monsters.iterator();
+        Iterator<Alien> it = aliens.iterator();
         while(it.hasNext()){
-            Monster m = it.next();
+            Alien m = it.next();
             System.out.println("X :" + m.getTranslateX() + "Y :" + m.getTranslateY());
         }
     }
