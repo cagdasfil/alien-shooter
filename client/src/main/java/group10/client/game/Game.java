@@ -47,7 +47,7 @@ public class Game extends Pane {
     private GameStatus gameStatus;
 
     public Game() {
-        this.setStyle("-fx-background-image: url('galaxy2.gif')");
+        this.setStyle("-fx-background-image: url('static/galaxy2.gif')");
         initPlayer();
         initMonsters();
         playerMovementAnimation();

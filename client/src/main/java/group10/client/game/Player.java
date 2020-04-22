@@ -21,7 +21,7 @@ public class Player extends Rectangle {
         this.kills = 0;
         this.score = 0;
 
-        image = new javafx.scene.image.Image("spaceShip.png");
+        image = new javafx.scene.image.Image("static/spaceShip.png");
         ImagePattern imagePattern = new ImagePattern(image);
         this.setFill(imagePattern);
     }

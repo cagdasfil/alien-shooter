@@ -1,43 +1,16 @@
 package group10.client;
 
 import group10.client.game.Game;
-import group10.client.view.MainScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-
-
-public class ClientApplication extends Application {
-    public static String hostName = "localhost:8080/";
-
-    // Global scene for stage
-    public static Scene mainScene;
-
-
-    // Screen width and height
-    private int screenWidth = 800;
-    private int screenHeight = 900;
-    private Game game = new Game();
-
-    @Override
-    public void start(Stage mainStage){
-
-        MainScreen mainScreen = new MainScreen("Galaxy Attack: Alien Shooter”","Play");
-        mainScreen.linkPlayButton(game);
-        mainScene = new Scene(mainScreen,screenWidth,screenHeight);
-
-        mainStage.setTitle("Galaxy Attack: Alien Shooter");
-
-        mainStage.setScene(mainScene);
-        mainStage.setResizable(false);
-        mainStage.show();
-    }
-
+@SpringBootApplication
+public class ClientApplication {
 
     public static void main(String[] args) {
-        launch(args);
+        Application.launch(UiApplication.class, args);
     }
-}
 
+}
