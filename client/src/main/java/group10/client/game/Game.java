@@ -20,14 +20,15 @@ public class Game extends Pane {
     private List<Bullet> monsterBullets = new ArrayList<>();
 
     // Animations of the game
-    private Timeline createPlayerBulletAnimation = new Timeline();;
-    private Timeline updatePlayerBulletAnimation = new Timeline();;
-    private Timeline createMonsterBulletAnimation = new Timeline();;
-    private Timeline updateMonsterBulletAnimation = new Timeline();;
+    private Timeline createPlayerBulletAnimation = new Timeline();
+    private Timeline updatePlayerBulletAnimation = new Timeline();
+    private Timeline createMonsterBulletAnimation = new Timeline();
+    private Timeline updateMonsterBulletAnimation = new Timeline();
+    private Timeline updateMonsterAnimation = new Timeline();
 
 
     private final int W = 800;
-    private final int H = 600;
+    private final int H = 900;
 
     private final int S = 40;
     private final int playerBulletRadius = 15;
@@ -38,6 +39,7 @@ public class Game extends Pane {
     private int playerBulletCratingRate = 150; // ms
     private int monsterBulletMovingRate = 50;
     private int monsterBulletCreatingRate = 4; // second
+    private int moveDistance = S /4;
 
     public Game() {
         this.setStyle("-fx-background-image: url('galaxy.jpg')");
@@ -47,6 +49,7 @@ public class Game extends Pane {
         debugger();
         configurePlayerBulletAnimations();
         configureMonsterBulletAnimation();
+        monsterMovementAnimation();
 
     }
 
@@ -56,16 +59,18 @@ public class Game extends Pane {
     }
 
     private void initMonsters(){
+        int gap = (W - 2 * S) / monsterCount;
+
         for(int i = 1 ; i < monsterCount +1; i++){
-            Monster tankMonster = new TankMonster(W- S/2 - i *90,H/ 10 * 3, S,S,Color.DARKRED);
+            Monster tankMonster = new TankMonster(W- S/2 - i * gap,H/ 10 * 3, S,S,Color.DARKRED);
             this.monsters.add(tankMonster);
             this.getChildren().add(tankMonster);
 
-            Monster shooterMonster = new ShooterMonster(W- S/2 - i *90,H/ 10 , S,S,Color.RED);
+            Monster shooterMonster = new ShooterMonster(W- S/2 - i * gap,H/ 10 , S,S,Color.RED);
             this.monsters.add(shooterMonster);
             this.getChildren().add(shooterMonster);
 
-            Monster regularMonster = new Monster(W- S/2 - i *90,H/ 10 * 2, S,S,Color.GREEN);
+            Monster regularMonster = new Monster(W- S/2 - i * gap,H/ 10 * 2, S,S,Color.GREEN);
             this.monsters.add(regularMonster);
             this.getChildren().add(regularMonster);
         }
@@ -87,7 +92,24 @@ public class Game extends Pane {
             transition.setToY(e.getY()- S / 2 - player.getY());
             transition.playFromStart();
         });
+    }
 
+    private void monsterMovementAnimation(){
+        EventHandler<ActionEvent> moveMonster = actionEvent -> {
+            Iterator<Monster> it = monsters.iterator();
+            while(it.hasNext()){
+                Monster monster = it.next();
+                monster.setTranslateX(monster.getTranslateX() + moveDistance);
+            }
+            moveDistance -=1;
+            if(moveDistance == - S/4 -1){
+                moveDistance = S/4;
+            }
+        };
+
+        updateMonsterAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(100),moveMonster));
+        updateMonsterAnimation.setCycleCount(Timeline.INDEFINITE);
+        updateMonsterAnimation.play();
     }
 
     private void configurePlayerBulletAnimations()
