@@ -58,9 +58,6 @@ public class LoginController implements Initializable {
     public void loginClick() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String jsonString = new JSONObject()
-                .put("username", username)
-                .put("password", password).toString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
