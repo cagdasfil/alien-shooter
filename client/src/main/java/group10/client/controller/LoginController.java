@@ -49,12 +49,6 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    public void playClick() throws IOException {
-        Parent game = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Game.fxml")));
-        generalLayout.getChildren().setAll(game);
-    }
-
-    @FXML
     public void loginClick() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -80,7 +74,8 @@ public class LoginController implements Initializable {
             badAuthAlert.showAndWait();
         }
         else {
-            System.out.println("success!");
+            Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
+            generalLayout.getChildren().setAll(gameLobby);
         }
 
     }
