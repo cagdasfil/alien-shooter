@@ -48,6 +48,18 @@ public class UserController {
     }
 
     /**
+     * This method redirects GET request to {@link UserService#getUserByUsername(String)}
+     * @param username id of user
+     * @return User returned user object with given id.
+     */
+
+    //@PreAuthorize("hasAnyRole('USER')")
+    @GetMapping("/usernames/{username}")
+    public User getUserByUsername(@PathVariable(value = "username") String username) {
+        return userService.getUserByUsername(username);
+    }
+
+    /**
      * This method redirects UPDATE request to {@link UserService#updateUser(Long, User)}
      * @param userDetails information about user which will be changed with existing information.
      * @param userId id of user to be updated

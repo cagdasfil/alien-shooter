@@ -51,4 +51,6 @@ public interface UserService {
      * @throws ApiException.UserNotFound  when the user object with the given id does not exists in database.
      */
     void deleteUser(Long userId);
+
+    User getUserByUsername(String username);
 }

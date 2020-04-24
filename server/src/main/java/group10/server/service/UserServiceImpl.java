@@ -124,4 +124,18 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    @Override
+    public User getUserByUsername(String username) {
+        /* find the user with the given ID*/
+        Optional<User> user = userRepository.findByUsername(username);
+        /* check whether given user is in database or not */
+        if(user.isPresent()){
+            return user.get();
+        }
+        else{
+            /* throw UserNotFound exception if user does not exist in database*/
+            throw new ApiException.UserNotFound("User does not exist with the given ID :", null);
+        }
+    }
 }
