@@ -3,6 +3,7 @@ package group10.client.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import group10.client.api.ScoreApi;
 import group10.client.model.client.ScoreRow;
 import group10.client.model.server.Score;
 import javafx.collections.FXCollections;
@@ -64,17 +65,9 @@ public class LeaderboardController implements Initializable {
         scoreColumnWeekly.setCellValueFactory(new PropertyValueFactory<>("Score"));
         dateColumnWeekly.setCellValueFactory(new PropertyValueFactory<>("Date"));
 
-        String scoresString = restTemplate.getForObject("http://localhost:8080/scores/weekly" , String.class);
+        String scoresString = ScoreApi.getScoresWeekly();
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<Score> scores = mapper.readValue(scoresString, new TypeReference<List<Score>>(){});
-
-        for (int rank=0; rank<scores.size(); rank++){
-            Score score = scores.get(rank);
-            scoresWeekly.add(new ScoreRow(rank+1, score.getUser().getUsername(), score.getScore(), score.getCreatedAt()));
-        }
-
-        tableWeekly.setItems(scoresWeekly);
+        fillTable(scoresString, scoresWeekly, tableWeekly);
     }
 
     public void initializeMonthlyTable() throws JsonProcessingException {
@@ -84,17 +77,22 @@ public class LeaderboardController implements Initializable {
         scoreColumnMonthly.setCellValueFactory(new PropertyValueFactory<>("Score"));
         dateColumnMonthly.setCellValueFactory(new PropertyValueFactory<>("Date"));
 
-        String scoresString = restTemplate.getForObject("http://localhost:8080/scores/monthly" , String.class);
+        String scoresString = ScoreApi.getScoresMonthly();
 
+        fillTable(scoresString, scoresMonthly, tableMonthly);
+    }
+
+
+    private void fillTable(String scoresString, ObservableList<ScoreRow> scoresList, TableView<ScoreRow> table) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         List<Score> scores = mapper.readValue(scoresString, new TypeReference<List<Score>>(){});
 
         for (int rank=0; rank<scores.size(); rank++){
             Score score = scores.get(rank);
-            scoresMonthly.add(new ScoreRow(rank+1, score.getUser().getUsername(), score.getScore(), score.getCreatedAt()));
+            scoresList.add(new ScoreRow(rank+1, score.getUser().getUsername(), score.getScore(), score.getCreatedAt()));
         }
 
-        tableMonthly.setItems(scoresMonthly);
+        table.setItems(scoresList);
     }
 
     @FXML

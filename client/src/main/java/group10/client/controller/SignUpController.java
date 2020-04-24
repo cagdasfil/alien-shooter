@@ -1,5 +1,6 @@
 package group10.client.controller;
 
+import group10.client.api.UserApi;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,9 +26,6 @@ import java.util.ResourceBundle;
 @Component
 public class SignUpController implements Initializable {
 
-    private RestTemplate restTemplate;
-    @Value("${spring.application.apiAddress}") private String apiAddress;
-
     @FXML public AnchorPane generalLayout;
     @FXML public TextField usernameField;
     @FXML public TextField passwordField;
@@ -37,38 +35,22 @@ public class SignUpController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        restTemplate = new RestTemplate();
+
     }
 
     @FXML
     public void signUpClick() throws IOException {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String name = nameField.getText();
-        String surname = surnameField.getText();
-        String email = emailField.getText();
 
-        String jsonString = new JSONObject()
-                .put("username", username)
-                .put("password", password)
-                .put("name", name)
-                .put("surname", surname)
-                .put("email", email).toString();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
-
-        ResponseEntity<JSONObject> response = restTemplate.exchange(apiAddress + "/sign_up",
-                HttpMethod.POST,
-                entity,
-                JSONObject.class);
-
-        System.out.println(response);
+        ResponseEntity<JSONObject> response = UserApi.signUpUser(
+                usernameField.getText(),
+                passwordField.getText(),
+                nameField.getText(),
+                surnameField.getText(),
+                emailField.getText()
+        );
 
         if (response.getStatusCode().is2xxSuccessful()){
-            Alert successfulSignUpAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert successfulSignUpAlert = new Alert(Alert.AlertType.INFORMATION);
             successfulSignUpAlert.setTitle("Successful Sign Up");
             successfulSignUpAlert.setHeaderText("Account has been created successfully !");
             successfulSignUpAlert.showAndWait();

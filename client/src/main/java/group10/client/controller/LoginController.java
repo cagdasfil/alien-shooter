@@ -1,5 +1,6 @@
 package group10.client.controller;
 
+import group10.client.api.UserApi;
 import group10.client.game.Game;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,9 +28,6 @@ import java.util.ResourceBundle;
 @Component
 public class LoginController implements Initializable {
 
-    private RestTemplate restTemplate;
-    @Value("${spring.application.apiAddress}") private String apiAddress;
-
     @FXML public AnchorPane generalLayout;
     @FXML public Button loginButton;
     @FXML public Button signUpButton;
@@ -38,7 +36,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        restTemplate = new RestTemplate();
+
     }
 
     @FXML
@@ -49,22 +47,11 @@ public class LoginController implements Initializable {
 
     @FXML
     public void loginClick() throws IOException {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("username",username);
-        map.add("password",password);
-
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
-
-        String response = restTemplate.exchange(apiAddress + "/login",
-                            HttpMethod.POST,
-                            entity,
-                            String.class).toString();
+        String response = UserApi.loginUser(
+                usernameField.getText(),
+                passwordField.getText()
+        );
 
         if (response.contains("error")){
             Alert badAuthAlert = new Alert(Alert.AlertType.ERROR);
