@@ -33,4 +33,16 @@ public class GameLobbyController implements Initializable {
         generalLayout.getChildren().setAll(game);
     }
 
+    @FXML
+    public void leaderboardClick() throws IOException {
+        Parent leaderboard = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Leaderboard.fxml")));
+        generalLayout.getChildren().setAll(leaderboard);
+    }
+
+    @FXML
+    public void quitClick() throws IOException {
+        Parent login = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Login.fxml")));
+        generalLayout.getChildren().setAll(login);
+    }
+
 }

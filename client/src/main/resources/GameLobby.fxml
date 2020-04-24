@@ -12,12 +12,12 @@
             <Font size="36.0" />
          </font>
       </Button>
-      <Button layoutX="272.0" layoutY="489.0" mnemonicParsing="false" prefHeight="77.0" prefWidth="256.0" text="Leaderboard">
+      <Button onAction="#leaderboardClick" layoutX="272.0" layoutY="489.0" mnemonicParsing="false" prefHeight="77.0" prefWidth="256.0" text="Leaderboard">
          <font>
             <Font size="36.0" />
          </font>
       </Button>
-      <Button layoutX="272.0" layoutY="586.0" mnemonicParsing="false" prefHeight="77.0" prefWidth="256.0" text="Quit">
+      <Button onAction="#quitClick" layoutX="272.0" layoutY="586.0" mnemonicParsing="false" prefHeight="77.0" prefWidth="256.0" text="Quit">
          <font>
             <Font size="36.0" />
          </font>
