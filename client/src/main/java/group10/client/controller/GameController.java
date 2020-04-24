@@ -16,7 +16,7 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Game game = new Game();
+        Game game = new Game(1);
         gameLayout.getChildren().setAll(game);
     }
 }

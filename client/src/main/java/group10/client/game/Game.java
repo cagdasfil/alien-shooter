@@ -5,7 +5,6 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -27,41 +26,53 @@ public class Game extends Pane {
     private Timeline updateMonsterBulletAnimation = new Timeline();
     private Timeline updateMonsterAnimation = new Timeline();
     private Timeline timeLine = new Timeline();
-    private static Integer startTime = 0;
-
 
     private final int W = 800;
     private final int H = 900;
 
     private final int S = 40;
-    private final int playerBulletRadius = 15;
-    private final int monsterBulletRadius = 10;
-    private int monsterCount = 8 ;
+    private final int playerBulletRadius;
+    private final int monsterBulletRadius;
+    private int monsterCount;
 
-    private int playerBulletMovingRate = 10;
-    private int playerBulletCratingRate = 150; // ms
-    private int monsterBulletMovingRate = 50;
-    private int monsterBulletCreatingRate = 4; // second
+    private int playerBulletMovingRate;
+    private int playerBulletCratingRate;
+    private int monsterBulletMovingRate;
+    private int monsterBulletCreatingRate;
     private int moveDistance = S / 4;
 
     private GameStatus gameStatus;
+    private GameTuner gameTuner;
+    private static Integer startTime = 0;
+    private static int totalKill = 0;
+    private static int totalHealth = 3;
+    private int gameLevel;
+    private boolean isGameOver = false;
 
-    public Game() {
+    public Game(int gameLevel) {
+        this.gameLevel = gameLevel;
+        this.gameTuner = new GameTuner();
         this.setStyle("-fx-background-image: url('static/galaxy2.gif')");
+
+        monsterCount = gameTuner.getSettings(gameLevel).get("monsterCount");
+        playerBulletRadius  = gameTuner.getSettings(gameLevel).get("playerBulletRadius");
+        monsterBulletRadius = gameTuner.getSettings(gameLevel).get("monsterBulletRadius");
+        playerBulletMovingRate = gameTuner.getSettings(gameLevel).get("playerBulletMovingRate");
+        playerBulletCratingRate = gameTuner.getSettings(gameLevel).get("playerBulletCratingRate");
+        monsterBulletMovingRate = gameTuner.getSettings(gameLevel).get("monsterBulletMovingRate");
+        monsterBulletCreatingRate = gameTuner.getSettings(gameLevel).get("monsterBulletCreatingRate");
+
         initPlayer();
         initMonsters();
-        playerMovementAnimation();
-        configurePlayerBulletAnimations();
-        configureMonsterBulletAnimation();
-        monsterMovementAnimation();
-        gameStatus = new GameStatus(player.getKills(),5,player.getHealth());
-        this.getChildren().add(gameStatus);
+        initAnimations();
+        initGameStatus();
         timer();
-
     }
 
     private void initPlayer(){
         this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,3);
+        this.player.setKills(totalKill);
+        this.player.setHealth(totalHealth);
         this.getChildren().add(player);
     }
 
@@ -180,7 +191,7 @@ public class Game extends Pane {
         updatePlayerBulletAnimation.play();
     }
 
-    private void configureMonsterBulletAnimation(){ ;
+    private void configureMonsterBulletAnimation(){ 
         EventHandler<ActionEvent> createBullet = actionEvent -> {
             Iterator<Alien> monsterIterator = this.aliens.iterator();
             while(monsterIterator.hasNext()){
@@ -217,6 +228,7 @@ public class Game extends Pane {
 
                     if(player.getHealth() == 0){
                         getChildren().remove(player);
+                        isGameOver = true;
                         gameEnd();
                     }
                 }
@@ -227,6 +239,18 @@ public class Game extends Pane {
         updateMonsterBulletAnimation.setCycleCount(Timeline.INDEFINITE);
         updateMonsterBulletAnimation.play();
 
+    }
+
+    private void initAnimations(){
+        playerMovementAnimation();
+        configurePlayerBulletAnimations();
+        configureMonsterBulletAnimation();
+        monsterMovementAnimation();
+    }
+
+    private void initGameStatus(){
+        gameStatus = new GameStatus(player.getKills(),startTime,player.getHealth());
+        this.getChildren().add(gameStatus);
     }
 
     private void gameEnd(){
@@ -243,15 +267,24 @@ public class Game extends Pane {
         updateMonsterAnimation.getKeyFrames().clear();
         timeLine.getKeyFrames().clear();
 
-        int killAllBonus = 0;
+        this.getChildren().removeAll();
+        totalKill = player.getKills();
+        totalHealth = player.getHealth();
 
-        if(aliens.size() == 0){
-            killAllBonus += 500;
+        if(gameLevel < gameTuner.maxLevel && !isGameOver){
+            Game game = new Game(gameLevel + 1);
+            this.getChildren().remove(this);
+            this.getChildren().add(game);
         }
 
-        int score = (100/startTime) * player.getKills() + killAllBonus;
-        player.setScore(score);
-        System.out.println("Final score :" + player.getScore());
+        else {
+            int levelBonus = 100 * gameLevel * gameLevel;
+            int killBonus = player.getKills() * 10;
+
+            int score = (100/startTime) * (levelBonus + killBonus);
+            player.setScore(score);
+            System.out.println("Final score :" + player.getScore());
+        }
     }
 
     void debugger(){

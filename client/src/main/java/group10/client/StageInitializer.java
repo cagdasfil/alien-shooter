@@ -36,6 +36,7 @@ public class StageInitializer implements ApplicationListener<UiApplication.Stage
             Stage stage = stageReadyEvent.getStage();
             stage.setScene(new Scene(parent, windowWidth, windowHeight));
             stage.setTitle(applicationTitle);
+            stage.setResizable(false);
             stage.show();
 
         } catch (IOException e) {
