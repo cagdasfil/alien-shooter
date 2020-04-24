@@ -1,5 +1,6 @@
 package group10.client.controller;
 
+import group10.client.game.Game;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,7 +30,7 @@ public class GameLobbyController implements Initializable {
 
     @FXML
     public void playClick() throws IOException {
-        Parent game = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Game.fxml")));
+        Game game = new Game(1);
         generalLayout.getChildren().setAll(game);
     }
 

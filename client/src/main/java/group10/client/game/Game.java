@@ -5,6 +5,9 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -12,6 +15,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class Game extends Pane {
     private Player player = null;
@@ -25,7 +29,7 @@ public class Game extends Pane {
     private Timeline createMonsterBulletAnimation = new Timeline();
     private Timeline updateMonsterBulletAnimation = new Timeline();
     private Timeline updateMonsterAnimation = new Timeline();
-    private Timeline timeLine = new Timeline();
+    private Timeline timer = new Timeline();
 
     private final int W = 800;
     private final int H = 900;
@@ -67,6 +71,7 @@ public class Game extends Pane {
         initAnimations();
         initGameStatus();
         timer();
+        cheat();
     }
 
     private void initPlayer(){
@@ -112,14 +117,20 @@ public class Game extends Pane {
         });
     }
 
+    public void cheat() {
+        this.setOnKeyPressed(keyEvent -> {
+            System.out.println(keyEvent.getCode());
+        });
+    }
+
     private void timer(){
         EventHandler<ActionEvent> timer = actionEvent -> {
             gameStatus.setTime(startTime);
             startTime += 1;
         };
-        timeLine.getKeyFrames().add(new KeyFrame(Duration.seconds(1),timer));
-        timeLine.setCycleCount(Timeline.INDEFINITE);
-        timeLine.play();
+        this.timer.getKeyFrames().add(new KeyFrame(Duration.seconds(1),timer));
+        this.timer.setCycleCount(Timeline.INDEFINITE);
+        this.timer.play();
     }
 
     private void monsterMovementAnimation(){
@@ -259,13 +270,13 @@ public class Game extends Pane {
         createPlayerBulletAnimation.stop();
         updatePlayerBulletAnimation.stop();
         updateMonsterAnimation.stop();
-        timeLine.stop();
+        timer.stop();
         createMonsterBulletAnimation.getKeyFrames().clear();
         updateMonsterBulletAnimation.getKeyFrames().clear();
         createPlayerBulletAnimation.getKeyFrames().clear();
         updatePlayerBulletAnimation.getKeyFrames().clear();
         updateMonsterAnimation.getKeyFrames().clear();
-        timeLine.getKeyFrames().clear();
+        timer.getKeyFrames().clear();
 
         this.getChildren().removeAll();
         totalKill = player.getKills();
@@ -284,7 +295,23 @@ public class Game extends Pane {
             int score = (100/startTime) * (levelBonus + killBonus);
             player.setScore(score);
             System.out.println("Final score :" + player.getScore());
+            startTime = 0;
+            totalKill = 0;
+            totalHealth = 3;
+            goBackGameLobby();
+
         }
+    }
+
+    void goBackGameLobby() {
+        try {
+            Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
+            ((AnchorPane)this.getParent()).getChildren().setAll(gameLobby);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     void debugger(){
