@@ -60,7 +60,7 @@ public class SignUpController implements Initializable {
 
         HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
 
-        ResponseEntity<JSONObject> response = restTemplate.exchange("http://localhost:8080/sign_up",
+        ResponseEntity<JSONObject> response = restTemplate.exchange(apiAddress + "/sign_up",
                 HttpMethod.POST,
                 entity,
                 JSONObject.class);

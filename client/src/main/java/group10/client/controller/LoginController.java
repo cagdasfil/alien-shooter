@@ -31,7 +31,6 @@ public class LoginController implements Initializable {
     @Value("${spring.application.apiAddress}") private String apiAddress;
 
     @FXML public AnchorPane generalLayout;
-    @FXML public Button playButton;
     @FXML public Button loginButton;
     @FXML public Button signUpButton;
     @FXML public TextField usernameField;
@@ -62,7 +61,7 @@ public class LoginController implements Initializable {
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 
-        String response = restTemplate.exchange("http://localhost:8080/login",
+        String response = restTemplate.exchange(apiAddress + "/login",
                             HttpMethod.POST,
                             entity,
                             String.class).toString();
