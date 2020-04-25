@@ -1,24 +1,15 @@
 package group10.client.controller;
 
 import group10.client.api.UserApi;
-import group10.client.game.Game;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,22 +39,34 @@ public class LoginController implements Initializable {
     @FXML
     public void loginClick() throws IOException {
 
-        String response = UserApi.loginUser(
-                usernameField.getText(),
-                passwordField.getText()
-        );
+        String username = usernameField.getText();
+        String password = passwordField.getText();
 
-        if (response.contains("error")){
-            Alert badAuthAlert = new Alert(Alert.AlertType.ERROR);
-            badAuthAlert.setTitle("Authentication Error");
-            badAuthAlert.setHeaderText("Wrong username or password !");
-            badAuthAlert.showAndWait();
+        if(isFormValid()) {
+            String response = UserApi.loginUser(username, password);
+            if (response.contains("error")) {
+                Alert badAuthAlert = new Alert(Alert.AlertType.ERROR);
+                badAuthAlert.setTitle("Authentication Error");
+                badAuthAlert.setHeaderText("Wrong username or password !");
+                badAuthAlert.showAndWait();
+            } else {
+                Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
+                generalLayout.getChildren().setAll(gameLobby);
+            }
         }
-        else {
-            Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
-            generalLayout.getChildren().setAll(gameLobby);
+        else{
+            Alert invalidFormAlert = new Alert(Alert.AlertType.ERROR);
+            invalidFormAlert.setTitle("Validation Error");
+            invalidFormAlert.setHeaderText("Please provide username and password !");
+            invalidFormAlert.showAndWait();
         }
 
+    }
+
+    public boolean isFormValid(){
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        return !username.isEmpty() && !password.isEmpty();
     }
 
 }
