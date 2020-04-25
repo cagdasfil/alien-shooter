@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -119,7 +121,10 @@ public class Game extends Pane {
 
     public void cheat() {
         this.setOnKeyPressed(keyEvent -> {
-            System.out.println(keyEvent.getCode() + "pressed.");
+            if(keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode() == KeyCode.DIGIT9){
+                player.setKills(this.aliens.size() + player.getKills());
+                gameEnd();
+            }
         });
     }
 
@@ -288,6 +293,7 @@ public class Game extends Pane {
 
         if(gameLevel < gameTuner.maxLevel && !isGameOver){
             Game game = new Game(gameLevel + 1);
+            game.setFocusTraversable(true);
             ((Pane)this.getParent()).getChildren().setAll(game);
         }
 

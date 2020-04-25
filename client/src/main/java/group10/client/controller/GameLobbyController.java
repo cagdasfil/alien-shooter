@@ -29,6 +29,7 @@ public class GameLobbyController implements Initializable {
     @FXML
     public void playClick() throws IOException {
         Game game = new Game(1);
+        game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);
     }
 
