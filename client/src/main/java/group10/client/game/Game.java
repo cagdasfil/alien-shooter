@@ -1,5 +1,8 @@
 package group10.client.game;
 
+import group10.client.api.ScoreApi;
+import group10.client.api.UserApi;
+import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -294,7 +297,9 @@ public class Game extends Pane {
 
             int score = (100/startTime) * (levelBonus + killBonus);
             player.setScore(score);
-            System.out.println("Final score :" + player.getScore());
+
+            ScoreApi.saveScore(player.getScore());
+
             startTime = 0;
             totalKill = 0;
             totalHealth = 3;
