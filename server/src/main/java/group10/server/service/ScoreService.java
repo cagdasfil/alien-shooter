@@ -36,10 +36,9 @@ public interface ScoreService {
     List<Score> getAllScoresMonthly();
 
     /**
-     * This method returns all scores created in the past week.
-     * @return scores List of all scores created in the past week in scoreRepository.
+     * This method returns all scores created in all time.
+     * @return scores List of all scores created in all time in scoreRepository.
      */
-
 
     List<Score> getAllScoresAllTime();
 

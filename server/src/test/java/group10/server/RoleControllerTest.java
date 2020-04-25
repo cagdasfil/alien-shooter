@@ -1,16 +1,20 @@
 package group10.server;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import group10.server.model.Role;
 import group10.server.model.User;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,9 +33,15 @@ public class RoleControllerTest extends ServerTest{
         /* Send request to the server */
         mockMvc.perform(postRoleRequest).andExpect(status().isOk());
 
-        /* Find whether role is created */
-        Optional<Role> role = roleRepository.findById(3L);
-        assertEquals(role.isPresent(), true);
+        /* Run get /roles method to get all roles */
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/roles")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        /* Get list of roles as String */
+        String rolesString = mvcResult.getResponse().getContentAsString();
+
+        /* Check whether role is created */
+        assertTrue(rolesString.contains("\"role\":\"TRY\""));
 
     }
 
@@ -39,8 +49,18 @@ public class RoleControllerTest extends ServerTest{
     public void gettingRoles() throws Exception{
 
         /* Run get /roles method to get all roles */
-        mockMvc.perform(MockMvcRequestBuilders.get("/roles")).andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/roles")).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        /* Get list of roles as String */
+        String rolesString = mvcResult.getResponse().getContentAsString();
+
+        /* Map string response to list of roles */
+        ObjectMapper mapper = new ObjectMapper();
+        List<Role> roles = mapper.readValue(rolesString, new TypeReference<List<Role>>(){});
+
+        /* Check whether roles exist */
+        assertFalse(roles.isEmpty());
 
     }
 
