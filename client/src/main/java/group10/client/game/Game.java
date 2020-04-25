@@ -1,8 +1,6 @@
 package group10.client.game;
 
 import group10.client.api.ScoreApi;
-import group10.client.api.UserApi;
-import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -10,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -50,7 +47,7 @@ public class Game extends Pane {
 
     private GameStatus gameStatus;
     private GameTuner gameTuner;
-    private static Integer startTime = 0;
+    private static Integer remainingTime = 100;
     private static int totalKill = 0;
     private static int totalHealth = 3;
     private int gameLevel;
@@ -122,14 +119,18 @@ public class Game extends Pane {
 
     public void cheat() {
         this.setOnKeyPressed(keyEvent -> {
-            System.out.println(keyEvent.getCode());
+            System.out.println(keyEvent.getCode() + "pressed.");
         });
     }
 
     private void timer(){
         EventHandler<ActionEvent> timer = actionEvent -> {
-            gameStatus.setTime(startTime);
-            startTime += 1;
+            gameStatus.setTime(remainingTime);
+            remainingTime -= 1;
+            if(remainingTime == 0){
+                isGameOver = true;
+                gameEnd();
+            }
         };
         this.timer.getKeyFrames().add(new KeyFrame(Duration.seconds(1),timer));
         this.timer.setCycleCount(Timeline.INDEFINITE);
@@ -263,7 +264,7 @@ public class Game extends Pane {
     }
 
     private void initGameStatus(){
-        gameStatus = new GameStatus(player.getKills(),startTime,player.getHealth());
+        gameStatus = new GameStatus(player.getKills(), remainingTime,player.getHealth());
         this.getChildren().add(gameStatus);
     }
 
@@ -287,20 +288,24 @@ public class Game extends Pane {
 
         if(gameLevel < gameTuner.maxLevel && !isGameOver){
             Game game = new Game(gameLevel + 1);
-            this.getChildren().remove(this);
-            this.getChildren().add(game);
+            ((Pane)this.getParent()).getChildren().setAll(game);
         }
 
         else {
             int levelBonus = 100 * gameLevel * gameLevel;
             int killBonus = player.getKills() * 10;
+            int healthBonus = player.getHealth() * 200;
+            int baseScore = levelBonus + killBonus + healthBonus;
 
-            int score = (100/startTime) * (levelBonus + killBonus);
-            player.setScore(score);
+            if(gameLevel == 4){
+                 baseScore = remainingTime * 50 + baseScore + healthBonus;
+            }
+
+            player.setScore(baseScore);
 
             ScoreApi.saveScore(player.getScore());
 
-            startTime = 0;
+            remainingTime = 100;
             totalKill = 0;
             totalHealth = 3;
             goBackGameLobby();
@@ -311,7 +316,7 @@ public class Game extends Pane {
     void goBackGameLobby() {
         try {
             Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
-            ((AnchorPane)this.getParent()).getChildren().setAll(gameLobby);
+            ((Pane)this.getParent()).getChildren().setAll(gameLobby);
         }
         catch (Exception e){
             e.printStackTrace();

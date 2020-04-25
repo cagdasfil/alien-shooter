@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.ResourceBundle;
 @Component
 public class GameLobbyController implements Initializable {
 
-    @FXML public AnchorPane generalLayout;
+    @FXML public Pane generalLayout;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
