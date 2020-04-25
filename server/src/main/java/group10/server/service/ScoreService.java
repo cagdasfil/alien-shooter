@@ -36,6 +36,14 @@ public interface ScoreService {
     List<Score> getAllScoresMonthly();
 
     /**
+     * This method returns all scores created in the past week.
+     * @return scores List of all scores created in the past week in scoreRepository.
+     */
+
+
+    List<Score> getAllScoresAllTime();
+
+    /**
      * This method adds score to the score database for the user with given id.
      * @param score score information
      * @param userId id of the user

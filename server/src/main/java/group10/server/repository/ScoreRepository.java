@@ -19,4 +19,7 @@ public interface ScoreRepository extends JpaRepository<Score, Long>{
     @Query("select s from Score s where s.createdAt >= :date order by s.score desc")
     List<Score> findAllMonthly(
             @Param("date") LocalDate date);
+
+    @Query("select s from Score s order by s.score desc")
+    List<Score> findAllAllTime( );
 }

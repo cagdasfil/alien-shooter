@@ -53,6 +53,16 @@ public class ScoreController {
     }
 
     /**
+     * This method redirects GET request to {@link ScoreService#getAllScoresAllTime()}
+     * @return scores List of all scores created in the all time in scoreRepository.
+     */
+
+    @GetMapping("/scores/alltime")
+    public List<Score> getScoresAllTime(){
+        return scoreService.getAllScoresAllTime();
+    }
+
+    /**
      * This method redirects GET request to {@link ScoreService#getScore(Long)}
      * @param scoreId id of score object
      * @return Score score object

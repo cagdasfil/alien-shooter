@@ -51,6 +51,12 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
+    public List<Score> getAllScoresAllTime(){
+        /* return all scores created in all time*/
+        return scoreRepository.findAllAllTime();
+    }
+
+    @Override
     public void addScore(Score score, Long userId){
         //find given user by ID and set in score table as foreign key.
         User u = userService.getUser(userId);
