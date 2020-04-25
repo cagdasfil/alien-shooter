@@ -19,7 +19,7 @@ public class ScoreApi {
     }
 
     public static String getScoresAllTime(){
-        return restTemplate.getForObject(apiAddress + "/scores/alltime" , String.class);
+        return restTemplate.getForObject(apiAddress + "/scores" , String.class);
     }
 
     public static void saveScore(Integer score){
