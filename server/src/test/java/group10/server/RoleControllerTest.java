@@ -3,7 +3,6 @@ package group10.server;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import group10.server.model.Role;
-import group10.server.model.User;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -12,7 +11,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -57,7 +55,7 @@ public class RoleControllerTest extends ServerTest{
 
         /* Map string response to list of roles */
         ObjectMapper mapper = new ObjectMapper();
-        List<Role> roles = mapper.readValue(rolesString, new TypeReference<List<Role>>(){});
+        List<Role> roles = mapper.readValue(rolesString, new TypeReference<>() {});
 
         /* Check whether roles exist */
         assertFalse(roles.isEmpty());
