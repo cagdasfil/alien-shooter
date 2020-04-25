@@ -18,6 +18,10 @@ public class ScoreApi {
         return restTemplate.getForObject(apiAddress + "/scores/monthly" , String.class);
     }
 
+    public static String getScoresAllTime(){
+        return restTemplate.getForObject(apiAddress + "/scores" , String.class);
+    }
+
     public static void saveScore(Integer score){
             String jsonString = new JSONObject()
                     .put("score", score).toString();

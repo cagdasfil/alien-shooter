@@ -28,6 +28,7 @@ public class LeaderboardController implements Initializable {
 
     private final ObservableList<ScoreRow> scoresWeekly = FXCollections.observableArrayList();
     private final ObservableList<ScoreRow> scoresMonthly = FXCollections.observableArrayList();
+    private final ObservableList<ScoreRow> scoresAllTime = FXCollections.observableArrayList();
 
     @FXML public AnchorPane generalLayout;
     @FXML private TableView<ScoreRow> tableWeekly;
@@ -40,12 +41,18 @@ public class LeaderboardController implements Initializable {
     @FXML public TableColumn<ScoreRow, String> usernameColumnMonthly;
     @FXML public TableColumn<ScoreRow, Long> scoreColumnMonthly;
     @FXML public TableColumn<ScoreRow, LocalDate> dateColumnMonthly;
+    @FXML private TableView<ScoreRow> tableAllTime;
+    @FXML public TableColumn<ScoreRow, Long> rankColumnAllTime;
+    @FXML public TableColumn<ScoreRow, String> usernameColumnAllTime;
+    @FXML public TableColumn<ScoreRow, Long> scoreColumnAllTime;
+    @FXML public TableColumn<ScoreRow, LocalDate> dateColumnAllTime;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         try {
             initializeWeeklyTable();
             initializeMonthlyTable();
+            initializeAllTimeTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,6 +80,18 @@ public class LeaderboardController implements Initializable {
         String scoresString = ScoreApi.getScoresMonthly();
 
         fillTable(scoresString, scoresMonthly, tableMonthly);
+    }
+
+    public void initializeAllTimeTable() throws JsonProcessingException {
+
+        rankColumnAllTime.setCellValueFactory(new PropertyValueFactory<>("Rank"));
+        usernameColumnAllTime.setCellValueFactory(new PropertyValueFactory<>("Username"));
+        scoreColumnAllTime.setCellValueFactory(new PropertyValueFactory<>("Score"));
+        dateColumnAllTime.setCellValueFactory(new PropertyValueFactory<>("Date"));
+
+        String scoresString = ScoreApi.getScoresAllTime();
+
+        fillTable(scoresString, scoresAllTime, tableAllTime);
     }
 
     private void fillTable(String scoresString, ObservableList<ScoreRow> scoresList, TableView<ScoreRow> table) throws JsonProcessingException {

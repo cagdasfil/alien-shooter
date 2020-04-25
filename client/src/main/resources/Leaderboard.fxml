@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="generalLayout" prefHeight="900.0" prefWidth="800.0" style="-fx-background-image: url(static/background.jpg)" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group10.client.controller.LeaderboardController">
    <children>
-      <TabPane layoutX="75.0" layoutY="292.0" prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" tabMinHeight="50.0" tabMinWidth="305.0">
+      <TabPane layoutX="75.0" layoutY="292.0" prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" tabMinHeight="50.0" tabMinWidth="199.0">
         <tabs>
           <Tab closable="false" text="Weekly">
             <content>
@@ -49,6 +49,25 @@
                   </AnchorPane>
             </content>
           </Tab>
+            <Tab closable="false" text="All Time">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TableView fx:id="tableAllTime" layoutX="16.0" layoutY="19.0" prefHeight="405.0" prefWidth="618.0">
+                                <columns>
+                                    <TableColumn fx:id="rankColumnAllTime" prefWidth="75.0" text="rank" />
+                                    <TableColumn fx:id="usernameColumnAllTime" prefWidth="75.0" text="username" />
+                                    <TableColumn fx:id="scoreColumnAllTime" prefWidth="75.0" text="score" />
+                                    <TableColumn fx:id="dateColumnAllTime" prefWidth="75.0" text="date" />
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                </columnResizePolicy>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
         </tabs>
       </TabPane>
       <Hyperlink layoutX="14.0" layoutY="841.0" onAction="#backClick" text="&lt; Back to Menu" textFill="WHITE">
