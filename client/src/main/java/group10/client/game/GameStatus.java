@@ -8,45 +8,72 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class GameStatus extends HBox {
-
-    private Label scoreLabel;
+    // total number of kills for the player
+    private Label killLabel;
+    // remaining time to game end
     private Label timeLabel;
+    // remaining health of the player
     private Label remainingHealthLabel;
 
-    public GameStatus(int score, int time, int remainingHealth) {
-        this.scoreLabel = new Label("Kills: " + score);
+    /**
+     *
+     * @param kill total number of kill for the player
+     * @param time remaining time to game end
+     * @param remainingHealth remaining health of the player
+     */
+    public GameStatus(int kill, int time, int remainingHealth) {
+        // set labels
+        this.killLabel = new Label("Kills: " + kill);
         this.timeLabel = new Label("Time : " + time + " seconds");
         this.remainingHealthLabel = new Label("Remaining Health : " + remainingHealth);
 
         //Setting the margin to the nodes
-        this.setMargin(this.scoreLabel, new Insets(60, 60, 60, 60));
+        this.setMargin(this.killLabel, new Insets(60, 60, 60, 60));
         this.setMargin(this.timeLabel, new Insets(60, 60, 60, 60));
         this.setMargin(this.remainingHealthLabel, new Insets(60, 60, 60, 60));
         configureAndAddLabels();
     }
 
     private void configureAndAddLabels(){
-        scoreLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD,20));
+        // set font for each label
+        killLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD,20));
         timeLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD,20));
         remainingHealthLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD,20));
 
-        scoreLabel.setTextFill(Color.RED);
+        // set text color for each label
+        killLabel.setTextFill(Color.RED);
         timeLabel.setTextFill(Color.RED);
         remainingHealthLabel.setTextFill(Color.RED);
 
-        this.getChildren().addAll(scoreLabel,timeLabel,remainingHealthLabel);
+        // show all labels on the screen
+        this.getChildren().addAll(killLabel,timeLabel,remainingHealthLabel);
     }
 
 
-    public void setScore(int score) {
-        scoreLabel.setText("Kills: " +  score);
+    /**
+     * Setter method to be able to set total number of kill for the player
+     * @param kill total number of kill for the player
+     */
+    public void setKill(int kill) {
+        // set label text
+        killLabel.setText("Kills: " +  kill);
     }
 
+    /**
+     * Setter method to be able to set remaining time of the game
+     * @param time remaining time
+     */
     public void setTime(int time) {
+        // set label text
         timeLabel.setText("Time : " + time + " seconds");
     }
 
+    /**
+     * Setter method to be able to set remaining health of the player
+     * @param remainingHealth remaining health of the player
+     */
     public void setRemainingHealth(int remainingHealth) {
+        // set label text
         remainingHealthLabel.setText("Remaining Health : " + remainingHealth);
     }
 }
