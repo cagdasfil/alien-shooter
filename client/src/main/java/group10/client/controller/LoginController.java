@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,6 +22,8 @@ import java.util.ResourceBundle;
 public class LoginController implements Initializable {
 
     public static User user;
+    public static String apiAddress;
+    @Value("${spring.application.apiAddress}") private String applicationApiAddress;
 
     @FXML public AnchorPane generalLayout;
     @FXML public Button loginButton;
@@ -30,7 +33,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        apiAddress = applicationApiAddress;
     }
 
     @FXML

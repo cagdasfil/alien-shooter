@@ -1,8 +1,8 @@
 package group10.client.api;
 
+import group10.client.controller.LoginController;
 import group10.client.model.server.User;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserApi {
 
     private static final RestTemplate restTemplate = new RestTemplate();
-    @Value("${spring.application.apiAddress}") private static String apiAddress;
+    private static final String apiAddress = LoginController.apiAddress;
 
     public static ResponseEntity<JSONObject> signUpUser(String username, String password, String name, String surname, String email){
 
@@ -27,7 +27,7 @@ public class UserApi {
 
         HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
 
-        return restTemplate.exchange("http://localhost:8080/sign_up",
+        return restTemplate.exchange(apiAddress + "/sign_up",
                 HttpMethod.POST,
                 entity,
                 JSONObject.class);
@@ -45,14 +45,14 @@ public class UserApi {
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 
-        return restTemplate.exchange("http://localhost:8080/login",
+        return restTemplate.exchange( apiAddress + "/login",
                 HttpMethod.POST,
                 entity,
                 String.class).toString();
     }
 
     public static User getUser(String username){
-        return restTemplate.getForObject("http://localhost:8080/usernames/"+username , User.class);
+        return restTemplate.getForObject(apiAddress + "/usernames/"+username , User.class);
     }
 
 }
