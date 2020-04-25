@@ -16,20 +16,20 @@ public  class GameTuner {
         level3 = new HashMap<>();
         level4 = new HashMap<>();
 
-        level1.put("monsterCount",4);
-        level2.put("monsterCount",5);
-        level3.put("monsterCount",6);
-        level4.put("monsterCount",7);
+        level1.put("alienCount",4);
+        level2.put("alienCount",5);
+        level3.put("alienCount",6);
+        level4.put("alienCount",7);
 
         level1.put("playerBulletRadius",15);
         level2.put("playerBulletRadius",15);
         level3.put("playerBulletRadius",15);
         level4.put("playerBulletRadius",15);
 
-        level1.put("monsterBulletRadius",10);
-        level2.put("monsterBulletRadius",11);
-        level3.put("monsterBulletRadius",12);
-        level4.put("monsterBulletRadius",13);
+        level1.put("alienBulletRadius",10);
+        level2.put("alienBulletRadius",11);
+        level3.put("alienBulletRadius",12);
+        level4.put("alienBulletRadius",13);
 
         level1.put("playerBulletMovingRate",10);
         level2.put("playerBulletMovingRate",11);
@@ -42,15 +42,15 @@ public  class GameTuner {
         level4.put("playerBulletCratingRate",150);
 
 
-        level1.put("monsterBulletMovingRate",40);
-        level2.put("monsterBulletMovingRate",30);
-        level3.put("monsterBulletMovingRate",20);
-        level4.put("monsterBulletMovingRate",10);
+        level1.put("alienBulletMovingRate",40);
+        level2.put("alienBulletMovingRate",30);
+        level3.put("alienBulletMovingRate",20);
+        level4.put("alienBulletMovingRate",10);
 
-        level1.put("monsterBulletCreatingRate",4); //seconds
-        level2.put("monsterBulletCreatingRate",3);
-        level3.put("monsterBulletCreatingRate",3);
-        level4.put("monsterBulletCreatingRate",2);
+        level1.put("alienBulletCreatingRate",4); //seconds
+        level2.put("alienBulletCreatingRate",3);
+        level3.put("alienBulletCreatingRate",3);
+        level4.put("alienBulletCreatingRate",2);
 
     }
 

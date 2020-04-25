@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -23,14 +22,14 @@ public class Game extends Pane {
     private Player player = null;
     private List<Alien> aliens = new ArrayList<>();
     private List<Bullet> playerBullets = new ArrayList<>();
-    private List<Bullet> monsterBullets = new ArrayList<>();
+    private List<Bullet> alienBullets = new ArrayList<>();
 
     // Animations of the game
     private Timeline createPlayerBulletAnimation = new Timeline();
     private Timeline updatePlayerBulletAnimation = new Timeline();
-    private Timeline createMonsterBulletAnimation = new Timeline();
-    private Timeline updateMonsterBulletAnimation = new Timeline();
-    private Timeline updateMonsterAnimation = new Timeline();
+    private Timeline createAlienBulletAnimation = new Timeline();
+    private Timeline updateAlienBulletAnimation = new Timeline();
+    private Timeline updateAlienAnimation = new Timeline();
     private Timeline timer = new Timeline();
 
     private final int W = 800;
@@ -38,13 +37,13 @@ public class Game extends Pane {
 
     private final int S = 40;
     private final int playerBulletRadius;
-    private final int monsterBulletRadius;
-    private int monsterCount;
+    private final int alienBulletRadius;
+    private int alienCount;
 
     private int playerBulletMovingRate;
     private int playerBulletCratingRate;
-    private int monsterBulletMovingRate;
-    private int monsterBulletCreatingRate;
+    private int alienBulletMovingRate;
+    private int alienBulletCreatingRate;
     private int moveDistance = S / 4;
 
     private GameStatus gameStatus;
@@ -60,16 +59,16 @@ public class Game extends Pane {
         this.gameTuner = new GameTuner();
         this.setStyle("-fx-background-image: url('static/galaxy2.gif')");
 
-        monsterCount = gameTuner.getSettings(gameLevel).get("monsterCount");
+        alienCount = gameTuner.getSettings(gameLevel).get("alienCount");
         playerBulletRadius  = gameTuner.getSettings(gameLevel).get("playerBulletRadius");
-        monsterBulletRadius = gameTuner.getSettings(gameLevel).get("monsterBulletRadius");
+        alienBulletRadius = gameTuner.getSettings(gameLevel).get("alienBulletRadius");
         playerBulletMovingRate = gameTuner.getSettings(gameLevel).get("playerBulletMovingRate");
         playerBulletCratingRate = gameTuner.getSettings(gameLevel).get("playerBulletCratingRate");
-        monsterBulletMovingRate = gameTuner.getSettings(gameLevel).get("monsterBulletMovingRate");
-        monsterBulletCreatingRate = gameTuner.getSettings(gameLevel).get("monsterBulletCreatingRate");
+        alienBulletMovingRate = gameTuner.getSettings(gameLevel).get("alienBulletMovingRate");
+        alienBulletCreatingRate = gameTuner.getSettings(gameLevel).get("alienBulletCreatingRate");
 
         initPlayer();
-        initMonsters();
+        initAliens();
         initAnimations();
         initGameStatus();
         timer();
@@ -83,10 +82,10 @@ public class Game extends Pane {
         this.getChildren().add(player);
     }
 
-    private void initMonsters(){
-        int gap = (W - 2 * S) / monsterCount;
+    private void initAliens(){
+        int gap = (W - 2 * S) / alienCount;
 
-        for(int i = 1 ; i < monsterCount +1; i++){
+        for(int i = 1; i < alienCount +1; i++){
             Alien tankAlien = new TankAlien(W- S/2 - i * gap,H/ 10 * 3, S,S,Color.DARKRED);
             this.aliens.add(tankAlien);
             this.getChildren().add(tankAlien);
@@ -142,8 +141,8 @@ public class Game extends Pane {
         this.timer.play();
     }
 
-    private void monsterMovementAnimation(){
-        EventHandler<ActionEvent> moveMonster = actionEvent -> {
+    private void alienMovementAnimation(){
+        EventHandler<ActionEvent> moveAlien = actionEvent -> {
             Iterator<Alien> it = aliens.iterator();
             while(it.hasNext()){
                 Alien alien = it.next();
@@ -155,9 +154,9 @@ public class Game extends Pane {
             }
         };
 
-        updateMonsterAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(100),moveMonster));
-        updateMonsterAnimation.setCycleCount(Timeline.INDEFINITE);
-        updateMonsterAnimation.play();
+        updateAlienAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(100),moveAlien));
+        updateAlienAnimation.setCycleCount(Timeline.INDEFINITE);
+        updateAlienAnimation.play();
     }
 
     private void configurePlayerBulletAnimations()
@@ -181,9 +180,9 @@ public class Game extends Pane {
                 Bullet bullet = it.next();
                 double newY = bullet.getCenterY() - 5;
                 bullet.setCenterY(newY);
-                Iterator<Alien> monsterIterator = this.aliens.iterator();
-                while(monsterIterator.hasNext()){
-                    Alien alien = monsterIterator.next();
+                Iterator<Alien> alienIterator = this.aliens.iterator();
+                while(alienIterator.hasNext()){
+                    Alien alien = alienIterator.next();
                     if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
                         it.remove();
                         playerBullets.remove(bullet);
@@ -193,7 +192,7 @@ public class Game extends Pane {
                             player.setKills(player.getKills() +1);
                             gameStatus.setScore(player.getKills());
 
-                            monsterIterator.remove();
+                            alienIterator.remove();
                             aliens.remove(alien);
                             getChildren().remove(alien);
                         }
@@ -211,28 +210,28 @@ public class Game extends Pane {
         updatePlayerBulletAnimation.play();
     }
 
-    private void configureMonsterBulletAnimation(){ 
+    private void configureAlienBulletAnimation(){
         EventHandler<ActionEvent> createBullet = actionEvent -> {
-            Iterator<Alien> monsterIterator = this.aliens.iterator();
-            while(monsterIterator.hasNext()){
-                Alien alien = monsterIterator.next();
+            Iterator<Alien> alienIterator = this.aliens.iterator();
+            while(alienIterator.hasNext()){
+                Alien alien = alienIterator.next();
                 if(alien instanceof ShooterAlien){
                     int bulletX = (int) (alien.getTranslateX() + alien.getWidth() / 2);
-                    int bulletY = (int) (alien.getTranslateY() + monsterBulletRadius);
+                    int bulletY = (int) (alien.getTranslateY() + alienBulletRadius);
 
-                    Bullet bullet = new Bullet( bulletX,bulletY, monsterBulletRadius, Color.ORANGE);
-                    monsterBullets.add(bullet);
+                    Bullet bullet = new Bullet( bulletX,bulletY, alienBulletRadius, Color.ORANGE);
+                    alienBullets.add(bullet);
                     this.getChildren().add(bullet);
                 }
             }
         };
 
-        createMonsterBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(monsterBulletCreatingRate),createBullet));
-        createMonsterBulletAnimation.setCycleCount(Timeline.INDEFINITE);
-        createMonsterBulletAnimation.play();
+        createAlienBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(alienBulletCreatingRate),createBullet));
+        createAlienBulletAnimation.setCycleCount(Timeline.INDEFINITE);
+        createAlienBulletAnimation.play();
 
         EventHandler<ActionEvent> updateBullets = actionEvent -> {
-            Iterator<Bullet> it = this.monsterBullets.iterator();
+            Iterator<Bullet> it = this.alienBullets.iterator();
             while(it.hasNext()){
                 Bullet bullet = it.next();
                 double newY = bullet.getCenterY() + 5;
@@ -240,7 +239,7 @@ public class Game extends Pane {
 
                 if(bullet.getBoundsInParent().intersects(player.getBoundsInParent())){
                     it.remove();
-                    monsterBullets.remove(bullet);
+                    alienBullets.remove(bullet);
                     getChildren().remove(bullet);
                     player.setHealth(player.getHealth() - 1);
 
@@ -255,17 +254,17 @@ public class Game extends Pane {
             }
         };
 
-        updateMonsterBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(monsterBulletMovingRate),updateBullets));
-        updateMonsterBulletAnimation.setCycleCount(Timeline.INDEFINITE);
-        updateMonsterBulletAnimation.play();
+        updateAlienBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(alienBulletMovingRate),updateBullets));
+        updateAlienBulletAnimation.setCycleCount(Timeline.INDEFINITE);
+        updateAlienBulletAnimation.play();
 
     }
 
     private void initAnimations(){
         playerMovementAnimation();
         configurePlayerBulletAnimations();
-        configureMonsterBulletAnimation();
-        monsterMovementAnimation();
+        configureAlienBulletAnimation();
+        alienMovementAnimation();
     }
 
     private void initGameStatus(){
@@ -274,17 +273,17 @@ public class Game extends Pane {
     }
 
     private void gameEnd(){
-        createMonsterBulletAnimation.stop();
-        updateMonsterBulletAnimation.stop();
+        createAlienBulletAnimation.stop();
+        updateAlienBulletAnimation.stop();
         createPlayerBulletAnimation.stop();
         updatePlayerBulletAnimation.stop();
-        updateMonsterAnimation.stop();
+        updateAlienAnimation.stop();
         timer.stop();
-        createMonsterBulletAnimation.getKeyFrames().clear();
-        updateMonsterBulletAnimation.getKeyFrames().clear();
+        createAlienBulletAnimation.getKeyFrames().clear();
+        updateAlienBulletAnimation.getKeyFrames().clear();
         createPlayerBulletAnimation.getKeyFrames().clear();
         updatePlayerBulletAnimation.getKeyFrames().clear();
-        updateMonsterAnimation.getKeyFrames().clear();
+        updateAlienAnimation.getKeyFrames().clear();
         timer.getKeyFrames().clear();
 
         this.getChildren().removeAll();
