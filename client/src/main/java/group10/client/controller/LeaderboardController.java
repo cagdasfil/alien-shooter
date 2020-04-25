@@ -16,11 +16,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,9 +25,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LeaderboardController implements Initializable {
-
-    private RestTemplate restTemplate;
-    @Value("${spring.application.apiAddress}") private String apiAddress;
 
     private final ObservableList<ScoreRow> scoresWeekly = FXCollections.observableArrayList();
     private final ObservableList<ScoreRow> scoresMonthly = FXCollections.observableArrayList();
@@ -49,7 +43,6 @@ public class LeaderboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-        restTemplate = new RestTemplate();
         try {
             initializeWeeklyTable();
             initializeMonthlyTable();
@@ -81,7 +74,6 @@ public class LeaderboardController implements Initializable {
 
         fillTable(scoresString, scoresMonthly, tableMonthly);
     }
-
 
     private void fillTable(String scoresString, ObservableList<ScoreRow> scoresList, TableView<ScoreRow> table) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();

@@ -1,5 +1,6 @@
 package group10.client.api;
 
+import group10.client.model.server.User;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -48,6 +49,10 @@ public class UserApi {
                 HttpMethod.POST,
                 entity,
                 String.class).toString();
+    }
+
+    public static User getUser(String username){
+        return restTemplate.getForObject("http://localhost:8080/usernames/"+username , User.class);
     }
 
 }

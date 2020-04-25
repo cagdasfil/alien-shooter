@@ -1,6 +1,7 @@
 package group10.client.controller;
 
 import group10.client.api.UserApi;
+import group10.client.model.server.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +19,8 @@ import java.util.ResourceBundle;
 
 @Component
 public class LoginController implements Initializable {
+
+    public static User user;
 
     @FXML public AnchorPane generalLayout;
     @FXML public Button loginButton;
@@ -50,6 +53,7 @@ public class LoginController implements Initializable {
                 badAuthAlert.setHeaderText("Wrong username or password !");
                 badAuthAlert.showAndWait();
             } else {
+                user = UserApi.getUser(username);
                 Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
                 generalLayout.getChildren().setAll(gameLobby);
             }
