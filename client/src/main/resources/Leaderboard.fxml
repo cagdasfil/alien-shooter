@@ -70,7 +70,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Hyperlink layoutX="14.0" layoutY="841.0" onAction="#backClick" text="&lt; Back to Menu" textFill="WHITE">
+      <Hyperlink layoutX="14.0" layoutY="841.0" onAction="#backClick" text="&lt; Back to Game Lobby" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
