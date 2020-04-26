@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
 <AnchorPane fx:id="generalLayout" prefHeight="900.0" prefWidth="800.0" style="-fx-background-image: url(static/background.jpg)" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group10.client.controller.LeaderboardController">
    <children>
       <TabPane layoutX="75.0" layoutY="292.0" prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" tabMinHeight="50.0" tabMinWidth="199.0">
