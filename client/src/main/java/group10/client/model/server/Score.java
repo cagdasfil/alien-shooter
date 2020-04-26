@@ -1,7 +1,5 @@
 package group10.client.model.server;
 
-import java.time.LocalDate;
-
 public class Score {
 
     private Long scoreId;

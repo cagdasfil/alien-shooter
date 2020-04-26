@@ -1,16 +1,12 @@
 package group10.client.controller;
 
-import group10.client.api.ScoreApi;
 import group10.client.game.Game;
-import group10.client.model.server.Score;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.springframework.stereotype.Component;
 
