@@ -49,8 +49,8 @@ public class UserController {
 
     /**
      * This method redirects GET request to {@link UserService#getUserByUsername(String)}
-     * @param username id of user
-     * @return User returned user object with given id.
+     * @param username username of user
+     * @return User returned user object with given username.
      */
 
     //@PreAuthorize("hasAnyRole('USER')")

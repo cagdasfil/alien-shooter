@@ -47,6 +47,7 @@ public interface ScoreService {
      * @param score score information
      * @param userId id of the user
      */
+
     void addScore(Score score, Long userId);
 
     /**
@@ -55,6 +56,7 @@ public interface ScoreService {
      * @throws ApiException.ScoreNotFound when the score object with the given id does not exists in database.
      * @return Score score object
      */
+
     Score getScore(Long scoreId );
 
     /**
@@ -62,5 +64,6 @@ public interface ScoreService {
      * @throws ApiException.ScoreNotFound when the score object with the given id does not exists in database.
      * @param scoreId id of score object to be deleted.
      */
+
     void deleteScore(Long scoreId);
 }
