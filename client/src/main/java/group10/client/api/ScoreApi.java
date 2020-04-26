@@ -45,18 +45,18 @@ public class ScoreApi {
      * @param score score of the user.
      */
     public static void saveScore(Integer score){
-            String jsonString = new JSONObject()
-                    .put("score", score).toString();
+        String jsonString = new JSONObject()
+                .put("score", score).toString();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
+        HttpEntity<String> entity = new HttpEntity<>(jsonString, headers);
 
-            restTemplate.exchange(apiAddress + "/scores/"+ LoginController.user.getId().toString(),
-                    HttpMethod.POST,
-                    entity,
-                    JSONObject.class);
+        restTemplate.exchange(apiAddress + "/scores/"+ LoginController.user.getId().toString(),
+                HttpMethod.POST,
+                entity,
+                JSONObject.class);
     }
 
 }

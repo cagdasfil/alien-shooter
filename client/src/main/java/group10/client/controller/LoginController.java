@@ -18,6 +18,9 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is controller for the Login.fxml file
+ */
 @Component
 public class LoginController implements Initializable {
 
@@ -31,6 +34,11 @@ public class LoginController implements Initializable {
     @FXML public TextField usernameField;
     @FXML public TextField passwordField;
 
+    /**
+     * Initialization function of the controller.
+     * @param url url for initialization
+     * @param resourceBundle resources to bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(applicationApiAddress != null){
@@ -38,12 +46,20 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Controller function of the sign up button click
+     * @throws IOException exception for FXML load operation
+     */
     @FXML
     public void signUpClick() throws IOException {
         Parent signUp = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("SignUp.fxml")));
         generalLayout.getChildren().setAll(signUp);
     }
 
+    /**
+     * Controller function of the login button click
+     * @throws IOException exception for FXML load operation
+     */
     @FXML
     public void loginClick() throws IOException {
 
@@ -72,6 +88,10 @@ public class LoginController implements Initializable {
 
     }
 
+    /**
+     * This method checks if username and password are provided
+     * @return boolean value of values are provided or not
+     */
     public boolean isFormValid(){
         String username = usernameField.getText();
         String password = passwordField.getText();

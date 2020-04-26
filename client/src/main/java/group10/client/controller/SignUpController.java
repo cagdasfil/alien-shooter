@@ -17,6 +17,9 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is controller for the SignUp.fxml file
+ */
 @Component
 public class SignUpController implements Initializable {
 
@@ -27,11 +30,20 @@ public class SignUpController implements Initializable {
     @FXML public TextField surnameField;
     @FXML public TextField emailField;
 
+    /**
+     * Initialization function of the controller.
+     * @param url url for initialization
+     * @param resourceBundle resources to bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 
+    /**
+     * Controller function of the submit button click
+     * @throws IOException exception for FXML load operation
+     */
     @FXML
     public void submitClick() throws IOException {
 
@@ -69,12 +81,21 @@ public class SignUpController implements Initializable {
         }
     }
 
+    /**
+     * Controller function of the back link click
+     * @throws IOException exception for FXML load operation
+     */
     @FXML
     public void backClick() throws IOException {
         Parent login = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Login.fxml")));
         generalLayout.getChildren().setAll(login);
     }
 
+    /**
+     * This method checks if all user information is provided
+     * and e-mail contains "@" character.
+     * @return boolean value of values are provided or not
+     */
     public boolean isFormValid(){
         String username = usernameField.getText();
         String password = passwordField.getText();

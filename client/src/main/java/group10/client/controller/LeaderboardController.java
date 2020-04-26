@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is controller for the Leaderboard.fxml file
+ */
 public class LeaderboardController implements Initializable {
 
     private final ObservableList<ScoreRow> scoresWeekly = FXCollections.observableArrayList();
@@ -47,6 +50,11 @@ public class LeaderboardController implements Initializable {
     @FXML public TableColumn<ScoreRow, Long> scoreColumnAllTime;
     @FXML public TableColumn<ScoreRow, LocalDate> dateColumnAllTime;
 
+    /**
+     * Initialization function of the controller.
+     * @param url url for initialization
+     * @param resourceBundle resources to bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         try {
@@ -58,6 +66,10 @@ public class LeaderboardController implements Initializable {
         }
     }
 
+    /**
+     * This method gets weekly scores and sends to the fillTable method.
+     * @throws JsonProcessingException exception for processing returned JSON object
+     */
     public void initializeWeeklyTable() throws JsonProcessingException {
 
         rankColumnWeekly.setCellValueFactory(new PropertyValueFactory<>("Rank"));
@@ -70,6 +82,10 @@ public class LeaderboardController implements Initializable {
         fillTable(scoresString, scoresWeekly, tableWeekly);
     }
 
+    /**
+     * This method gets monthly scores and sends to the fillTable method.
+     * @throws JsonProcessingException exception for processing returned JSON object
+     */
     public void initializeMonthlyTable() throws JsonProcessingException {
 
         rankColumnMonthly.setCellValueFactory(new PropertyValueFactory<>("Rank"));
@@ -82,6 +98,10 @@ public class LeaderboardController implements Initializable {
         fillTable(scoresString, scoresMonthly, tableMonthly);
     }
 
+    /**
+     * This method gets all scores and sends to the fillTable method.
+     * @throws JsonProcessingException exception for processing returned JSON object
+     */
     public void initializeAllTimeTable() throws JsonProcessingException {
 
         rankColumnAllTime.setCellValueFactory(new PropertyValueFactory<>("Rank"));
@@ -94,9 +114,16 @@ public class LeaderboardController implements Initializable {
         fillTable(scoresString, scoresAllTime, tableAllTime);
     }
 
+    /**
+     * This method adds scores to the specified table
+     * @param scoresString list of scores as String
+     * @param scoresList list of the score rows to add table
+     * @param table table to add score rows
+     * @throws JsonProcessingException exception for processing returned JSON object
+     */
     private void fillTable(String scoresString, ObservableList<ScoreRow> scoresList, TableView<ScoreRow> table) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        List<Score> scores = mapper.readValue(scoresString, new TypeReference<List<Score>>(){});
+        List<Score> scores = mapper.readValue(scoresString, new TypeReference<>(){});
 
         for (int rank=0; rank<scores.size(); rank++){
             Score score = scores.get(rank);
@@ -106,6 +133,10 @@ public class LeaderboardController implements Initializable {
         table.setItems(scoresList);
     }
 
+    /**
+     * Controller function of the back link click
+     * @throws IOException exception for FXML load operation
+     */
     @FXML
     public void backClick() throws IOException {
         Parent gameLobby = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GameLobby.fxml")));
