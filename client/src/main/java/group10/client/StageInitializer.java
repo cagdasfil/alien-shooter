@@ -26,7 +26,6 @@ public class StageInitializer implements ApplicationListener<UiApplication.Stage
         this.applicationContext = applicationContext;
     }
 
-
     @Override
     public void onApplicationEvent(UiApplication.StageReadyEvent stageReadyEvent) {
         try {
@@ -38,7 +37,6 @@ public class StageInitializer implements ApplicationListener<UiApplication.Stage
             stage.setTitle(applicationTitle);
             stage.setResizable(false);
             stage.show();
-
         } catch (IOException e) {
             throw new RuntimeException();
         }

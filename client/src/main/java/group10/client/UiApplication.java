@@ -31,7 +31,6 @@ public class UiApplication extends Application {
         public StageReadyEvent(Stage stage) {
             super(stage);
         }
-
         public Stage getStage() {
             return ((Stage) getSource());
         }

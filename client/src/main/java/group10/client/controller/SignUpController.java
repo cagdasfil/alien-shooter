@@ -33,7 +33,7 @@ public class SignUpController implements Initializable {
     }
 
     @FXML
-    public void signUpClick() throws IOException {
+    public void submitClick() throws IOException {
 
         String username = usernameField.getText();
         String password = passwordField.getText();
