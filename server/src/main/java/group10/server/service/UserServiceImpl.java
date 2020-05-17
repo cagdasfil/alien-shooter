@@ -7,7 +7,6 @@ import group10.server.model.User;
 import group10.server.repository.RoleRepository;
 import group10.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

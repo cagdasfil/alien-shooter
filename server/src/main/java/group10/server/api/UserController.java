@@ -1,9 +1,8 @@
 package group10.server.api;
 
-import group10.server.service.UserService;
 import group10.server.model.User;
+import group10.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
