@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>group10</groupId>
-    <artifactId>client</artifactId>
+    <artifactId>client_program10</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>client</name>
     <description>client side for Galaxy Attack: Alien Shooter</description>
@@ -58,6 +58,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
