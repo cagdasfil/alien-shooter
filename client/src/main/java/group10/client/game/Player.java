@@ -37,9 +37,9 @@ public class Player extends Rectangle {
         this.score = 0;
 
         // Set spaceship image
-        image = new javafx.scene.image.Image("static/spaceship.png");
-        ImagePattern imagePattern = new ImagePattern(image);
-        this.setFill(imagePattern);
+        //image = new javafx.scene.image.Image("static/spaceship.png");
+        //ImagePattern imagePattern = new ImagePattern(image);
+        //this.setFill(imagePattern);
     }
 
     /**

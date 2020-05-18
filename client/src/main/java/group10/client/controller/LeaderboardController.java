@@ -123,7 +123,7 @@ public class LeaderboardController implements Initializable {
      */
     private void fillTable(String scoresString, ObservableList<ScoreRow> scoresList, TableView<ScoreRow> table) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        List<Score> scores = mapper.readValue(scoresString, new TypeReference<>(){});
+        List<Score> scores = mapper.readValue(scoresString, new TypeReference<List<Score>>(){});
 
         for (int rank=0; rank<scores.size(); rank++){
             Score score = scores.get(rank);
