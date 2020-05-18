@@ -1,6 +1,10 @@
 package group10.client.game;
 
 import group10.client.api.ScoreApi;
+import group10.client.controller.LoginController;
+import group10.client.multiplayer.MultiplayerGame;
+import group10.client.multiplayer.SocketClient;
+import group10.client.multiplayer.SocketServer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -439,9 +443,8 @@ public class Game extends Pane {
             game.setFocusTraversable(true);
             ((Pane)this.getParent()).getChildren().setAll(game);
         }
-
-        else {
-            // If game finishes, calculate the total score of the player
+        else if (isGameOver){
+            // If player dies , calculate the total score of the player
             int levelBonus = 100 * gameLevel * gameLevel;
             int killBonus = player.getKills() * 10;
             int healthBonus = player.getHealth() * 200;
@@ -449,7 +452,7 @@ public class Game extends Pane {
 
             // If player reaches the highest level , add time bonus to the base score
             if(gameLevel == 4){
-                 baseScore = remainingTime * 50 + baseScore;
+                baseScore = remainingTime * 50 + baseScore;
             }
 
             // set score of the player
@@ -465,6 +468,41 @@ public class Game extends Pane {
 
             // go back game lobby
             goBackGameLobby();
+        }
+
+        else if (gameLevel == gameTuner.maxLevel) {
+            // If player completed single player levels, go MultiPlayer level
+
+            if(LoginController.user.getUsername().equals("user")){
+
+                try {
+                    SocketServer socketServer = new SocketServer();
+                    socketServer.readMessage();
+                    socketServer.sendMessage("hello client");
+                    MultiplayerGame game = new MultiplayerGame(1, socketServer);
+                    game.setFocusTraversable(true);
+                    ((Pane)this.getParent()).getChildren().setAll(game);
+                }
+                catch (Exception e){
+                    System.out.println(e);
+                }
+
+            }
+
+            else if(LoginController.user.getUsername().equals("admin")){
+                try {
+                    SocketClient socketClient = new SocketClient();
+                    socketClient.sendMessage("hello server");
+                    socketClient.readMessage();
+                    MultiplayerGame game = new MultiplayerGame(1, socketClient);
+                    game.setFocusTraversable(true);
+                    ((Pane)this.getParent()).getChildren().setAll(game);
+                }
+                catch (Exception e){
+                    System.out.println(e);
+                }
+
+            }
 
         }
     }
