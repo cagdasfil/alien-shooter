@@ -479,7 +479,7 @@ public class Game extends Pane {
                     SocketServer socketServer = new SocketServer();
                     socketServer.readMessage();
                     socketServer.sendMessage("hello client");
-                    MultiplayerGame game = new MultiplayerGame(1, socketServer);
+                    MultiplayerGame game = new MultiplayerGame(5, socketServer);
                     game.setFocusTraversable(true);
                     ((Pane)this.getParent()).getChildren().setAll(game);
                 }
@@ -494,7 +494,7 @@ public class Game extends Pane {
                     SocketClient socketClient = new SocketClient();
                     socketClient.sendMessage("hello server");
                     socketClient.readMessage();
-                    MultiplayerGame game = new MultiplayerGame(1, socketClient);
+                    MultiplayerGame game = new MultiplayerGame(5, socketClient);
                     game.setFocusTraversable(true);
                     ((Pane)this.getParent()).getChildren().setAll(game);
                 }
