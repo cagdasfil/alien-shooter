@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -27,20 +26,20 @@ public class MultiplayerGame extends Pane {
     //
     private Player pair = null;
 
-    // List of aliens, player bullets and alien bullets
-    private List<Alien> aliens = new ArrayList<>();
+    // List of player bullets and boss bullets
+    private Boss boss;
     private List<Bullet> playerBullets = new ArrayList<>();
     private List<Bullet> pairBullets = new ArrayList<>();
-    private List<Bullet> alienBullets = new ArrayList<>();
+    private List<Bullet> bossBullets = new ArrayList<>();
 
     // Animations of the game
     private Timeline createPlayerBulletAnimation = new Timeline();
     private Timeline updatePlayerBulletAnimation = new Timeline();
     private Timeline createPairBulletAnimation = new Timeline();
     private Timeline updatePairBulletAnimation = new Timeline();
-    private Timeline createAlienBulletAnimation = new Timeline();
-    private Timeline updateAlienBulletAnimation = new Timeline();
-    private Timeline updateAlienAnimation = new Timeline();
+    private Timeline createBossBulletAnimation = new Timeline();
+    private Timeline updateBossBulletAnimation = new Timeline();
+    private Timeline updateBossAnimation = new Timeline();
     private Timeline timer = new Timeline();
     private Timeline pairMovement = new Timeline();
 
@@ -48,29 +47,26 @@ public class MultiplayerGame extends Pane {
     private final int W = 800;
     private final int H = 900;
 
-    // width and height for the player and alien objects
+    // width and height for the player objects
     private final int S = 40;
 
-    // player and alien bullet radius
+    // player and boss bullet radius
     private final int playerBulletRadius;
-    private final int alienBulletRadius;
-
-    // number of aliens in a row
-    private int alienCount;
+    private final int bossBulletRadius;
 
     // moving and creating rate of the player bullet
     private int playerBulletMovingRate;
     private int playerBulletCratingRate;
 
-    // moving and creating rate of the alien bullet
-    private int alienBulletMovingRate;
-    private int alienBulletCreatingRate;
+    // moving and creating rate of the boss bullet
+    private int bossBulletMovingRate;
+    private int bossBulletCreatingRate;
 
-    // moving distance for the aliens
+    // moving distance for the boss
     private int moveDistance = S / 4;
 
-    // health of the tank aliens
-    private int tankAlienHealth;
+    // health of the boss
+    private int bossHealth;
 
     // game status object to be able to show remaining time, number of kills and remaining health on the screen
     private GameStatus gameStatus;
@@ -113,18 +109,18 @@ public class MultiplayerGame extends Pane {
 
         // load game settings
         this.gameTuner = new GameTuner();
-        alienCount = gameTuner.getSettings(gameLevel).get("alienCount");
+
         playerBulletRadius  = gameTuner.getSettings(gameLevel).get("playerBulletRadius");
-        alienBulletRadius = gameTuner.getSettings(gameLevel).get("alienBulletRadius");
+        bossBulletRadius = gameTuner.getSettings(gameLevel).get("bossBulletRadius");
         playerBulletMovingRate = gameTuner.getSettings(gameLevel).get("playerBulletMovingRate");
         playerBulletCratingRate = gameTuner.getSettings(gameLevel).get("playerBulletCratingRate");
-        alienBulletMovingRate = gameTuner.getSettings(gameLevel).get("alienBulletMovingRate");
-        alienBulletCreatingRate = gameTuner.getSettings(gameLevel).get("alienBulletCreatingRate");
-        tankAlienHealth = gameTuner.getSettings(gameLevel).get("tankAlienHealth");
+        bossBulletMovingRate = gameTuner.getSettings(gameLevel).get("bossBulletMovingRate");
+        bossBulletCreatingRate = gameTuner.getSettings(gameLevel).get("bossBulletCreatingRate");
+        bossHealth = gameTuner.getSettings(gameLevel).get("bossHealth");
 
-        // init player and aliens
+        // init player and boss
         initPlayer();
-        initAliens();
+        initBoss();
 
         // init animations
         initAnimations();
@@ -134,9 +130,6 @@ public class MultiplayerGame extends Pane {
 
         // init timer
         timer();
-
-        // activate cheat CTRL + SHIFT + 9
-        cheat();
     }
 
     /**
@@ -155,28 +148,11 @@ public class MultiplayerGame extends Pane {
     }
 
     /**
-     * This method inits simple aliens, shooter aliens and tank aliens on the scene
+     * This method inits Boss
      */
-    private void initAliens(){
-        // distance between each alien object
-        int gap = (W - 2 * S) / alienCount;
-
-        for(int i = 1; i < alienCount +1; i++){
-            // create tank aliens with given count and show them on screen
-            Alien tankAlien = new TankAlien(W- S/2 - i * gap,H/ 10 * 3, S,S,Color.DARKRED,tankAlienHealth);
-            this.aliens.add(tankAlien);
-            this.getChildren().add(tankAlien);
-
-            // create shooter aliens with given count and show them on screen
-            Alien shooterAlien = new ShooterAlien(W- S/2 - i * gap,H/ 10 , S,S,Color.RED);
-            this.aliens.add(shooterAlien);
-            this.getChildren().add(shooterAlien);
-
-            // create simple aliens with given count and show them on screen
-            Alien regularAlien = new Alien(W- S/2 - i * gap,H/ 10 * 2, S,S,Color.GREEN);
-            this.aliens.add(regularAlien);
-            this.getChildren().add(regularAlien);
-        }
+    private void initBoss(){
+        this.boss = new Boss(W/2,H/ 10,2*S,3*S, Color.RED, bossHealth);
+        this.getChildren().add(boss);
     }
 
     /**
@@ -240,18 +216,7 @@ public class MultiplayerGame extends Pane {
        pairMovement.play();
     }
 
-    /**
-     *  This method activates cheat that automatically passes the game to the next level (CTRL + SHIFT + 9 )
-     */
-    public void cheat() {
-        this.setOnKeyPressed(keyEvent -> {
-            // If user pressed (CTRL + SHIFT + 9) combination , kill all the aliens that are alive and pass game to next level
-            if(keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode() == KeyCode.DIGIT9){
-                player.setKills(this.aliens.size() + player.getKills());
-                gameEnd();
-            }
-        });
-    }
+
 
     /**
      * This method initialize the timer and counts remaining time to end game
@@ -274,30 +239,22 @@ public class MultiplayerGame extends Pane {
     }
 
     /**
-     * This method handles movement animation of the aliens. Aliens move left and right to be able to escape player bullets.
+     * This method handles movement animation of the boss. Boss moves left and right to be able to escape player bullets.
      */
-    private void alienMovementAnimation(){
-        EventHandler<ActionEvent> moveAlien = actionEvent -> {
-            // iterator for aliens
-            Iterator<Alien> it = aliens.iterator();
+    private void bossMovementAnimation(){
+        EventHandler<ActionEvent> moveBoss = actionEvent -> {
 
-            // iterate over aliens and move them with move distance
-            while(it.hasNext()){
-                Alien alien = it.next();
-                alien.setTranslateX(alien.getTranslateX() + moveDistance);
-            }
-            // decrement move distance
-            moveDistance -=1;
+            boss.setTranslateX(boss.getTranslateX() + moveDistance);
 
-            // move distance = [-S/4, S/4]
-            if(moveDistance == - S/4 -1){
-                moveDistance = S/4;
+            // [2 * S ...  W - 2 * S ]
+            if( (boss.getTranslateX() + 2 * S > W) || (boss.getTranslateX() -  2 * S < 0) ) {
+                moveDistance *= -1;
             }
         };
 
-        updateAlienAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(100),moveAlien));
-        updateAlienAnimation.setCycleCount(Timeline.INDEFINITE);
-        updateAlienAnimation.play();
+        updateBossAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(30),moveBoss));
+        updateBossAnimation.setCycleCount(Timeline.INDEFINITE);
+        updateBossAnimation.play();
     }
 
     /**
@@ -325,43 +282,28 @@ public class MultiplayerGame extends Pane {
                 double newY = bullet.getCenterY() - 5;
                 bullet.setCenterY(newY);
 
-                // iterator for aliens
-                Iterator<Alien> alienIterator = this.aliens.iterator();
 
-                // iterate over aliens
-                while(alienIterator.hasNext()){
-                    Alien alien = alienIterator.next();
+                // check whether player bullet intersects with the boss or not
+                if(bullet.getBoundsInParent().intersects(boss.getBoundsInParent())){
+                    // If intersects remove player bullet from list and scene
+                    it.remove();
+                    pairBullets.remove(bullet);
+                    getChildren().remove(bullet);
 
-                    // check whether player bullet intersects with the alien or not
-                    if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
-                        // If intersects remove player bullet from list and scene
-                        it.remove();
-                        pairBullets.remove(bullet);
-                        getChildren().remove(bullet);
+                    // decrement the health of the boss who shot
+                    boss.setHealth(boss.getHealth() - 1);
 
-                        // decrement the health of the alien who shot
-                        alien.setHealth(alien.getHealth() - 1);
+                    // If boss has no remaining health
+                    if(boss.getHealth() == 0){
+                        // increment number of kills of the player by one and update game status indicator located on screen
+                        pair.setKills(pair.getKills() +1);
+                        //gameStatus.setKill(player.getKills());
 
-                        // If alien has no remaining health
-                        if(alien.getHealth() == 0){
-                            // increment number of kills of the player by one and update game status indicator located on screen
-                            pair.setKills(pair.getKills() +1);
-                            //gameStatus.setKill(player.getKills());
-
-                            // remove the alien from the list and scene
-                            alienIterator.remove();
-                            aliens.remove(alien);
-                            getChildren().remove(alien);
-                        }
-
-                        // ıf there is no remaining alien finish the game
-                        if(aliens.size() == 0){
-                            gameEnd();
-                        }
-
+                        getChildren().remove(boss);
+                        gameEnd();
                     }
-                }
 
+                }
             }
         };
 
@@ -398,42 +340,32 @@ public class MultiplayerGame extends Pane {
                 double newY = bullet.getCenterY() - 5;
                 bullet.setCenterY(newY);
 
-                // iterator for aliens
-                Iterator<Alien> alienIterator = this.aliens.iterator();
 
-                // iterate over aliens
-                while(alienIterator.hasNext()){
-                    Alien alien = alienIterator.next();
+                // check whether player bullet intersects with the boss or not
+                if(bullet.getBoundsInParent().intersects(boss.getBoundsInParent())){
+                    // If intersects remove player bullet from list and scene
+                    it.remove();
+                    playerBullets.remove(bullet);
+                    getChildren().remove(bullet);
 
-                    // check whether player bullet intersects with the alien or not
-                    if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
-                        // If intersects remove player bullet from list and scene
-                        it.remove();
-                        playerBullets.remove(bullet);
-                        getChildren().remove(bullet);
+                    // decrement the health of the boss who shot
+                    boss.setHealth(boss.getHealth() - 1);
 
-                        // decrement the health of the alien who shot
-                        alien.setHealth(alien.getHealth() - 1);
+                    // If boss has no remaining health
+                    if(boss.getHealth() == 0){
+                        // increment number of kills of the player by one and update game status indicator located on screen
+                        player.setKills(player.getKills() +1);
+                        gameStatus.setKill(player.getKills());
 
-                        // If alien has no remaining health
-                        if(alien.getHealth() == 0){
-                            // increment number of kills of the player by one and update game status indicator located on screen
-                            player.setKills(player.getKills() +1);
-                            gameStatus.setKill(player.getKills());
+                        // remove the boss from the scene
 
-                            // remove the alien from the list and scene
-                            alienIterator.remove();
-                            aliens.remove(alien);
-                            getChildren().remove(alien);
+
+                        getChildren().remove(boss);
+                        boss = null;
+                        gameEnd();
                         }
-
-                        // ıf there is no remaining alien finish the game
-                        if(aliens.size() == 0){
-                            gameEnd();
-                        }
-
                     }
-                }
+
             }
         };
 
@@ -443,41 +375,30 @@ public class MultiplayerGame extends Pane {
     }
 
     /**
-     * This method handles alien bullet animation
+     * This method handles boss bullet animation
      */
-    private void configureAlienBulletAnimation(){
+    private void configureBossBulletAnimation(){
         EventHandler<ActionEvent> createBullet = actionEvent -> {
-            // iterator for aliens
-            Iterator<Alien> alienIterator = this.aliens.iterator();
 
-            // iterate over aliens
-            while(alienIterator.hasNext()){
-                Alien alien = alienIterator.next();
+            // calculate x and y coordinate of the bullet for the boss
+            int bulletX = (int) (boss.getTranslateX() + boss.getWidth() / 2);
+            int bulletY = (int) (boss.getTranslateY() + bossBulletRadius);
 
-                // If the type of the alien is Shooter Alien
-                if(alien instanceof ShooterAlien){
-
-                    // calculate x and y coordinate of the bullet for shooter alien
-                    int bulletX = (int) (alien.getTranslateX() + alien.getWidth() / 2);
-                    int bulletY = (int) (alien.getTranslateY() + alienBulletRadius);
-
-                    // create and show the bullet on screen
-                    Bullet bullet = new Bullet( bulletX,bulletY, alienBulletRadius, Color.ORANGE);
-                    alienBullets.add(bullet);
-                    this.getChildren().add(bullet);
-                }
-            }
+            // create and show the bullet on screen
+            Bullet bullet = new Bullet( bulletX,bulletY, bossBulletRadius, Color.ORANGE);
+            bossBullets.add(bullet);
+            this.getChildren().add(bullet);
         };
 
-        createAlienBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(alienBulletCreatingRate),createBullet));
-        createAlienBulletAnimation.setCycleCount(Timeline.INDEFINITE);
-        createAlienBulletAnimation.play();
+        createBossBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(bossBulletCreatingRate),createBullet));
+        createBossBulletAnimation.setCycleCount(Timeline.INDEFINITE);
+        createBossBulletAnimation.play();
 
         EventHandler<ActionEvent> updateBullets = actionEvent -> {
-            // iterator for alien bullets
-            Iterator<Bullet> it = this.alienBullets.iterator();
+            // iterator for boss bullets
+            Iterator<Bullet> it = this.bossBullets.iterator();
 
-            // iterate over alien bullets
+            // iterate over boss bullets
             while(it.hasNext()){
                 Bullet bullet = it.next();
 
@@ -489,7 +410,7 @@ public class MultiplayerGame extends Pane {
                 if(bullet.getBoundsInParent().intersects(player.getBoundsInParent())){
                     // If intersects remove the bullet from the list and scene
                     it.remove();
-                    alienBullets.remove(bullet);
+                    bossBullets.remove(bullet);
                     getChildren().remove(bullet);
 
                     // decrement player health by one
@@ -510,9 +431,9 @@ public class MultiplayerGame extends Pane {
             }
         };
 
-        updateAlienBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(alienBulletMovingRate),updateBullets));
-        updateAlienBulletAnimation.setCycleCount(Timeline.INDEFINITE);
-        updateAlienBulletAnimation.play();
+        updateBossBulletAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(bossBulletMovingRate),updateBullets));
+        updateBossBulletAnimation.setCycleCount(Timeline.INDEFINITE);
+        updateBossBulletAnimation.play();
 
     }
 
@@ -524,8 +445,8 @@ public class MultiplayerGame extends Pane {
         pairMovementAnimation();
         configurePlayerBulletAnimations();
         configurePairBulletAnimations();
-        configureAlienBulletAnimation();
-        alienMovementAnimation();
+        configureBossBulletAnimation();
+        bossMovementAnimation();
     }
 
     /**
@@ -542,21 +463,21 @@ public class MultiplayerGame extends Pane {
      */
     private void gameEnd(){
         // stop animations and clean scene
-        createAlienBulletAnimation.stop();
-        updateAlienBulletAnimation.stop();
+        createBossBulletAnimation.stop();
+        updateBossBulletAnimation.stop();
         createPlayerBulletAnimation.stop();
         updatePlayerBulletAnimation.stop();
         createPairBulletAnimation.stop();
         updatePairBulletAnimation.stop();
-        updateAlienAnimation.stop();
+        updateBossAnimation.stop();
         timer.stop();
-        createAlienBulletAnimation.getKeyFrames().clear();
-        updateAlienBulletAnimation.getKeyFrames().clear();
+        createBossBulletAnimation.getKeyFrames().clear();
+        updateBossBulletAnimation.getKeyFrames().clear();
         createPlayerBulletAnimation.getKeyFrames().clear();
         updatePlayerBulletAnimation.getKeyFrames().clear();
         createPairBulletAnimation.getKeyFrames().clear();
         updatePairBulletAnimation.getKeyFrames().clear();
-        updateAlienAnimation.getKeyFrames().clear();
+        updateBossAnimation.getKeyFrames().clear();
         timer.getKeyFrames().clear();
         this.getChildren().removeAll();
 
