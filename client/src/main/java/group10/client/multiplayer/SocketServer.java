@@ -46,15 +46,13 @@ public class SocketServer {
         server.close();
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(Object message) throws IOException {
         //write object to Socket
         oos.writeObject(message);
     }
 
-    public String readMessage() throws IOException, ClassNotFoundException {
-        //convert ObjectInputStream object to String
-        String message = (String) ois.readObject();
-        System.out.println("Message Received: " + message);
+    public Object readMessage() throws IOException, ClassNotFoundException {
+        Object message =ois.readObject();
 
         //terminate the server if client sends exit request
         if(message.equals("exit")){

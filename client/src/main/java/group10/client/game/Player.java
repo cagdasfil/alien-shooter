@@ -14,6 +14,8 @@ public class Player extends Rectangle {
     private Image image;
     private int kills;
     private int score;
+    //number of hits to Boss
+    private int hitBoss;
 
     /**
      * Constructor for Player Class
@@ -32,9 +34,10 @@ public class Player extends Rectangle {
         setTranslateY(y);
 
         this.health = health;
-        // set number of kills and score of the player zero initially.
+        // set number of kills ,score and number of hits to boss  of the player zero initially.
         this.kills = 0;
         this.score = 0;
+        this.hitBoss = 0;
 
         // Set spaceship image
         //image = new javafx.scene.image.Image("static/spaceship.png");
@@ -90,5 +93,13 @@ public class Player extends Rectangle {
      */
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public int getHitBoss() {
+        return hitBoss;
+    }
+
+    public void setHitBoss(int hitBoss) {
+        this.hitBoss = hitBoss;
     }
 }

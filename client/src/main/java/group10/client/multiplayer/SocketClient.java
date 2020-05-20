@@ -35,17 +35,15 @@ public class SocketClient {
         System.out.println("client is closed");
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(Object message) throws IOException {
         oos.writeObject(message);
-        System.out.println("Sending request to Socket Server" + message);
         if(message.equals("exit")){
             closeConnections();
         }
     }
 
-    public String readMessage() throws IOException, ClassNotFoundException, InterruptedException {
-        String message = (String) ois.readObject();
-        System.out.println("Message: " + message);
+    public Object readMessage() throws IOException, ClassNotFoundException, InterruptedException {
+        Object message = ois.readObject();
         Thread.sleep(10);
         return message;
     }
