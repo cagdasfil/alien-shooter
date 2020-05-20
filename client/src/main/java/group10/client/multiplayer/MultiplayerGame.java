@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 
 import java.util.ArrayList;
@@ -89,6 +90,8 @@ public class MultiplayerGame extends Pane {
     SocketServer socketServer = null;
     SocketClient socketClient = null;
 
+    private boolean isServerSide = false;
+
     /**
      * Constructor for the game class
      * @param gameLevel game level
@@ -102,6 +105,7 @@ public class MultiplayerGame extends Pane {
         }
         else if (conn instanceof SocketServer){
             socketServer = (SocketServer) conn;
+            isServerSide = true;
         }
 
         // set background image of the scene
@@ -137,10 +141,10 @@ public class MultiplayerGame extends Pane {
      */
     private void initPlayer(){
         // create new player object
-        this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,3);
-        this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLACK,3);
-        this.player.setKills(totalKill);
-        this.player.setHealth(totalHealth);
+        this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,100);
+        this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLACK,100);
+        //this.player.setKills(totalKill);
+        //this.player.setHealth(totalHealth);
 
         // show the new player object on the screen
         this.getChildren().add(player);
@@ -181,13 +185,15 @@ public class MultiplayerGame extends Pane {
        EventHandler<ActionEvent> o = actionEvent -> {
            if(socketClient != null){
                try{
-                   socketClient.sendMessage(Double.toString(player.getTranslateX()+ player.getX()));
-                   socketClient.sendMessage(Double.toString(player.getTranslateY()+ player.getY()));
-                   String m = null;
-                   m = socketClient.readMessage();
-                   pair.setTranslateX(Double.parseDouble(m));
-                   m = socketClient.readMessage();
-                   pair.setTranslateY(Double.parseDouble(m));
+                   Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
+                   socketClient.sendMessage(currentCoordinates);
+                   Object message = socketClient.readMessage();
+                   if(message instanceof  Pair){
+                       Pair pairCoordinates = (Pair) message;
+
+                       pair.setTranslateX((Double)pairCoordinates.getKey());
+                       pair.setTranslateY((Double)pairCoordinates.getValue());
+                   }
                }
                catch (Exception e){
                    System.out.println(e);
@@ -196,13 +202,15 @@ public class MultiplayerGame extends Pane {
            }
            else if(socketServer != null){
                try{
-                   socketServer.sendMessage(Double.toString(player.getTranslateX()+ player.getX()));
-                   socketServer.sendMessage(Double.toString(player.getTranslateY()+ player.getY()));
-                   String m = null;
-                   m = socketServer.readMessage();
-                   pair.setTranslateX(Double.parseDouble(m));
-                   m = socketServer.readMessage();
-                   pair.setTranslateY(Double.parseDouble(m));
+                   Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
+                   socketServer.sendMessage(currentCoordinates);
+                   Object message = socketServer.readMessage();
+                   if(message instanceof  Pair){
+                       Pair pairCoordinates = (Pair) message;
+
+                       pair.setTranslateX((Double)pairCoordinates.getKey());
+                       pair.setTranslateY((Double)pairCoordinates.getValue());
+                   }
                }
                catch (Exception e){
                    System.out.println(e);
@@ -290,18 +298,26 @@ public class MultiplayerGame extends Pane {
                     pairBullets.remove(bullet);
                     getChildren().remove(bullet);
 
-                    // decrement the health of the boss who shot
-                    boss.setHealth(boss.getHealth() - 1);
+                    if(isServerSide){
+                        // decrement the health of the boss who shot
+                        boss.setHealth(boss.getHealth() - 1);
 
-                    // If boss has no remaining health
-                    if(boss.getHealth() == 0){
-                        // increment number of kills of the player by one and update game status indicator located on screen
-                        pair.setKills(pair.getKills() +1);
-                        //gameStatus.setKill(player.getKills());
+                        // increment number of hits to boss variable by one
+                        pair.setHitBoss(pair.getHitBoss()+1);
 
-                        getChildren().remove(boss);
-                        gameEnd();
+                        System.out.println("Pair boss hit : " + pair.getHitBoss());
+
+                        // If boss has no remaining health
+                        if(boss.getHealth() == 0){
+                            // increment number of kills of the player by one and update game status indicator located on screen
+                            pair.setKills(pair.getKills() +1);
+                            //gameStatus.setKill(player.getKills());
+
+                            getChildren().remove(boss);
+                            gameEnd();
+                        }
                     }
+
 
                 }
             }
@@ -348,24 +364,26 @@ public class MultiplayerGame extends Pane {
                     playerBullets.remove(bullet);
                     getChildren().remove(bullet);
 
-                    // decrement the health of the boss who shot
-                    boss.setHealth(boss.getHealth() - 1);
+                    if(isServerSide){
+                        // decrement the health of the boss who shot
+                        boss.setHealth(boss.getHealth() - 1);
+                        // increment number of hits to boss variable by one
+                        player.setHitBoss(player.getHitBoss()+1);
+                        gameStatus.setHitBoss(player.getHitBoss());
 
-                    // If boss has no remaining health
-                    if(boss.getHealth() == 0){
-                        // increment number of kills of the player by one and update game status indicator located on screen
-                        player.setKills(player.getKills() +1);
-                        gameStatus.setKill(player.getKills());
+                        System.out.println("Player boss hit : " + player.getHitBoss());
+                        // If boss has no remaining health
+                        if(boss.getHealth() == 0){
+                            // increment number of kills of the player by one and update game status indicator located on screen
+                            player.setKills(player.getKills() +1);
+                            //gameStatus.setKill(player.getKills());
 
-                        // remove the boss from the scene
-
-
-                        getChildren().remove(boss);
-                        boss = null;
-                        gameEnd();
+                            // remove the boss from the scene
+                            getChildren().remove(boss);
+                            gameEnd();
                         }
                     }
-
+                }
             }
         };
 
@@ -454,7 +472,7 @@ public class MultiplayerGame extends Pane {
      */
     private void initGameStatus(){
         // create new game status object and add it on screen
-        gameStatus = new GameStatus(player.getKills(), remainingTime,player.getHealth());
+        gameStatus = new GameStatus(player.getHitBoss(), remainingTime,player.getHealth(),true);
         this.getChildren().add(gameStatus);
     }
 
