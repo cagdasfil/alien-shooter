@@ -37,13 +37,15 @@ public class SocketClient {
 
     public void sendMessage(Object message) throws IOException {
         oos.writeObject(message);
-        if(message.equals("exit")){
-            closeConnections();
-        }
     }
 
     public Object readMessage() throws IOException, ClassNotFoundException, InterruptedException {
         Object message = ois.readObject();
+        if(message instanceof String){
+            String msg = (String) message;
+            if(msg.equals("exit"))
+                closeConnections();
+        }
         Thread.sleep(10);
         return message;
     }

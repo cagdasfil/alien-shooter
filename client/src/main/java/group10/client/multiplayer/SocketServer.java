@@ -53,11 +53,6 @@ public class SocketServer {
 
     public Object readMessage() throws IOException, ClassNotFoundException {
         Object message =ois.readObject();
-
-        //terminate the server if client sends exit request
-        if(message.equals("exit")){
-            closeConnections();
-        }
         return message;
     }
 }

@@ -469,16 +469,17 @@ public class Game extends Pane {
             // go back game lobby
             goBackGameLobby();
         }
-
+        // If player completed single player levels, go MultiPlayer level
         else if (gameLevel == gameTuner.maxLevel) {
-            // If player completed single player levels, go MultiPlayer level
+            // set static variables of single player game before go to MultiPlayer Level.
+            remainingTime = 100;
+            totalKill = 0;
+            totalHealth = 3;
 
             if(LoginController.user.getUsername().equals("user")){
 
                 try {
                     SocketServer socketServer = new SocketServer();
-                    socketServer.readMessage();
-                    socketServer.sendMessage("hello client");
                     MultiplayerGame game = new MultiplayerGame(5, socketServer);
                     game.setFocusTraversable(true);
                     ((Pane)this.getParent()).getChildren().setAll(game);
@@ -492,8 +493,6 @@ public class Game extends Pane {
             else if(LoginController.user.getUsername().equals("admin")){
                 try {
                     SocketClient socketClient = new SocketClient();
-                    socketClient.sendMessage("hello server");
-                    socketClient.readMessage();
                     MultiplayerGame game = new MultiplayerGame(5, socketClient);
                     game.setFocusTraversable(true);
                     ((Pane)this.getParent()).getChildren().setAll(game);

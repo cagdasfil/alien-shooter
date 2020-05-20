@@ -75,6 +75,7 @@ public  class GameTuner {
         level4.put("tankAlienHealth",5);
         level5.put("bossHealth",100);
 
+        level5.put("MultiPlayerGameTime",80);
     }
 
     /**

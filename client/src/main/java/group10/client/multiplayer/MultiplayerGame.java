@@ -14,6 +14,7 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 
 
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -75,12 +76,8 @@ public class MultiplayerGame extends Pane {
     // game settings object. We have different game settings for each different level of the game.
     private GameTuner gameTuner;
 
-    // remaining time for the game to end
-    private static Integer remainingTime = 100;
-
-    // variables to hold number of kills and remaining health for the player between different game levels.
-    private static int totalKill = 0;
-    private static int totalHealth = 3;
+    // remaining time for the MultiPlayer level to end
+    private Integer remainingTime;
 
     // game level
     private int gameLevel;
@@ -121,6 +118,7 @@ public class MultiplayerGame extends Pane {
         bossBulletMovingRate = gameTuner.getSettings(gameLevel).get("bossBulletMovingRate");
         bossBulletCreatingRate = gameTuner.getSettings(gameLevel).get("bossBulletCreatingRate");
         bossHealth = gameTuner.getSettings(gameLevel).get("bossHealth");
+        remainingTime = gameTuner.getSettings(gameLevel).get("MultiPlayerGameTime");
 
         // init player and boss
         initPlayer();
@@ -142,9 +140,7 @@ public class MultiplayerGame extends Pane {
     private void initPlayer(){
         // create new player object
         this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,100);
-        this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLACK,100);
-        //this.player.setKills(totalKill);
-        //this.player.setHealth(totalHealth);
+        this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.GREEN,100);
 
         // show the new player object on the screen
         this.getChildren().add(player);
@@ -155,7 +151,7 @@ public class MultiplayerGame extends Pane {
      * This method inits Boss
      */
     private void initBoss(){
-        this.boss = new Boss(W/2,H/ 10,2*S,3*S, Color.RED, bossHealth);
+        this.boss = new Boss(W/2,H/ 10,4*S,6*S, Color.RED, bossHealth);
         this.getChildren().add(boss);
     }
 
@@ -183,11 +179,13 @@ public class MultiplayerGame extends Pane {
 
     private void pairMovementAnimation(){
        EventHandler<ActionEvent> o = actionEvent -> {
-           if(socketClient != null){
+           if(isServerSide){
                try{
                    Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
-                   socketClient.sendMessage(currentCoordinates);
-                   Object message = socketClient.readMessage();
+                   Integer pairBossHits = pair.getHitBoss();
+                   socketServer.sendMessage(currentCoordinates);
+                   socketServer.sendMessage(pairBossHits);
+                   Object message = socketServer.readMessage();
                    if(message instanceof  Pair){
                        Pair pairCoordinates = (Pair) message;
 
@@ -198,18 +196,33 @@ public class MultiplayerGame extends Pane {
                catch (Exception e){
                    System.out.println(e);
                }
-
            }
-           else if(socketServer != null){
+           else {
                try{
                    Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
-                   socketServer.sendMessage(currentCoordinates);
-                   Object message = socketServer.readMessage();
-                   if(message instanceof  Pair){
-                       Pair pairCoordinates = (Pair) message;
 
-                       pair.setTranslateX((Double)pairCoordinates.getKey());
-                       pair.setTranslateY((Double)pairCoordinates.getValue());
+                   socketClient.sendMessage(currentCoordinates);
+                   try{
+                       Object coordinateMessage = socketClient.readMessage();
+                       Object bossHitMessage = socketClient.readMessage();
+
+                       if(coordinateMessage instanceof  Pair){
+                           Pair pairCoordinates = (Pair) coordinateMessage;
+
+                           pair.setTranslateX((Double)pairCoordinates.getKey());
+                           pair.setTranslateY((Double)pairCoordinates.getValue());
+                       }
+
+                       if(bossHitMessage instanceof Integer){
+                           Integer bossHits = (Integer) bossHitMessage;
+                           player.setHitBoss(bossHits);
+                           gameStatus.setHitBoss(player.getHitBoss());
+                       }
+                   }
+                   catch (SocketException e){
+                       if(e.getMessage().equals("Socket closed")){
+                           gameEnd();
+                       }
                    }
                }
                catch (Exception e){
@@ -236,7 +249,7 @@ public class MultiplayerGame extends Pane {
             // decrement remaining time by one for each second
             remainingTime -= 1;
             // if remaining time equals to zero, gameover!
-            if(remainingTime == 0){
+            if(remainingTime == 0 && isServerSide){
                 isGameOver = true;
                 gameEnd();
             }
@@ -305,7 +318,7 @@ public class MultiplayerGame extends Pane {
                         // increment number of hits to boss variable by one
                         pair.setHitBoss(pair.getHitBoss()+1);
 
-                        System.out.println("Pair boss hit : " + pair.getHitBoss());
+                        //System.out.println("Pair boss hit : " + pair.getHitBoss());
 
                         // If boss has no remaining health
                         if(boss.getHealth() == 0){
@@ -371,7 +384,7 @@ public class MultiplayerGame extends Pane {
                         player.setHitBoss(player.getHitBoss()+1);
                         gameStatus.setHitBoss(player.getHitBoss());
 
-                        System.out.println("Player boss hit : " + player.getHitBoss());
+                        //System.out.println("Player boss hit : " + player.getHitBoss());
                         // If boss has no remaining health
                         if(boss.getHealth() == 0){
                             // increment number of kills of the player by one and update game status indicator located on screen
@@ -431,19 +444,45 @@ public class MultiplayerGame extends Pane {
                     bossBullets.remove(bullet);
                     getChildren().remove(bullet);
 
-                    // decrement player health by one
-                    player.setHealth(player.getHealth() - 1);
+                    if(isServerSide){
+                        // decrement player health by one
+                        player.setHealth(player.getHealth() - 1);
 
-                    // update game status indicator located on screen
-                    gameStatus.setRemainingHealth(player.getHealth());
+                        // update game status indicator located on screen
+                        gameStatus.setRemainingHealth(player.getHealth());
 
-                    // check whether player has remaining health or not
-                    if(player.getHealth() == 0){
+                        System.out.println("Player health : " + player.getHealth());
+                        // check whether player has remaining health or not
+                        if(player.getHealth() == 0){
 
-                        // If not remove player from the screen and gameover!
-                        getChildren().remove(player);
-                        isGameOver = true;
-                        gameEnd();
+                            // If not remove player from the screen and gameover!
+                            getChildren().remove(player);
+                            isGameOver = true;
+                            gameEnd();
+                        }
+                    }
+
+                }
+                // check whether the bullet intersects with the pair or not
+                else if(bullet.getBoundsInParent().intersects(pair.getBoundsInParent())){
+                    // If intersects remove the bullet from the list and scene
+                    it.remove();
+                    bossBullets.remove(bullet);
+                    getChildren().remove(bullet);
+
+                    if(isServerSide){
+                        // decrement pair health by one
+                        pair.setHealth(pair.getHealth() - 1);
+                        System.out.println("Pair health : " + pair.getHealth());
+
+                        // check whether pair has remaining health or not
+                        if(pair.getHealth() == 0){
+
+                            // If not remove pair from the screen and gameover!
+                            getChildren().remove(pair);
+                            isGameOver = true;
+                            gameEnd();
+                        }
                     }
                 }
             }
@@ -488,6 +527,7 @@ public class MultiplayerGame extends Pane {
         createPairBulletAnimation.stop();
         updatePairBulletAnimation.stop();
         updateBossAnimation.stop();
+        pairMovement.stop();
         timer.stop();
         createBossBulletAnimation.getKeyFrames().clear();
         updateBossBulletAnimation.getKeyFrames().clear();
@@ -497,12 +537,22 @@ public class MultiplayerGame extends Pane {
         updatePairBulletAnimation.getKeyFrames().clear();
         updateBossAnimation.getKeyFrames().clear();
         timer.getKeyFrames().clear();
+        pairMovement.getKeyFrames().clear();
         this.getChildren().removeAll();
-
-        remainingTime = 100;
-        totalKill = 0;
-        totalHealth = 3;
-
+        System.out.println("Player number of boss hits : " + player.getHitBoss());
+        System.out.println("Pair number of boss hits : " + pair.getHitBoss());
+        System.out.println("Boss health :" + boss.getHealth());
+        if(isServerSide){
+            try{
+                String exitMessage = "exit";
+                socketServer.sendMessage(exitMessage);
+                Thread.sleep(100);
+                socketServer.closeConnections();
+            }
+            catch (Exception e){
+                System.out.println("connection cannot closed");
+            }
+        }
         goBackGameLobby();
     }
 
