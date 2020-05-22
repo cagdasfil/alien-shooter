@@ -479,10 +479,8 @@ public class Game extends Pane {
             if(LoginController.user.getUsername().equals("user")){
 
                 try {
-                    SocketServer socketServer = new SocketServer();
-                    MultiplayerGame game = new MultiplayerGame(5, socketServer);
-                    game.setFocusTraversable(true);
-                    ((Pane)this.getParent()).getChildren().setAll(game);
+                    Parent waitingRoom = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("WaitingRoom.fxml")));
+                    ((Pane)this.getParent()).getChildren().setAll(waitingRoom);
                 }
                 catch (Exception e){
                     System.out.println(e);
