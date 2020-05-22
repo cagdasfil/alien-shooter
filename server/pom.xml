@@ -18,6 +18,7 @@
 
     <properties>
         <java.version>13</java.version>
+        <tomcat.version>9.0.35</tomcat.version>
     </properties>
 
     <dependencies>

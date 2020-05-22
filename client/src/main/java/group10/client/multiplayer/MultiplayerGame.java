@@ -1,6 +1,8 @@
 package group10.client.multiplayer;
 
+import group10.client.api.ScoreApi;
 import group10.client.game.*;
+import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -529,6 +531,7 @@ public class MultiplayerGame extends Pane {
         updateBossAnimation.stop();
         pairMovement.stop();
         timer.stop();
+
         createBossBulletAnimation.getKeyFrames().clear();
         updateBossBulletAnimation.getKeyFrames().clear();
         createPlayerBulletAnimation.getKeyFrames().clear();
@@ -536,8 +539,9 @@ public class MultiplayerGame extends Pane {
         createPairBulletAnimation.getKeyFrames().clear();
         updatePairBulletAnimation.getKeyFrames().clear();
         updateBossAnimation.getKeyFrames().clear();
-        timer.getKeyFrames().clear();
         pairMovement.getKeyFrames().clear();
+        timer.getKeyFrames().clear();
+
         this.getChildren().removeAll();
         System.out.println("Player number of boss hits : " + player.getHitBoss());
         System.out.println("Pair number of boss hits : " + pair.getHitBoss());
@@ -552,6 +556,33 @@ public class MultiplayerGame extends Pane {
             catch (Exception e){
                 System.out.println("connection cannot closed");
             }
+        }
+
+
+        /* calculate scores*/
+        int mostHitBonus = 1000;
+        if(isServerSide){
+            int score = player.getHitBoss() * 100;
+
+            if(player.getHitBoss() > pair.getHitBoss()){
+                score += mostHitBonus;
+                ScoreApi.saveScore(score);
+            }
+            else{
+                ScoreApi.saveScore(score);
+            }
+            System.out.println("Player score :" + score);
+        }
+        else{
+            int score = player.getHitBoss() * 100;
+            if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
+                score += mostHitBonus;
+                ScoreApi.saveScore(score);
+            }
+            else{
+                ScoreApi.saveScore(score);
+            }
+            System.out.println("Pair score :" + score);
         }
         goBackGameLobby();
     }
