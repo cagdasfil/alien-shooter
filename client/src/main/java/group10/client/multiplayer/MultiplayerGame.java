@@ -182,12 +182,19 @@ public class MultiplayerGame extends Pane {
            if(isServerSide){
                try{
                    Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
+
                    Integer pairBossHits = pair.getHitBoss();
-                   socketServer.sendMessage(currentCoordinates);
-                   socketServer.sendMessage(pairBossHits);
-                   Object message = socketServer.readMessage();
-                   if(message instanceof  Pair){
-                       Pair pairCoordinates = (Pair) message;
+                   Integer pairHealth = pair.getHealth();
+
+                   ArrayList<Object> sendMessage = new ArrayList<>();
+                   sendMessage.add(currentCoordinates);
+                   sendMessage.add(pairBossHits);
+                   sendMessage.add(pairHealth);
+
+                   socketServer.sendMessage(sendMessage);
+                   Object readMessage = socketServer.readMessage();
+                   if(readMessage instanceof  Pair){
+                       Pair pairCoordinates = (Pair) readMessage;
 
                        pair.setTranslateX((Double)pairCoordinates.getKey());
                        pair.setTranslateY((Double)pairCoordinates.getValue());
@@ -202,33 +209,26 @@ public class MultiplayerGame extends Pane {
                    Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
 
                    socketClient.sendMessage(currentCoordinates);
-                   try{
-                       Object coordinateMessage = socketClient.readMessage();
-                       Object bossHitMessage = socketClient.readMessage();
 
-                       if(coordinateMessage instanceof  Pair){
-                           Pair pairCoordinates = (Pair) coordinateMessage;
+                   Object readMessage = socketClient.readMessage();
+                   ArrayList<Object> messages = (ArrayList<Object>) readMessage;
 
-                           pair.setTranslateX((Double)pairCoordinates.getKey());
-                           pair.setTranslateY((Double)pairCoordinates.getValue());
-                       }
+                   Pair pairCoordinates = (Pair) messages.get(0);
+                   pair.setTranslateX((Double)pairCoordinates.getKey());
+                   pair.setTranslateY((Double)pairCoordinates.getValue());
 
-                       if(bossHitMessage instanceof Integer){
-                           Integer bossHits = (Integer) bossHitMessage;
-                           player.setHitBoss(bossHits);
-                           gameStatus.setHitBoss(player.getHitBoss());
-                       }
-                   }
-                   catch (SocketException e){
-                       if(e.getMessage().equals("Socket closed")){
-                           gameEnd();
-                       }
-                   }
+                   Integer bossHits = (Integer) messages.get(1);
+                   player.setHitBoss(bossHits);
+                   gameStatus.setHitBoss(player.getHitBoss());
+                   Integer playerHealth = (Integer) messages.get(2);
+                   player.setHealth(playerHealth);
+                   gameStatus.setRemainingHealth(player.getHealth());
                }
                catch (Exception e){
-                   System.out.println(e);
+                   if(e.getMessage().equals("Socket closed")){
+                       gameEnd();
+                   }
                }
-
            }
        };
 
