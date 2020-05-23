@@ -12,8 +12,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,10 @@ import java.util.ResourceBundle;
 public class WaitingRoomController implements Initializable {
 
     @FXML public Pane generalLayout;
+    @FXML public Text readyText;
+    @FXML public Button readyButton;
+
+    Match match;
 
     /**
      * Initialization function of the controller.
@@ -45,41 +51,69 @@ public class WaitingRoomController implements Initializable {
     @FXML
     public void readyClick() throws IOException, InterruptedException {
 
-        Match match = MatchApi.getMatch();
+        match = MatchApi.getMatch();
+        Button playButton = readyButton;
+        Text text = readyText;
+        //text.setX(100);
+        //text.setY(100);
 
         if(match == null){ // Server
-            ResponseEntity<JSONObject> response = MatchApi.addMatch(
+            MatchApi.addMatch(
                     LoginController.user.getUsername()
             );
             do {
                 match = MatchApi.getMatch();
-            } while (match.getClient_player().equals(""));
-            SocketServer socketServer = null;
-            try {
-                socketServer = new SocketServer();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            MultiplayerGame game = new MultiplayerGame(5, socketServer);
-            game.setFocusTraversable(true);
-            generalLayout.getChildren().setAll(game);
+            } while (Objects.requireNonNull(match).getClient_player().equals(""));
+            playButton.setOnAction(actionEvent ->  {
+                playClickServer();
+            });
+            playButton.setText("Play");
+            text.setText("You are matched with " + match.getClient_player());
+            generalLayout.getChildren().setAll(text,playButton);
         }
         else{ // Client
             match.setClient_player(LoginController.user.getUsername());
             MatchApi.updateMatch(match);
-            Thread.sleep(2000);
-            SocketClient socketClient = null;
-            try {
-                socketClient = new SocketClient();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            MultiplayerGame game = new MultiplayerGame(5, socketClient);
-            game.setFocusTraversable(true);
-            generalLayout.getChildren().setAll(game);
-            MatchApi.deleteMatch(match);
+            playButton.setOnAction(actionEvent ->  {
+                playClickClient();
+            });
+            playButton.setText("Play");
+            text.setText("You are matched with " + match.getServer_player());
+            generalLayout.getChildren().setAll(text);
+            do {
+                match = MatchApi.getMatch();
+            } while (Objects.requireNonNull(match).getStatus().equals("wait"));
+            generalLayout.getChildren().add(playButton);
+            //MatchApi.deleteMatch(match);
         }
 
+    }
+
+    public void playClickServer(){
+        match.setStatus("ready");
+        MatchApi.updateMatch(match);
+        SocketServer socketServer = null;
+        try {
+            socketServer = new SocketServer();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        MultiplayerGame game = new MultiplayerGame(5, socketServer);
+        game.setFocusTraversable(true);
+        generalLayout.getChildren().setAll(game);
+    }
+
+    public void playClickClient(){
+        SocketClient socketClient = null;
+        try {
+            socketClient = new SocketClient();
+        } catch (ClassNotFoundException | InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+        MultiplayerGame game = new MultiplayerGame(5, socketClient);
+        game.setFocusTraversable(true);
+        generalLayout.getChildren().setAll(game);
+        MatchApi.deleteMatch(match);
     }
 
 }
