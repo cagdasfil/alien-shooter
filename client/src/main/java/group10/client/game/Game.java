@@ -1,7 +1,9 @@
 package group10.client.game;
 
+import group10.client.api.MatchApi;
 import group10.client.api.ScoreApi;
 import group10.client.controller.LoginController;
+import group10.client.model.server.Match;
 import group10.client.multiplayer.MultiplayerGame;
 import group10.client.multiplayer.SocketClient;
 import group10.client.multiplayer.SocketServer;
@@ -12,11 +14,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -476,29 +485,12 @@ public class Game extends Pane {
             totalKill = 0;
             totalHealth = 3;
 
-            if(LoginController.user.getUsername().equals("user")){
-
-                try {
-                    Parent waitingRoom = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("WaitingRoom.fxml")));
-                    ((Pane)this.getParent()).getChildren().setAll(waitingRoom);
-                }
-                catch (Exception e){
-                    System.out.println(e);
-                }
-
-            }
-
-            else if(LoginController.user.getUsername().equals("admin")){
-                try {
-                    SocketClient socketClient = new SocketClient();
-                    MultiplayerGame game = new MultiplayerGame(5, socketClient);
-                    game.setFocusTraversable(true);
-                    ((Pane)this.getParent()).getChildren().setAll(game);
-                }
-                catch (Exception e){
-                    System.out.println(e);
-                }
-
+            Parent waitingRoom = null;
+            try {
+                waitingRoom = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("WaitingRoom.fxml")));
+                ((Pane)this.getParent()).getChildren().setAll(waitingRoom);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
         }
