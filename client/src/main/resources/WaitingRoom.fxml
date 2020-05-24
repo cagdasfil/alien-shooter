@@ -7,7 +7,7 @@
 
 <Pane fx:id="generalLayout" prefHeight="900.0" prefWidth="800.0" style="-fx-background-image: url(static/background.jpg)" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group10.client.controller.WaitingRoomController">
    <children>
-      <Text fx:id="readyText" fill="WHITE" layoutX="161.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are You Ready For Multiplayer Level ?" textAlignment="CENTER" wrappingWidth="478.154296875">
+      <Text fx:id="readyText" fill="WHITE" layoutX="161.0" layoutY="381.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" text="Are You Ready For Multiplayer Level ?" textAlignment="CENTER" wrappingWidth="478.154296875">
          <font>
             <Font name="Corbel Bold" size="46.0" />
          </font>
