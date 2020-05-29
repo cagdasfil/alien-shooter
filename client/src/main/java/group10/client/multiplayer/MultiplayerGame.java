@@ -181,57 +181,7 @@ public class MultiplayerGame extends Pane {
 
     private void pairMovementAnimation(){
        EventHandler<ActionEvent> o = actionEvent -> {
-           if(isServerSide){
-               try{
-                   Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
-
-                   Integer pairBossHits = pair.getHitBoss();
-                   Integer pairHealth = pair.getHealth();
-
-                   ArrayList<Object> sendMessage = new ArrayList<>();
-                   sendMessage.add(currentCoordinates);
-                   sendMessage.add(pairBossHits);
-                   sendMessage.add(pairHealth);
-
-                   socketServer.sendMessage(sendMessage);
-                   Object readMessage = socketServer.readMessage();
-                   if(readMessage instanceof  Pair){
-                       Pair pairCoordinates = (Pair) readMessage;
-
-                       pair.setTranslateX((Double)pairCoordinates.getKey());
-                       pair.setTranslateY((Double)pairCoordinates.getValue());
-                   }
-               }
-               catch (Exception e){
-                   System.out.println(e);
-               }
-           }
-           else {
-               try{
-                   Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
-
-                   socketClient.sendMessage(currentCoordinates);
-
-                   Object readMessage = socketClient.readMessage();
-                   ArrayList<Object> messages = (ArrayList<Object>) readMessage;
-
-                   Pair pairCoordinates = (Pair) messages.get(0);
-                   pair.setTranslateX((Double)pairCoordinates.getKey());
-                   pair.setTranslateY((Double)pairCoordinates.getValue());
-
-                   Integer bossHits = (Integer) messages.get(1);
-                   player.setHitBoss(bossHits);
-                   gameStatus.setHitBoss(player.getHitBoss());
-                   Integer playerHealth = (Integer) messages.get(2);
-                   player.setHealth(playerHealth);
-                   gameStatus.setRemainingHealth(player.getHealth());
-               }
-               catch (Exception e){
-                   if(e.getMessage().equals("Socket closed")){
-                       gameEnd();
-                   }
-               }
-           }
+           setPairCoordinate();
        };
 
        pairMovement.getKeyFrames().add(new KeyFrame(Duration.millis(30),o));
@@ -324,6 +274,7 @@ public class MultiplayerGame extends Pane {
 
                         // If boss has no remaining health
                         if(boss.getHealth() == 0){
+                            setPairCoordinate();
                             // increment number of kills of the player by one and update game status indicator located on screen
                             pair.setKills(pair.getKills() +1);
                             //gameStatus.setKill(player.getKills());
@@ -561,30 +512,77 @@ public class MultiplayerGame extends Pane {
 
         /* calculate scores*/
         int mostHitBonus = 1000;
+        int score = player.getHitBoss() * 100;
         if(isServerSide){
-            int score = player.getHitBoss() * 100;
 
             if(player.getHitBoss() > pair.getHitBoss()){
                 score += mostHitBonus;
-                ScoreApi.saveScore(score);
             }
-            else{
-                ScoreApi.saveScore(score);
-            }
+            ScoreApi.saveScore(score);
             System.out.println("Player score :" + score);
         }
         else{
-            int score = player.getHitBoss() * 100;
             if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
                 score += mostHitBonus;
-                ScoreApi.saveScore(score);
             }
-            else{
-                ScoreApi.saveScore(score);
-            }
+            ScoreApi.saveScore(score);
             System.out.println("Pair score :" + score);
         }
         goBackGameLobby();
+    }
+
+    void setPairCoordinate(){
+        if(isServerSide){
+            try{
+                Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
+
+                Integer pairBossHits = pair.getHitBoss();
+                Integer pairHealth = pair.getHealth();
+
+                ArrayList<Object> sendMessage = new ArrayList<>();
+                sendMessage.add(currentCoordinates);
+                sendMessage.add(pairBossHits);
+                sendMessage.add(pairHealth);
+
+                socketServer.sendMessage(sendMessage);
+                Object readMessage = socketServer.readMessage();
+                if(readMessage instanceof  Pair){
+                    Pair pairCoordinates = (Pair) readMessage;
+
+                    pair.setTranslateX((Double)pairCoordinates.getKey());
+                    pair.setTranslateY((Double)pairCoordinates.getValue());
+                }
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
+        }
+        else {
+            try{
+                Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
+
+                socketClient.sendMessage(currentCoordinates);
+
+                Object readMessage = socketClient.readMessage();
+                ArrayList<Object> messages = (ArrayList<Object>) readMessage;
+
+                Pair pairCoordinates = (Pair) messages.get(0);
+                pair.setTranslateX((Double)pairCoordinates.getKey());
+                pair.setTranslateY((Double)pairCoordinates.getValue());
+
+                Integer bossHits = (Integer) messages.get(1);
+                player.setHitBoss(bossHits);
+                gameStatus.setHitBoss(player.getHitBoss());
+                Integer playerHealth = (Integer) messages.get(2);
+                player.setHealth(playerHealth);
+                gameStatus.setRemainingHealth(player.getHealth());
+            }
+            catch (Exception e){
+                if(e.getMessage().equals("Socket closed")){
+                    gameEnd();
+                }
+            }
+        }
     }
 
     /**
