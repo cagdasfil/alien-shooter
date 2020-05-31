@@ -2,10 +2,13 @@ package group10.client.multiplayer;
 
 public class GameData {
     // x coordinate of the player
-    Double xCoordinate;
+    Double playerX;
 
     // y coordinate of the player
-    Double yCoordinate;
+    Double playerY;
+
+    // x coordinate of the boss
+    Double bossX;
 
     // number of hits to the boss
     Integer bossHit;
@@ -20,15 +23,16 @@ public class GameData {
 
     }
 
-    public GameData(Double xCoordinate, Double yCoordinate) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
+    public GameData(Double playerX, Double playerY) {
+        this.playerX = playerX;
+        this.playerY = playerY;
         this.isGameFinished = false;
     }
 
-    public GameData(Double xCoordinate, Double yCoordinate, Integer bossHit, Integer playerHealth) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
+    public GameData(Double playerX, Double playerY,Double bossX, Integer bossHit, Integer playerHealth) {
+        this.playerX = playerX;
+        this.playerY = playerY;
+        this.bossX = bossX;
         this.bossHit = bossHit;
         this.playerHealth = playerHealth;
         this.isGameFinished = false;
@@ -38,20 +42,20 @@ public class GameData {
         this.isGameFinished = isGameFinished;
     }
 
-    public Double getxCoordinate() {
-        return xCoordinate;
+    public Double getPlayerX() {
+        return playerX;
     }
 
-    public void setxCoordinate(Double xCoordinate) {
-        this.xCoordinate = xCoordinate;
+    public void setPlayerX(Double playerX) {
+        this.playerX = playerX;
     }
 
-    public Double getyCoordinate() {
-        return yCoordinate;
+    public Double getPlayerY() {
+        return playerY;
     }
 
-    public void setyCoordinate(Double yCoordinate) {
-        this.yCoordinate = yCoordinate;
+    public void setPlayerY(Double playerY) {
+        this.playerY = playerY;
     }
 
     public Integer getBossHit() {
@@ -76,5 +80,13 @@ public class GameData {
 
     public void setGameFinished(Boolean gameFinished) {
         isGameFinished = gameFinished;
+    }
+
+    public Double getBossX() {
+        return bossX;
+    }
+
+    public void setBossX(Double bossX) {
+        this.bossX = bossX;
     }
 }

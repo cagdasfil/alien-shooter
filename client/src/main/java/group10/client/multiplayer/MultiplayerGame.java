@@ -547,9 +547,15 @@ public class MultiplayerGame extends Pane {
             @Override
             public void received(Connection connection, Object object) {
                 if(object instanceof  GameData){
-                    GameData gameData = (GameData ) object;
-                    pair.setTranslateX(gameData.getxCoordinate());
-                    pair.setTranslateY(gameData.getyCoordinate());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameData gameData = (GameData ) object;
+                            pair.setTranslateX(gameData.getPlayerX());
+                            pair.setTranslateY(gameData.getPlayerY());
+                        }
+                    });
+
                 }
             }
         });
@@ -573,20 +579,24 @@ public class MultiplayerGame extends Pane {
             @Override
             public void received(Connection connection, Object object) {
                 if(object instanceof  GameData){
-                    GameData gameData = (GameData ) object;
-                    if(gameData.getGameFinished()){
-                        gameEnd();
-                    }
-                    pair.setTranslateX(gameData.getxCoordinate());
-                    pair.setTranslateY(gameData.getyCoordinate());
-
-                    player.setHitBoss(gameData.getBossHit());
-                    player.setHealth(gameData.getPlayerHealth());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            gameStatus.setHitBoss(gameData.getBossHit());
-                            gameStatus.setRemainingHealth(gameData.getPlayerHealth());
+                            GameData gameData = (GameData ) object;
+                            if(gameData.getGameFinished()){
+                                gameEnd();
+                            }
+                            else{
+                                pair.setTranslateX(gameData.getPlayerX());
+                                pair.setTranslateY(gameData.getPlayerY());
+                                boss.setTranslateX(gameData.getBossX());
+
+                                player.setHitBoss(gameData.getBossHit());
+                                player.setHealth(gameData.getPlayerHealth());
+                                gameStatus.setHitBoss(gameData.getBossHit());
+                                gameStatus.setRemainingHealth(gameData.getPlayerHealth());
+                            }
+
                         }
                     });
                 }
@@ -608,12 +618,13 @@ public class MultiplayerGame extends Pane {
             try{
                 Double playerX = player.getTranslateX() + player.getX();
                 Double playerY = player.getTranslateY() + player.getY();
+                Double bossX = boss.getTranslateX() + boss.getX();
 
 
                 Integer pairBossHits = pair.getHitBoss();
                 Integer pairHealth = pair.getHealth();
 
-                GameData gameData = new GameData(playerX,playerY,pairBossHits,pairHealth);
+                GameData gameData = new GameData(playerX,playerY,bossX,pairBossHits,pairHealth);
                 this.server.sendToAllTCP(gameData);
             }
             catch (Exception e){
