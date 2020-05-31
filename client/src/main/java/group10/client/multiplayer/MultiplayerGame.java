@@ -1,11 +1,16 @@
 package group10.client.multiplayer;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 import group10.client.api.ScoreApi;
 import group10.client.game.*;
-import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +18,8 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import javafx.util.Pair;
-
-
-import java.net.SocketException;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -89,22 +92,25 @@ public class MultiplayerGame extends Pane {
     SocketServer socketServer = null;
     SocketClient socketClient = null;
 
+    Server server = null;
+    Client client = null;
+
     private boolean isServerSide = false;
 
     /**
      * Constructor for the game class
      * @param gameLevel game level
      */
-    public MultiplayerGame(int gameLevel, Object conn) {
+    public MultiplayerGame(int gameLevel, int role) {
         // set game level
         this.gameLevel = gameLevel;
 
-        if(conn instanceof SocketClient){
-            socketClient = (SocketClient) conn;
-        }
-        else if (conn instanceof SocketServer){
-            socketServer = (SocketServer) conn;
+        if(role == 0){
+            initServerSocket();
             isServerSide = true;
+        }
+        else if (role == 1){
+            initClientSocket();
         }
 
         // set background image of the scene
@@ -499,10 +505,10 @@ public class MultiplayerGame extends Pane {
         System.out.println("Boss health :" + boss.getHealth());
         if(isServerSide){
             try{
-                String exitMessage = "exit";
-                socketServer.sendMessage(exitMessage);
+                GameData gameData = new GameData(true);
+                this.server.sendToAllTCP(gameData);
                 Thread.sleep(100);
-                socketServer.closeConnections();
+                this.server.close();
             }
             catch (Exception e){
                 System.out.println("connection cannot closed");
@@ -531,27 +537,84 @@ public class MultiplayerGame extends Pane {
         goBackGameLobby();
     }
 
+    void initServerSocket(){
+        this.server = new Server();
+
+        Kryo kryo = this.server.getKryo();
+        kryo.register(GameData.class);
+
+        this.server.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof  GameData){
+                    GameData gameData = (GameData ) object;
+                    pair.setTranslateX(gameData.getxCoordinate());
+                    pair.setTranslateY(gameData.getyCoordinate());
+                }
+            }
+        });
+
+        try {
+            this.server.bind(9876);
+        }
+        catch (IOException e){
+            System.out.println(e);
+        }
+        server.start();
+    }
+
+    void initClientSocket(){
+        this.client = new Client();
+
+        Kryo kryo = this.client.getKryo();
+        kryo.register(GameData.class);
+
+        this.client.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof  GameData){
+                    GameData gameData = (GameData ) object;
+                    if(gameData.getGameFinished()){
+                        gameEnd();
+                    }
+                    pair.setTranslateX(gameData.getxCoordinate());
+                    pair.setTranslateY(gameData.getyCoordinate());
+
+                    player.setHitBoss(gameData.getBossHit());
+                    player.setHealth(gameData.getPlayerHealth());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameStatus.setHitBoss(gameData.getBossHit());
+                            gameStatus.setRemainingHealth(gameData.getPlayerHealth());
+                        }
+                    });
+                }
+            }
+        });
+
+        this.client.start();
+
+        try {
+            this.client.connect(5000, InetAddress.getLocalHost().getHostName(),9876);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     void setPairCoordinate(){
         if(isServerSide){
             try{
-                Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
+                Double playerX = player.getTranslateX() + player.getX();
+                Double playerY = player.getTranslateY() + player.getY();
+
 
                 Integer pairBossHits = pair.getHitBoss();
                 Integer pairHealth = pair.getHealth();
 
-                ArrayList<Object> sendMessage = new ArrayList<>();
-                sendMessage.add(currentCoordinates);
-                sendMessage.add(pairBossHits);
-                sendMessage.add(pairHealth);
-
-                socketServer.sendMessage(sendMessage);
-                Object readMessage = socketServer.readMessage();
-                if(readMessage instanceof  Pair){
-                    Pair pairCoordinates = (Pair) readMessage;
-
-                    pair.setTranslateX((Double)pairCoordinates.getKey());
-                    pair.setTranslateY((Double)pairCoordinates.getValue());
-                }
+                GameData gameData = new GameData(playerX,playerY,pairBossHits,pairHealth);
+                this.server.sendToAllTCP(gameData);
             }
             catch (Exception e){
                 System.out.println(e);
@@ -559,23 +622,12 @@ public class MultiplayerGame extends Pane {
         }
         else {
             try{
-                Pair<Double,Double> currentCoordinates = new Pair<>(player.getTranslateX()+ player.getX(),player.getTranslateY()+ player.getY());
 
-                socketClient.sendMessage(currentCoordinates);
+                Double playerX = player.getTranslateX()+ player.getX();
+                Double playerY = player.getTranslateY() + player.getY();
 
-                Object readMessage = socketClient.readMessage();
-                ArrayList<Object> messages = (ArrayList<Object>) readMessage;
-
-                Pair pairCoordinates = (Pair) messages.get(0);
-                pair.setTranslateX((Double)pairCoordinates.getKey());
-                pair.setTranslateY((Double)pairCoordinates.getValue());
-
-                Integer bossHits = (Integer) messages.get(1);
-                player.setHitBoss(bossHits);
-                gameStatus.setHitBoss(player.getHitBoss());
-                Integer playerHealth = (Integer) messages.get(2);
-                player.setHealth(playerHealth);
-                gameStatus.setRemainingHealth(player.getHealth());
+                GameData gameData = new GameData(playerX,playerY);
+                this.client.sendTCP(gameData);
             }
             catch (Exception e){
                 if(e.getMessage().equals("Socket closed")){

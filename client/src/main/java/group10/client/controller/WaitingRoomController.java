@@ -1,5 +1,6 @@
 package group10.client.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import group10.client.api.MatchApi;
 import group10.client.api.UserApi;
 import group10.client.game.Game;
@@ -80,9 +81,6 @@ public class WaitingRoomController implements Initializable {
             playButton.setText("Play");
             text.setText("You are matched with " + match.getServer_player());
             generalLayout.getChildren().setAll(text);
-            do {
-                match = MatchApi.getMatch();
-            } while (Objects.requireNonNull(match).getStatus().equals("wait"));
             generalLayout.getChildren().add(playButton);
             //MatchApi.deleteMatch(match);
         }
@@ -92,25 +90,13 @@ public class WaitingRoomController implements Initializable {
     public void playClickServer(){
         match.setStatus("ready");
         MatchApi.updateMatch(match);
-        SocketServer socketServer = null;
-        try {
-            socketServer = new SocketServer();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        MultiplayerGame game = new MultiplayerGame(5, socketServer);
+        MultiplayerGame game = new MultiplayerGame(5, 0);
         game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);
     }
 
     public void playClickClient(){
-        SocketClient socketClient = null;
-        try {
-            socketClient = new SocketClient();
-        } catch (ClassNotFoundException | InterruptedException | IOException e) {
-            e.printStackTrace();
-        }
-        MultiplayerGame game = new MultiplayerGame(5, socketClient);
+        MultiplayerGame game = new MultiplayerGame(5, 1);
         game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);
         MatchApi.deleteMatch(match);
