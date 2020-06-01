@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import group10.client.api.ScoreApi;
 import group10.client.game.*;
+import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -15,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -518,23 +520,45 @@ public class MultiplayerGame extends Pane {
 
         /* calculate scores*/
         int mostHitBonus = 1000;
-        int score = player.getHitBoss() * 100;
-        if(isServerSide){
+        int playerScore = player.getHitBoss() * 100;
+        int playerBonus = 0;
+        int pairScore = (bossHealth - player.getHitBoss()) * 100;
+        int pairBonus = 0;
 
+        if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
+            playerBonus = mostHitBonus;
+        }
+        else{
+            pairBonus = mostHitBonus;
+        }
+
+        ScoreApi.saveScore(playerScore+playerBonus);
+
+        showScores(playerScore, playerBonus, pairScore, pairBonus);
+        /*
+        if(isServerSide){
             if(player.getHitBoss() > pair.getHitBoss()){
-                score += mostHitBonus;
+                playerBonus = mostHitBonus;
             }
-            ScoreApi.saveScore(score);
-            System.out.println("Player score :" + score);
+            else{
+                pairBonus = mostHitBonus;
+            }
+            ScoreApi.saveScore(playerScore+playerBonus);
+            System.out.println("Player score :" + (playerScore+playerBonus));
         }
         else{
             if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
-                score += mostHitBonus;
+                playerBonus = mostHitBonus;
             }
-            ScoreApi.saveScore(score);
-            System.out.println("Pair score :" + score);
+            else{
+                pairBonus = mostHitBonus;
+            }
+            ScoreApi.saveScore(pairScore+pairBonus);
+            System.out.println("Pair score :" + (pairScore+pairBonus));
         }
-        goBackGameLobby();
+        showScores(playerScore, playerBonus, pairScore, pairBonus);
+
+         */
     }
 
     void initServerSocket(){
@@ -651,6 +675,18 @@ public class MultiplayerGame extends Pane {
     /**
      * This method shows game lobby on the screen when the game ends
      */
+
+    void showScores(int playerScore, int playerBonus, int pairScore, int pairBonus){
+        Alert scores = new Alert(Alert.AlertType.INFORMATION);
+        scores.setTitle("Scores");
+        scores.setHeaderText("Game Over !");
+        scores.setContentText("Total Score : " + (playerScore+playerBonus+pairScore+pairBonus)
+                                +"\nYour Score : " + playerScore + " + " + playerBonus
+                                +"\nTeammate's Score : " + pairScore + " + " + pairBonus);
+        scores.show();
+        goBackGameLobby();
+    }
+
     void goBackGameLobby() {
         try {
             // show game lobby on the screen
