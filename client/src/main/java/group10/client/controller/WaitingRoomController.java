@@ -65,19 +65,23 @@ public class WaitingRoomController implements Initializable {
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
-                } while (Objects.requireNonNull(match).getClient_player().equals(""));
+                } while (Objects.requireNonNull(match).getClientUsername().equals(""));
                 playButton.setOnAction(actionEvent ->  {
                     playClickServer();
                 });
                 playButton.setVisible(true);
-                readyText.setText("You are matched with " + match.getClient_player());
+                readyText.setText("You are matched with " + match.getClientUsername());
             });
             t.start();
         }
         else{ // Client
-            match.setClient_player(LoginController.user.getUsername());
+            match.setClientUsername(LoginController.user.getUsername());
             MatchApi.updateMatch(match);
-            readyText.setText("You are matched with " + match.getServer_player());
+            readyText.setText("You are matched with " + match.getServerUsername());
+            playButton.setOnAction(actionEvent ->  {
+                playClickClient();
+            });
+            playButton.setVisible(true);
             Thread t = new Thread(() -> {
                 do {
                     try {
@@ -85,13 +89,10 @@ public class WaitingRoomController implements Initializable {
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
-                } while (Objects.requireNonNull(match).getStatus().equals("wait"));
-                playButton.setOnAction(actionEvent ->  {
-                    playClickClient();
-                });
-                playButton.setVisible(true);
+                } while (Objects.requireNonNull(match).getServerStatus().equals("wait"));
+
             });
-            t.start();
+            //t.start();
             /*
             Thread t = new Thread(() -> {
                 do {
@@ -129,22 +130,22 @@ public class WaitingRoomController implements Initializable {
             );
             do {
                 match = MatchApi.getMatch();
-            } while (Objects.requireNonNull(match).getClient_player().equals(""));
+            } while (Objects.requireNonNull(match).getClientUsername().equals(""));
             playButton.setOnAction(actionEvent ->  {
                 playClickServer();
             });
             playButton.setText("Play");
-            text.setText("You are matched with " + match.getClient_player());
+            text.setText("You are matched with " + match.getClientUsername());
             generalLayout.getChildren().setAll(text,playButton);
         }
         else{ // Client
-            match.setClient_player(LoginController.user.getUsername());
+            match.setClientUsername(LoginController.user.getUsername());
             MatchApi.updateMatch(match);
             playButton.setOnAction(actionEvent ->  {
                 playClickClient();
             });
             playButton.setText("Play");
-            text.setText("You are matched with " + match.getServer_player());
+            text.setText("You are matched with " + match.getServerUsername());
             generalLayout.getChildren().setAll(text);
             generalLayout.getChildren().add(playButton);
             //MatchApi.deleteMatch(match);
@@ -153,15 +154,30 @@ public class WaitingRoomController implements Initializable {
     }
 
     public void playClickServer(){
-        match.setStatus("ready");
-        MatchApi.updateMatch(match);
-        //readyText.setText("Waiting Teammate's response...");
+        do {
+            try {
+                match = MatchApi.getMatch();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } while (Objects.requireNonNull(match).getClientStatus().equals("wait"));
         MultiplayerGame game = new MultiplayerGame(5, 0);
         game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);
+        match.setServerStatus("ready");
+        MatchApi.updateMatch(match);
     }
 
     public void playClickClient(){
+        match.setClientStatus("ready");
+        MatchApi.updateMatch(match);
+        do {
+            try {
+                match = MatchApi.getMatch();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } while (Objects.requireNonNull(match).getServerStatus().equals("wait"));
         MultiplayerGame game = new MultiplayerGame(5, 1);
         game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);

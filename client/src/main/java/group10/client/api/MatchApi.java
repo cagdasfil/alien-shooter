@@ -23,9 +23,14 @@ public class MatchApi {
     public static ResponseEntity<JSONObject> addMatch(String username){
 
         String jsonString = new JSONObject()
-                .put("server_player", username)
-                .put("client_player", "")
-                .put("status", "wait").toString();
+                .put("serverUsername", username)
+                .put("serverIP", "")
+                .put("serverPort", "")
+                .put("serverStatus", "wait")
+                .put("clientUsername", "")
+                .put("clientIP", "")
+                .put("clientPort", "")
+                .put("clientStatus", "wait").toString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -53,9 +58,14 @@ public class MatchApi {
 
     public static void updateMatch(Match match){
         String jsonString = new JSONObject()
-                .put("server_player", match.getServer_player())
-                .put("client_player", match.getClient_player())
-                .put("status", match.getStatus()).toString();
+                .put("serverUsername", match.getServerUsername())
+                .put("serverIP", match.getServerIP())
+                .put("serverPort", match.getServerPort())
+                .put("serverStatus", match.getServerStatus())
+                .put("clientUsername", match.getClientUsername())
+                .put("clientIP", match.getClientIP())
+                .put("clientPort", match.getClientPort())
+                .put("clientStatus", match.getClientStatus()).toString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

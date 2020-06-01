@@ -23,7 +23,7 @@ public class Match {
     @Column(name="server_status", nullable = false)
     private String serverStatus;
 
-    @Column(name ="client_username", nullable = false, unique = true, updatable = false)
+    @Column(name ="client_username", nullable = false)
     private String clientUsername;
 
     @Column(name="client_ip", nullable = false)

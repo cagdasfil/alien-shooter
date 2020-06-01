@@ -5,9 +5,14 @@ import java.util.Set;
 public class Match {
 
     private Long id;
-    private String server_player;
-    private String client_player;
-    private String status;;
+    private String serverUsername;
+    private String serverIP;
+    private String serverPort;
+    private String serverStatus;
+    private String clientUsername;
+    private String clientIP;
+    private String clientPort;
+    private String clientStatus;
 
     public Long getId() {
         return id;
@@ -17,27 +22,67 @@ public class Match {
         this.id = id;
     }
 
-    public String getServer_player() {
-        return server_player;
+    public String getServerUsername() {
+        return serverUsername;
     }
 
-    public void setServer_player(String server_player) {
-        this.server_player = server_player;
+    public void setServerUsername(String serverUsername) {
+        this.serverUsername = serverUsername;
     }
 
-    public String getClient_player() {
-        return client_player;
+    public String getServerIP() {
+        return serverIP;
     }
 
-    public void setClient_player(String client_player) {
-        this.client_player = client_player;
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
     }
 
-    public String getStatus() {
-        return status;
+    public String getServerPort() {
+        return serverPort;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setServerPort(String serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public String getServerStatus() {
+        return serverStatus;
+    }
+
+    public void setServerStatus(String serverStatus) {
+        this.serverStatus = serverStatus;
+    }
+
+    public String getClientUsername() {
+        return clientUsername;
+    }
+
+    public void setClientUsername(String clientUsername) {
+        this.clientUsername = clientUsername;
+    }
+
+    public String getClientIP() {
+        return clientIP;
+    }
+
+    public void setClientIP(String clientIP) {
+        this.clientIP = clientIP;
+    }
+
+    public String getClientPort() {
+        return clientPort;
+    }
+
+    public void setClientPort(String clientPort) {
+        this.clientPort = clientPort;
+    }
+
+    public String getClientStatus() {
+        return clientStatus;
+    }
+
+    public void setClientStatus(String clientStatus) {
+        this.clientStatus = clientStatus;
     }
 }
