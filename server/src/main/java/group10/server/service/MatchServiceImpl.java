@@ -41,9 +41,14 @@ public class MatchServiceImpl implements MatchService {
         List<Match> matches = getAllMatches();
         Match m = matches.get(0);  // find the user that will be modified by id's.
         /* modify related fields*/
-        m.setServer_player(match.getServer_player());
-        m.setClient_player(match.getClient_player());
-        m.setStatus(match.getStatus());
+        m.setServerUsername(match.getServerUsername());
+        m.setServerIP(match.getServerIP());
+        m.setServerPort(match.getServerPort());
+        m.setServerStatus(match.getServerStatus());
+        m.setClientUsername(match.getClientUsername());
+        m.setClientIP(match.getClientIP());
+        m.setClientPort(match.getClientPort());
+        m.setClientStatus(match.getClientStatus());
         /* save changes to the database.*/
         matchRepository.save(m);
     }

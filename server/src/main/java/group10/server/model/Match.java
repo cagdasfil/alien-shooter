@@ -11,28 +11,36 @@ public class Match {
     @Column(name="id")
     private Long id;
 
-    @Column(name ="server_player", nullable = false, unique = true, updatable = false)
-    private String server_player;
+    @Column(name ="server_username", nullable = false, unique = true, updatable = false)
+    private String serverUsername;
 
-    @Column(name="client_player", nullable = false)
-    private String client_player;
+    @Column(name="server_ip", nullable = false)
+    private String serverIP;
 
-    @Column(name="status", nullable = false)
-    private String status;
+    @Column(name ="server_port", nullable = false)
+    private String serverPort;
+
+    @Column(name="server_status", nullable = false)
+    private String serverStatus;
+
+    @Column(name ="client_username", nullable = false, unique = true, updatable = false)
+    private String clientUsername;
+
+    @Column(name="client_ip", nullable = false)
+    private String clientIP;
+
+    @Column(name ="client_port", nullable = false)
+    private String clientPort;
+
+    @Column(name="client_status", nullable = false)
+    private String clientStatus;
 
 
     /**
-     * Empty class constructor for User class.
+     * Empty class constructor for Match class.
      */
     public Match() {
 
-    }
-
-
-    public Match(Match match) {
-        this.server_player = match.server_player;
-        this.client_player = match.client_player;
-        this.status = match.status;
     }
 
     public Long getId() {
@@ -43,27 +51,67 @@ public class Match {
         this.id = id;
     }
 
-    public String getServer_player() {
-        return server_player;
+    public String getServerUsername() {
+        return serverUsername;
     }
 
-    public void setServer_player(String server_player) {
-        this.server_player = server_player;
+    public void setServerUsername(String serverUsername) {
+        this.serverUsername = serverUsername;
     }
 
-    public String getClient_player() {
-        return client_player;
+    public String getServerIP() {
+        return serverIP;
     }
 
-    public void setClient_player(String client_player) {
-        this.client_player = client_player;
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
     }
 
-    public String getStatus() {
-        return status;
+    public String getServerPort() {
+        return serverPort;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setServerPort(String serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public String getServerStatus() {
+        return serverStatus;
+    }
+
+    public void setServerStatus(String serverStatus) {
+        this.serverStatus = serverStatus;
+    }
+
+    public String getClientUsername() {
+        return clientUsername;
+    }
+
+    public void setClientUsername(String clientUsername) {
+        this.clientUsername = clientUsername;
+    }
+
+    public String getClientIP() {
+        return clientIP;
+    }
+
+    public void setClientIP(String clientIP) {
+        this.clientIP = clientIP;
+    }
+
+    public String getClientPort() {
+        return clientPort;
+    }
+
+    public void setClientPort(String clientPort) {
+        this.clientPort = clientPort;
+    }
+
+    public String getClientStatus() {
+        return clientStatus;
+    }
+
+    public void setClientStatus(String clientStatus) {
+        this.clientStatus = clientStatus;
     }
 }

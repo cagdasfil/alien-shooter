@@ -21,12 +21,10 @@ public class MatchController {
     }
 
 
-
     @GetMapping("/matches")
     public List<Match> getMatches(){
         return matchService.getAllMatches();
     }
-
 
     @PutMapping("/matches/{id}")
     public void updateMatch(@RequestBody Match match, @PathVariable(value = "id") Long matchId) {
@@ -37,7 +35,6 @@ public class MatchController {
     public void createMatch(@Valid @RequestBody Match match) {
         matchService.addMatch(match);
     }
-
 
     @DeleteMapping("/matches/{id}")
     public void deleteMatch(@PathVariable(value = "id") Long matchId){
