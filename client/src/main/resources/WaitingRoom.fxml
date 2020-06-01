@@ -7,12 +7,12 @@
 
 <Pane fx:id="generalLayout" prefHeight="900.0" prefWidth="800.0" style="-fx-background-image: url(static/background.jpg)" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group10.client.controller.WaitingRoomController">
    <children>
-      <Text fx:id="readyText" fill="WHITE" layoutX="161.0" layoutY="381.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" text="Are You Ready For Multiplayer Level ?" textAlignment="CENTER" wrappingWidth="478.154296875">
+      <Text fx:id="readyText" fill="WHITE" layoutX="133.0" layoutY="423.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" text="Waiting For a Teammate..." textAlignment="CENTER" wrappingWidth="534.154296875">
          <font>
             <Font name="Corbel Bold" size="46.0" />
          </font>
       </Text>
-      <Button fx:id="readyButton" layoutX="352.0" layoutY="564.0" mnemonicParsing="false" onAction="#readyClick" text="Ready">
+      <Button fx:id="playButton" layoutX="352.0" layoutY="564.0" mnemonicParsing="false" onAction="#readyClick" text="Play">
          <font>
             <Font size="24.0" />
          </font></Button>
