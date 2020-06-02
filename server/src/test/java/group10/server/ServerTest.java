@@ -1,5 +1,6 @@
 package group10.server;
 
+import group10.server.repository.MatchRepository;
 import group10.server.repository.RoleRepository;
 import group10.server.repository.ScoreRepository;
 import group10.server.repository.UserRepository;
@@ -27,6 +28,9 @@ public class ServerTest {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    MatchRepository matchRepository;
 
     MockMvc mockMvc;
 

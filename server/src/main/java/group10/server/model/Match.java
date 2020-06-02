@@ -11,7 +11,7 @@ public class Match {
     @Column(name="id")
     private Long id;
 
-    @Column(name ="server_username", nullable = false, unique = true, updatable = false)
+    @Column(name ="server_username", nullable = false)
     private String serverUsername;
 
     @Column(name="server_ip", nullable = false)
