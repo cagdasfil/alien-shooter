@@ -1,12 +1,6 @@
 package group10.client.game;
 
-import group10.client.api.MatchApi;
 import group10.client.api.ScoreApi;
-import group10.client.controller.LoginController;
-import group10.client.model.server.Match;
-import group10.client.multiplayer.MultiplayerGame;
-import group10.client.multiplayer.SocketClient;
-import group10.client.multiplayer.SocketServer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -14,15 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.IOException;
