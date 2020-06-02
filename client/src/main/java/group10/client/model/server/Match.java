@@ -1,7 +1,5 @@
 package group10.client.model.server;
 
-import java.util.Set;
-
 public class Match {
 
     private Long id;
@@ -10,8 +8,6 @@ public class Match {
     private String serverPort;
     private String serverStatus;
     private String clientUsername;
-    private String clientIP;
-    private String clientPort;
     private String clientStatus;
 
     public Long getId() {
@@ -60,22 +56,6 @@ public class Match {
 
     public void setClientUsername(String clientUsername) {
         this.clientUsername = clientUsername;
-    }
-
-    public String getClientIP() {
-        return clientIP;
-    }
-
-    public void setClientIP(String clientIP) {
-        this.clientIP = clientIP;
-    }
-
-    public String getClientPort() {
-        return clientPort;
-    }
-
-    public void setClientPort(String clientPort) {
-        this.clientPort = clientPort;
     }
 
     public String getClientStatus() {

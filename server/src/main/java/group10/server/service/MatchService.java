@@ -1,17 +1,11 @@
 package group10.server.service;
 
 import group10.server.model.Match;
-import group10.server.model.User;
-
 import java.util.List;
-
-
 
 public interface MatchService {
 
-
     List<Match> getAllMatches();
-
 
     void addMatch(Match match);
 

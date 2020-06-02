@@ -26,15 +26,8 @@ public class Match {
     @Column(name ="client_username", nullable = false)
     private String clientUsername;
 
-    @Column(name="client_ip", nullable = false)
-    private String clientIP;
-
-    @Column(name ="client_port", nullable = false)
-    private String clientPort;
-
     @Column(name="client_status", nullable = false)
     private String clientStatus;
-
 
     /**
      * Empty class constructor for Match class.
@@ -89,22 +82,6 @@ public class Match {
 
     public void setClientUsername(String clientUsername) {
         this.clientUsername = clientUsername;
-    }
-
-    public String getClientIP() {
-        return clientIP;
-    }
-
-    public void setClientIP(String clientIP) {
-        this.clientIP = clientIP;
-    }
-
-    public String getClientPort() {
-        return clientPort;
-    }
-
-    public void setClientPort(String clientPort) {
-        this.clientPort = clientPort;
     }
 
     public String getClientStatus() {

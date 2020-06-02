@@ -1,7 +1,6 @@
 package group10.server.api;
 
 import group10.server.model.Match;
-import group10.server.model.User;
 import group10.server.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ public class MatchController {
     public MatchController(MatchService matchService) {
         this.matchService = matchService;
     }
-
 
     @GetMapping("/matches")
     public List<Match> getMatches(){

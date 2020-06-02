@@ -1,9 +1,6 @@
 package group10.server.service;
 
-
-import group10.server.exception.ApiException;
 import group10.server.model.Match;
-import group10.server.model.User;
 import group10.server.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +15,6 @@ import java.util.List;
 @Service
 public class MatchServiceImpl implements MatchService {
     private final MatchRepository matchRepository;
-
 
     @Autowired
     public MatchServiceImpl(MatchRepository matchRepository) {
@@ -46,8 +42,6 @@ public class MatchServiceImpl implements MatchService {
         m.setServerPort(match.getServerPort());
         m.setServerStatus(match.getServerStatus());
         m.setClientUsername(match.getClientUsername());
-        m.setClientIP(match.getClientIP());
-        m.setClientPort(match.getClientPort());
         m.setClientStatus(match.getClientStatus());
         /* save changes to the database.*/
         matchRepository.save(m);

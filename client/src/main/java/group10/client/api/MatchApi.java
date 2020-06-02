@@ -40,15 +40,12 @@ public class MatchApi {
         String username = LoginController.user.getUsername();
         String serverPort = "9876";
 
-
         String jsonString = new JSONObject()
                 .put("serverUsername", username)
                 .put("serverIP", serverIP)
                 .put("serverPort", serverPort)
                 .put("serverStatus", "wait")
                 .put("clientUsername", "")
-                .put("clientIP", "")
-                .put("clientPort", "")
                 .put("clientStatus", "wait").toString();
 
         HttpHeaders headers = new HttpHeaders();
@@ -82,8 +79,6 @@ public class MatchApi {
                 .put("serverPort", match.getServerPort())
                 .put("serverStatus", match.getServerStatus())
                 .put("clientUsername", match.getClientUsername())
-                .put("clientIP", match.getClientIP())
-                .put("clientPort", match.getClientPort())
                 .put("clientStatus", match.getClientStatus()).toString();
 
         HttpHeaders headers = new HttpHeaders();
