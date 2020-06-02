@@ -9,6 +9,18 @@ This is  an interactive multiplayer two-dimensional shooter game .
 * Berkant Bayraktar - 2098796
 * Çağdaş Fil - 2093839
 
+
+## How to Run
+To be able to extract executables (server_program10.war and client_program10.jar) run the following command. 
+
+`sudo ./build.sh`
+
+The user that wants to run this game must forward the service port 9876 to internal port 9876 like in the figure : 
+
+[Port Forwarding Example](http://144.122.71.144:8080/cagdas.fil/group10/src/master/port%20forwarding.jpeg).
+
+Otherwise, connection between users in multiplayer level cannot be handled.
+
 ## Game Manual
 
 Information about gameplay, score and levels can be found in [Game Manual](http://144.122.71.144:8080/cagdas.fil/group10/src/master/Game%20Manual.pdf).
