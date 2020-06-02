@@ -2,32 +2,18 @@ package group10.client.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import group10.client.api.MatchApi;
-import group10.client.api.UserApi;
-import group10.client.game.Game;
 import group10.client.model.server.Match;
 import group10.client.multiplayer.MultiplayerGame;
-import group10.client.multiplayer.SocketClient;
-import group10.client.multiplayer.SocketServer;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -38,6 +24,7 @@ public class WaitingRoomController implements Initializable {
 
     @FXML public Pane generalLayout;
     @FXML public Text text;
+    @FXML public Text informText;
     @FXML public Button playButton;
     @FXML public ProgressIndicator progress;
 
@@ -70,6 +57,7 @@ public class WaitingRoomController implements Initializable {
                     playClickServer();
                 });
                 playButton.setVisible(true);
+                informText.setVisible(false);
                 progress.setVisible(false);
                 text.setText("You are matched with " + match.getClientUsername());
             });
@@ -83,6 +71,7 @@ public class WaitingRoomController implements Initializable {
                 playClickClient();
             });
             playButton.setVisible(true);
+            informText.setVisible(false);
             progress.setVisible(false);
         }
     }

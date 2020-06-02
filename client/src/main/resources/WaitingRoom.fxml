@@ -8,15 +8,20 @@
 
 <Pane fx:id="generalLayout" prefHeight="900.0" prefWidth="800.0" style="-fx-background-image: url(static/background.jpg)" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="group10.client.controller.WaitingRoomController">
    <children>
-      <Text fx:id="text" fill="WHITE" layoutX="133.0" layoutY="424.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" text="Waiting For a Teammate..." textAlignment="CENTER" wrappingWidth="534.154296875">
+      <Text fx:id="text" fill="WHITE" layoutY="524.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" text="Waiting For a Teammate..." textAlignment="CENTER" wrappingWidth="800.0">
          <font>
-            <Font name="Corbel Bold" size="46.0" />
+            <Font name="Corbel Bold" size="44.0" />
          </font>
       </Text>
-      <Button fx:id="playButton" layoutX="362.0" layoutY="563.0" mnemonicParsing="false" text="Play">
+      <Button fx:id="playButton" layoutX="362.0" layoutY="610.0" mnemonicParsing="false" text="Play">
          <font>
             <Font size="24.0" />
          </font></Button>
-      <ProgressIndicator fx:id="progress" layoutX="374.0" layoutY="510.0" />
+      <ProgressIndicator fx:id="progress" layoutX="374.0" layoutY="609.0" />
+      <Text fx:id="informText" fill="WHITE" layoutX="186.0" layoutY="312.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" text="You reached Multiplayer Level" textAlignment="CENTER" wrappingWidth="428.154296875">
+         <font>
+            <Font name="Corbel Bold" size="54.0" />
+         </font>
+      </Text>
    </children>
 </Pane>
