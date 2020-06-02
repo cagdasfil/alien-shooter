@@ -522,11 +522,11 @@ public class MultiplayerGame extends Pane {
         // calculate base scores of the player and pair
         int playerScore = player.getHitBoss() * 100;
         int playerBonus = 0;
-        int pairScore = (boss.getHealth() - player.getHitBoss()) * 100;
+        int pairScore = (bossHealth - boss.getHealth() - player.getHitBoss()) * 100;
         int pairBonus = 0;
 
         // set mostHitBonus(1000) to the user that have most hits.
-        if(player.getHitBoss() > (boss.getHealth() - player.getHitBoss())){
+        if(playerScore > pairScore){
             playerBonus = mostHitBonus;
         }
         else{
