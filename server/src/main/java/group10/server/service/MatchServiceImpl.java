@@ -7,13 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 /**
- * Concrete class which implements {@link UserService} interface.
+ * Concrete class which implements {@link MatchService} interface.
  */
-
 @Service
 public class MatchServiceImpl implements MatchService {
+    /* Match Database */
     private final MatchRepository matchRepository;
 
     @Autowired
@@ -33,10 +32,11 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public void updateMatch(Long matchId, Match match) {
-        /* check whether the user with the given id is in database or not*/
+        /* retrieve all matches from database */
         List<Match> matches = getAllMatches();
-        Match m = matches.get(0);  // find the user that will be modified by id's.
-        /* modify related fields*/
+        /* get the first match from matches list */
+        Match m = matches.get(0);
+        /* modify related fields */
         m.setServerUsername(match.getServerUsername());
         m.setServerIP(match.getServerIP());
         m.setServerPort(match.getServerPort());
