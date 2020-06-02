@@ -37,14 +37,19 @@ public class WaitingRoomController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Hide the play button before match
         playButton.setVisible(false);
+        // Get match from database
         try {
             match = MatchApi.getMatch();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        if(match == null){ // Server
+        // If there is no match in database, take server role.
+        if(match == null){ // SERVER
+            // Create a match and save to database
             MatchApi.addMatch();
+            // Thread to wait until a client comes
             Thread t = new Thread(() -> {
                 do {
                     try {
@@ -53,30 +58,42 @@ public class WaitingRoomController implements Initializable {
                         e.printStackTrace();
                     }
                 } while (Objects.requireNonNull(match).getClientUsername().equals(""));
+                // Direct playButton to playClickServer function
                 playButton.setOnAction(actionEvent ->  {
                     playClickServer();
                 });
+                // Set visibility of the components
                 playButton.setVisible(true);
                 informText.setVisible(false);
                 progress.setVisible(false);
+                // Inform player about matched player
                 text.setText("You are matched with " + match.getClientUsername());
             });
             t.start();
         }
-        else{ // Client
+        // if there is a match in server, take client role.
+        else{ // CLIENT
+            // Send client information to server
             match.setClientUsername(LoginController.user.getUsername());
             MatchApi.updateMatch(match);
+            // Inform player about matched player
             text.setText("You are matched with " + match.getServerUsername());
+            // Direct playButton to playClickClient function
             playButton.setOnAction(actionEvent ->  {
                 playClickClient();
             });
+            // Set visibility of the components
             playButton.setVisible(true);
             informText.setVisible(false);
             progress.setVisible(false);
         }
     }
 
+    /**
+     * Controller function of the play button click for server player
+     */
     public void playClickServer(){
+        // Wait until the client player is ready
         do {
             try {
                 match = MatchApi.getMatch();
@@ -84,16 +101,23 @@ public class WaitingRoomController implements Initializable {
                 e.printStackTrace();
             }
         } while (Objects.requireNonNull(match).getClientStatus().equals("wait"));
+        // Create a multiplayer game and start
         MultiplayerGame game = new MultiplayerGame(5, 0);
         game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);
+        // Set status to inform client player
         match.setServerStatus("ready");
         MatchApi.updateMatch(match);
     }
 
+    /**
+     * Controller function of the play button click for client player
+     */
     public void playClickClient(){
+        // Set status to inform server player
         match.setClientStatus("ready");
         MatchApi.updateMatch(match);
+        // Wait until the server player is ready
         do {
             try {
                 match = MatchApi.getMatch();
@@ -101,9 +125,11 @@ public class WaitingRoomController implements Initializable {
                 e.printStackTrace();
             }
         } while (Objects.requireNonNull(match).getServerStatus().equals("wait"));
+        // Create a multiplayer game and start
         MultiplayerGame game = new MultiplayerGame(5, 1);
         game.setFocusTraversable(true);
         generalLayout.getChildren().setAll(game);
+        // Delete the match entry
         MatchApi.deleteMatch(match);
     }
 
