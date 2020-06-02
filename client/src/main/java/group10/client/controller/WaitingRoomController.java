@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.json.JSONObject;
@@ -30,14 +31,15 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * This class is controller for the GameLobby.fxml file
+ * This class is controller for the WaitingRoom.fxml file
  */
 @Component
 public class WaitingRoomController implements Initializable {
 
     @FXML public Pane generalLayout;
-    @FXML public Text readyText;
+    @FXML public Text text;
     @FXML public Button playButton;
+    @FXML public ProgressIndicator progress;
 
     Match match;
 
@@ -70,87 +72,21 @@ public class WaitingRoomController implements Initializable {
                     playClickServer();
                 });
                 playButton.setVisible(true);
-                readyText.setText("You are matched with " + match.getClientUsername());
+                progress.setVisible(false);
+                text.setText("You are matched with " + match.getClientUsername());
             });
             t.start();
         }
         else{ // Client
             match.setClientUsername(LoginController.user.getUsername());
             MatchApi.updateMatch(match);
-            readyText.setText("You are matched with " + match.getServerUsername());
+            text.setText("You are matched with " + match.getServerUsername());
             playButton.setOnAction(actionEvent ->  {
                 playClickClient();
             });
             playButton.setVisible(true);
-            Thread t = new Thread(() -> {
-                do {
-                    try {
-                        match = MatchApi.getMatch();
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                } while (Objects.requireNonNull(match).getServerStatus().equals("wait"));
-
-            });
-            //t.start();
-            /*
-            Thread t = new Thread(() -> {
-                do {
-                    try {
-                        match = MatchApi.getMatch();
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                } while (Objects.requireNonNull(match).getStatus().equals("wait"));
-                playButton.setOnAction(actionEvent ->  {
-                    playClickClient();
-                });
-                playButton.fire();
-            });
-            t.start();
-            //MatchApi.deleteMatch(match);
-
-             */
+            progress.setVisible(false);
         }
-
-    }
-
-    @FXML
-    public void readyClick() throws IOException, InterruptedException {
-
-        match = MatchApi.getMatch();
-        Button playButton = new Button();
-        Text text = readyText;
-        //text.setX(100);
-        //text.setY(100);
-
-        if(match == null){ // Server
-            MatchApi.addMatch(
-                    LoginController.user.getUsername()
-            );
-            do {
-                match = MatchApi.getMatch();
-            } while (Objects.requireNonNull(match).getClientUsername().equals(""));
-            playButton.setOnAction(actionEvent ->  {
-                playClickServer();
-            });
-            playButton.setText("Play");
-            text.setText("You are matched with " + match.getClientUsername());
-            generalLayout.getChildren().setAll(text,playButton);
-        }
-        else{ // Client
-            match.setClientUsername(LoginController.user.getUsername());
-            MatchApi.updateMatch(match);
-            playButton.setOnAction(actionEvent ->  {
-                playClickClient();
-            });
-            playButton.setText("Play");
-            text.setText("You are matched with " + match.getServerUsername());
-            generalLayout.getChildren().setAll(text);
-            generalLayout.getChildren().add(playButton);
-            //MatchApi.deleteMatch(match);
-        }
-
     }
 
     public void playClickServer(){
