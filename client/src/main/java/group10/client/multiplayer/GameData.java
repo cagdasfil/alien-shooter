@@ -23,11 +23,25 @@ public class GameData {
 
     }
 
+    /**
+     *
+     * @param playerX x coordinate of the player
+     * @param playerY y coordinate of the player
+     */
     public GameData(Double playerX, Double playerY) {
         this.playerX = playerX;
         this.playerY = playerY;
         this.isGameFinished = false;
     }
+
+    /**
+     *
+     * @param playerX x coordinate of the player
+     * @param playerY y cooordinate of the player
+     * @param bossX x coordinate of the boss
+     * @param bossHit number of boss hits
+     * @param playerHealth remaining health of the player
+     */
 
     public GameData(Double playerX, Double playerY,Double bossX, Integer bossHit, Integer playerHealth) {
         this.playerX = playerX;
@@ -42,51 +56,55 @@ public class GameData {
         this.isGameFinished = isGameFinished;
     }
 
+    /**
+     * Getter method to be able to access x coordinate of the player.
+     * @return
+     */
     public Double getPlayerX() {
         return playerX;
     }
 
-    public void setPlayerX(Double playerX) {
-        this.playerX = playerX;
-    }
 
+    /**
+     * Getter method to be able to access y coordinate of the player
+     * @return
+     */
     public Double getPlayerY() {
         return playerY;
     }
 
-    public void setPlayerY(Double playerY) {
-        this.playerY = playerY;
-    }
 
+    /**
+     * Getter method to be able to access number of hits for the player
+     * @return
+     */
     public Integer getBossHit() {
         return bossHit;
     }
 
-    public void setBossHit(Integer bossHit) {
-        this.bossHit = bossHit;
-    }
 
+    /**
+     * Getter method to be able to access remaining health of the player
+     * @return
+     */
     public Integer getPlayerHealth() {
         return playerHealth;
     }
 
-    public void setPlayerHealth(Integer playerHealth) {
-        this.playerHealth = playerHealth;
-    }
-
+    /**
+     * Getter method to be able to understand game is finished or not
+     * @return
+     */
     public Boolean getGameFinished() {
         return isGameFinished;
     }
 
-    public void setGameFinished(Boolean gameFinished) {
-        isGameFinished = gameFinished;
-    }
 
+    /**
+     * Getter method to be able to access x coordinate of the boss.
+     * @return
+     */
     public Double getBossX() {
         return bossX;
-    }
-
-    public void setBossX(Double bossX) {
-        this.bossX = bossX;
     }
 }

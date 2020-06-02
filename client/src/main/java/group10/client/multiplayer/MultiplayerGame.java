@@ -8,7 +8,6 @@ import com.esotericsoftware.kryonet.Server;
 import group10.client.api.ScoreApi;
 import group10.client.controller.WaitingRoomController;
 import group10.client.game.*;
-import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -33,7 +32,7 @@ public class MultiplayerGame extends Pane {
     // player object
     private Player player = null;
 
-    //
+    //pair object
     private Player pair = null;
 
     // List of player bullets and boss bullets
@@ -90,11 +89,7 @@ public class MultiplayerGame extends Pane {
     // game level
     private int gameLevel;
 
-    // variable to be set when the player has no remaining health or time finishes.
-    private boolean isGameOver = false;
-    SocketServer socketServer = null;
-    SocketClient socketClient = null;
-
+    //Server and client handles p2p communication between two user.
     Server server = null;
     Client client = null;
 
@@ -108,6 +103,7 @@ public class MultiplayerGame extends Pane {
         // set game level
         this.gameLevel = gameLevel;
 
+        //decide whether the current client opens a server for communication or just a connects existing server
         if(role == 0){
             initServerSocket();
             isServerSide = true;
@@ -122,6 +118,7 @@ public class MultiplayerGame extends Pane {
         // load game settings
         this.gameTuner = new GameTuner();
 
+        //load game settings
         playerBulletRadius  = gameTuner.getSettings(gameLevel).get("playerBulletRadius");
         bossBulletRadius = gameTuner.getSettings(gameLevel).get("bossBulletRadius");
         playerBulletMovingRate = gameTuner.getSettings(gameLevel).get("playerBulletMovingRate");
@@ -149,11 +146,11 @@ public class MultiplayerGame extends Pane {
      * This method inits player on the scene
      */
     private void initPlayer(){
-        // create new player object
+        // create new player and pair object
         this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,100);
         this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.GREEN,100);
 
-        // show the new player object on the screen
+        // show the new player and pair object on the screen
         this.getChildren().add(player);
         this.getChildren().add(pair);
     }
@@ -162,7 +159,9 @@ public class MultiplayerGame extends Pane {
      * This method inits Boss
      */
     private void initBoss(){
+        //create boss object
         this.boss = new Boss(W/2,H/ 10,4*S,6*S, Color.RED, bossHealth);
+        // show boss object on the screen
         this.getChildren().add(boss);
     }
 
@@ -187,10 +186,12 @@ public class MultiplayerGame extends Pane {
         });
     }
 
-
+    /**
+     * This method handles pair's movement animation. Spaceship coordinate of the pair object is get by using sockets.
+     */
     private void pairMovementAnimation(){
        EventHandler<ActionEvent> o = actionEvent -> {
-           setPairCoordinate();
+           sendCoordinateToPair();
        };
 
        pairMovement.getKeyFrames().add(new KeyFrame(Duration.millis(30),o));
@@ -211,7 +212,6 @@ public class MultiplayerGame extends Pane {
             remainingTime -= 1;
             // if remaining time equals to zero, gameover!
             if(remainingTime == 0 && isServerSide){
-                isGameOver = true;
                 gameEnd();
             }
         };
@@ -228,8 +228,8 @@ public class MultiplayerGame extends Pane {
 
             boss.setTranslateX(boss.getTranslateX() + moveDistance);
 
-            // [2 * S ...  W - 2 * S ]
-            if( (boss.getTranslateX() + 2 * S > W) || (boss.getTranslateX() -  2 * S < 0) ) {
+            // [2 * S ...  W - 6 * S ]
+            if( (boss.getTranslateX() + (6 * S) > W) || (boss.getTranslateX() -  (2 * S) < 0) ) {
                 moveDistance *= -1;
             }
         };
@@ -245,8 +245,10 @@ public class MultiplayerGame extends Pane {
 
     private void configurePairBulletAnimations(){
         EventHandler<ActionEvent> createBullet = actionEvent -> {
+            // calculate x and y coordinate of the bullets to be created for the pair
             int bulletX = (int) (this.pair.getTranslateX() + this.pair.getWidth() / 2);
             int bulletY = (int) (this.pair.getTranslateY() - playerBulletRadius);
+            // create bullets and show them on scene
             Bullet bullet = new Bullet( bulletX,bulletY, playerBulletRadius, Color.LIGHTGOLDENRODYELLOW);
             pairBullets.add(bullet);
             this.getChildren().add(bullet);
@@ -265,9 +267,9 @@ public class MultiplayerGame extends Pane {
                 bullet.setCenterY(newY);
 
 
-                // check whether player bullet intersects with the boss or not
+                // check whether pair bullet intersects with the boss or not
                 if(bullet.getBoundsInParent().intersects(boss.getBoundsInParent())){
-                    // If intersects remove player bullet from list and scene
+                    // If intersects remove pair bullet from list and scene
                     it.remove();
                     pairBullets.remove(bullet);
                     getChildren().remove(bullet);
@@ -283,11 +285,9 @@ public class MultiplayerGame extends Pane {
 
                         // If boss has no remaining health
                         if(boss.getHealth() == 0){
-                            setPairCoordinate();
+                            sendCoordinateToPair();
                             // increment number of kills of the player by one and update game status indicator located on screen
                             pair.setKills(pair.getKills() +1);
-                            //gameStatus.setKill(player.getKills());
-
                             getChildren().remove(boss);
                             gameEnd();
                         }
@@ -413,13 +413,11 @@ public class MultiplayerGame extends Pane {
                         // update game status indicator located on screen
                         gameStatus.setRemainingHealth(player.getHealth());
 
-                        System.out.println("Player health : " + player.getHealth());
                         // check whether player has remaining health or not
                         if(player.getHealth() == 0){
 
                             // If not remove player from the screen and gameover!
                             getChildren().remove(player);
-                            isGameOver = true;
                             gameEnd();
                         }
                     }
@@ -435,14 +433,12 @@ public class MultiplayerGame extends Pane {
                     if(isServerSide){
                         // decrement pair health by one
                         pair.setHealth(pair.getHealth() - 1);
-                        System.out.println("Pair health : " + pair.getHealth());
 
                         // check whether pair has remaining health or not
                         if(pair.getHealth() == 0){
 
                             // If not remove pair from the screen and gameover!
                             getChildren().remove(pair);
-                            isGameOver = true;
                             gameEnd();
                         }
                     }
@@ -519,30 +515,38 @@ public class MultiplayerGame extends Pane {
         }
 
         /* calculate scores*/
+
+        // most hit bonus 1000
         int mostHitBonus = 1000;
+        // calculate base scores of the player and pair
         int playerScore = player.getHitBoss() * 100;
         int playerBonus = 0;
         int pairScore = (bossHealth - player.getHitBoss()) * 100;
         int pairBonus = 0;
 
+        // set mostHitBonus(1000) to the user that have most hits.
         if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
             playerBonus = mostHitBonus;
         }
         else{
             pairBonus = mostHitBonus;
         }
-
+        //post the final score.
         ScoreApi.saveScore(playerScore+playerBonus);
-
+        // show each user his/her score and pair's score
         showScores(playerScore, playerBonus, pairScore, pairBonus);
     }
 
+    /**
+     * This method inits Server Side for the p2p communication between users in the multiplayer level.
+     */
     void initServerSocket(){
+        // initialize the Server for the p2p communication
         this.server = new Server();
-
+        // register the classes that will be transmitted
         Kryo kryo = this.server.getKryo();
         kryo.register(GameData.class);
-
+        // add action listener
         this.server.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
@@ -551,6 +555,7 @@ public class MultiplayerGame extends Pane {
                         @Override
                         public void run() {
                             GameData gameData = (GameData ) object;
+                            // get pair's coordinate
                             pair.setTranslateX(gameData.getPlayerX());
                             pair.setTranslateY(gameData.getPlayerY());
                         }
@@ -559,7 +564,7 @@ public class MultiplayerGame extends Pane {
                 }
             }
         });
-
+        // bind tcp port for the server
         try {
             this.server.bind(9876);
         }
@@ -569,12 +574,18 @@ public class MultiplayerGame extends Pane {
         server.start();
     }
 
-    void initClientSocket(){
-        this.client = new Client();
+    /**
+     * This method inits Client Side for the p2p communication between users in the multiplayer level.
+     */
 
+    void initClientSocket(){
+        // Initialize Client Side for the p2p communication
+        this.client = new Client();
+        // register the classes that will be transmitted
         Kryo kryo = this.client.getKryo();
         kryo.register(GameData.class);
 
+        // add action listener
         this.client.addListener(new Listener(){
             @Override
             public void received(Connection connection, Object object) {
@@ -587,6 +598,7 @@ public class MultiplayerGame extends Pane {
                                 gameEnd();
                             }
                             else{
+                                // get pair's and boss's coordinate and set them on the screen
                                 pair.setTranslateX(gameData.getPlayerX());
                                 pair.setTranslateY(gameData.getPlayerY());
                                 boss.setTranslateX(gameData.getBossX());
@@ -603,8 +615,10 @@ public class MultiplayerGame extends Pane {
             }
         });
 
+        // start the client
         this.client.start();
 
+        // connect client to the server
         try {
             this.client.connect(5000,
                     WaitingRoomController.match.getServerIP(),
@@ -615,9 +629,10 @@ public class MultiplayerGame extends Pane {
 
     }
 
-    void setPairCoordinate(){
+    void sendCoordinateToPair(){
         if(isServerSide){
             try{
+                // If you are server side in the p2p communication, send own and boss's coordinate. Also send pairBosshits and pairHealth
                 Double playerX = player.getTranslateX() + player.getX();
                 Double playerY = player.getTranslateY() + player.getY();
                 Double bossX = boss.getTranslateX() + boss.getX();
@@ -635,7 +650,7 @@ public class MultiplayerGame extends Pane {
         }
         else {
             try{
-
+                // If you are client side in the p2p communication, send own coordinate.
                 Double playerX = player.getTranslateX()+ player.getX();
                 Double playerY = player.getTranslateY() + player.getY();
 
@@ -651,7 +666,7 @@ public class MultiplayerGame extends Pane {
     }
 
     /**
-     * This method shows game lobby on the screen when the game ends
+     * This method shows own and pair's score to the user.
      */
 
     void showScores(int playerScore, int playerBonus, int pairScore, int pairBonus){
@@ -665,6 +680,9 @@ public class MultiplayerGame extends Pane {
         goBackGameLobby();
     }
 
+    /**
+     * This method shows game lobby on the screen when the game ends
+     */
     void goBackGameLobby() {
         try {
             // show game lobby on the screen
