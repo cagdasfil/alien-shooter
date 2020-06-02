@@ -98,6 +98,7 @@ public class MultiplayerGame extends Pane {
     /**
      * Constructor for the game class
      * @param gameLevel game level
+     * @param role role of the user
      */
     public MultiplayerGame(int gameLevel, int role) {
         // set game level
@@ -147,8 +148,8 @@ public class MultiplayerGame extends Pane {
      */
     private void initPlayer(){
         // create new player and pair object
-        this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,100);
-        this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.GREEN,100);
+        this.player = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.BLUE,5);
+        this.pair = new Player(W/2 - S/2,H/ 10 * 9,2*S,3*S, Color.GREEN,5);
 
         // show the new player and pair object on the screen
         this.getChildren().add(player);

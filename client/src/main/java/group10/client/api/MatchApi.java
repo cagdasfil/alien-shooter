@@ -67,6 +67,7 @@ public class MatchApi {
     /**
      * This method gets first Match entry in the table
      * @return match as a Match object
+     * @throws JsonProcessingException Json processing exception
      */
     public static Match getMatch() throws JsonProcessingException {
         String s = restTemplate.getForObject(apiAddress + "/matches" , String.class);

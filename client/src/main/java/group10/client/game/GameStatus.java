@@ -44,6 +44,7 @@ public class GameStatus extends HBox {
      * @param hitBoss total number of kill for the player
      * @param time remaining time to game end
      * @param remainingHealth remaining health of the player
+     * @param isMultiPlayerLevel flag for checking multiplayer level
      */
     public GameStatus(int hitBoss, int time, int remainingHealth,boolean isMultiPlayerLevel) {
         // set labels

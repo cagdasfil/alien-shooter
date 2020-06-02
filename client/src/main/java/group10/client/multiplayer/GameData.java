@@ -58,7 +58,7 @@ public class GameData {
 
     /**
      * Getter method to be able to access x coordinate of the player.
-     * @return
+     * @return x coordinate of the player
      */
     public Double getPlayerX() {
         return playerX;
@@ -67,7 +67,7 @@ public class GameData {
 
     /**
      * Getter method to be able to access y coordinate of the player
-     * @return
+     * @return y coordinate of the player
      */
     public Double getPlayerY() {
         return playerY;
@@ -76,7 +76,7 @@ public class GameData {
 
     /**
      * Getter method to be able to access number of hits for the player
-     * @return
+     * @return total number of boss hits for the player
      */
     public Integer getBossHit() {
         return bossHit;
@@ -85,7 +85,7 @@ public class GameData {
 
     /**
      * Getter method to be able to access remaining health of the player
-     * @return
+     * @return remaining health of the player
      */
     public Integer getPlayerHealth() {
         return playerHealth;
@@ -93,7 +93,7 @@ public class GameData {
 
     /**
      * Getter method to be able to understand game is finished or not
-     * @return
+     * @return game is finished or not
      */
     public Boolean getGameFinished() {
         return isGameFinished;
@@ -102,7 +102,7 @@ public class GameData {
 
     /**
      * Getter method to be able to access x coordinate of the boss.
-     * @return
+     * @return x coordinate of the boss
      */
     public Double getBossX() {
         return bossX;
