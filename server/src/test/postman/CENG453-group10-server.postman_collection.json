@@ -372,6 +372,135 @@
 			],
 			"description": "Score related requests.",
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Match",
+			"item": [
+				{
+					"name": "Get all matches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/matches\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"matches\n"
+							]
+						},
+						"description": "Gets all matches in the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Create new match",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"serverUsername\":\"player1\",\n    \"serverIP\": \"1.1.1.1\",\n    \"serverPort\": \"1\",\n    \"serverStatus\": \"wait\",\n    \"clientUsername\": \"player2\",\n    \"clientStatus\": \"wait\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/add_match\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"add_match\n"
+							]
+						},
+						"description": "Creates new match with the entered values."
+					},
+					"response": []
+				},
+				{
+					"name": "Update a match",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"serverUsername\":\"player1\",\n    \"serverIP\": \"1.1.1.1\",\n    \"serverPort\": \"1\",\n    \"serverStatus\": \"wait\",\n    \"clientUsername\": \"player2\",\n    \"clientStatus\": \"ready\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/matches/1\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"matches",
+								"1\n"
+							]
+						},
+						"description": "Update the match with the specified id value."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete specified match",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/matches/1\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"matches",
+								"1\n"
+							]
+						},
+						"description": "Deletes the match with the sepecified id."
+					},
+					"response": []
+				}
+			],
+			"description": "Match related requests.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f69825d4-3d3c-4e50-8675-97de524f3589",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "84186635-aa09-4483-9ad0-b9c30242224f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
