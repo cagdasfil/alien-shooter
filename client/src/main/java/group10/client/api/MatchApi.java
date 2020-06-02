@@ -17,13 +17,17 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * This class runs user related HTTP methods.
+ * This class runs match related HTTP methods.
  */
 public class MatchApi {
 
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final String apiAddress = LoginController.apiAddress;
 
+    /**
+     * This method adds a match with user's configuration
+     * @return response of the HTTP method as JSONObject
+     */
     public static ResponseEntity<JSONObject> addMatch(){
 
         String serverIP = "";
@@ -60,6 +64,10 @@ public class MatchApi {
 
     }
 
+    /**
+     * This method gets first Match entry in the table
+     * @return match as a Match object
+     */
     public static Match getMatch() throws JsonProcessingException {
         String s = restTemplate.getForObject(apiAddress + "/matches" , String.class);
         ObjectMapper mapper = new ObjectMapper();
@@ -72,6 +80,10 @@ public class MatchApi {
         }
     }
 
+    /**
+     * This method updates the match in database with given match object
+     * @param match match object to update database with
+     */
     public static void updateMatch(Match match){
         String jsonString = new JSONObject()
                 .put("serverUsername", match.getServerUsername())
@@ -92,6 +104,10 @@ public class MatchApi {
                 JSONObject.class);
     }
 
+    /**
+     * This method deletes the match in database with given match object id
+     * @param match match object to delete
+     */
     public static void deleteMatch(Match match){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
