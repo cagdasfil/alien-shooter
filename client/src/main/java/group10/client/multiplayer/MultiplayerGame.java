@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import group10.client.api.ScoreApi;
+import group10.client.controller.WaitingRoomController;
 import group10.client.game.*;
 import group10.client.model.server.Score;
 import javafx.animation.KeyFrame;
@@ -517,7 +518,6 @@ public class MultiplayerGame extends Pane {
             }
         }
 
-
         /* calculate scores*/
         int mostHitBonus = 1000;
         int playerScore = player.getHitBoss() * 100;
@@ -535,30 +535,6 @@ public class MultiplayerGame extends Pane {
         ScoreApi.saveScore(playerScore+playerBonus);
 
         showScores(playerScore, playerBonus, pairScore, pairBonus);
-        /*
-        if(isServerSide){
-            if(player.getHitBoss() > pair.getHitBoss()){
-                playerBonus = mostHitBonus;
-            }
-            else{
-                pairBonus = mostHitBonus;
-            }
-            ScoreApi.saveScore(playerScore+playerBonus);
-            System.out.println("Player score :" + (playerScore+playerBonus));
-        }
-        else{
-            if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
-                playerBonus = mostHitBonus;
-            }
-            else{
-                pairBonus = mostHitBonus;
-            }
-            ScoreApi.saveScore(pairScore+pairBonus);
-            System.out.println("Pair score :" + (pairScore+pairBonus));
-        }
-        showScores(playerScore, playerBonus, pairScore, pairBonus);
-
-         */
     }
 
     void initServerSocket(){
@@ -630,7 +606,9 @@ public class MultiplayerGame extends Pane {
         this.client.start();
 
         try {
-            this.client.connect(5000, InetAddress.getLocalHost().getHostName(),9876);
+            this.client.connect(5000,
+                    WaitingRoomController.match.getServerIP(),
+                    Integer.parseInt(WaitingRoomController.match.getServerPort()));
         } catch (IOException e) {
             e.printStackTrace();
         }

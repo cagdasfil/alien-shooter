@@ -41,7 +41,7 @@ public class WaitingRoomController implements Initializable {
     @FXML public Button playButton;
     @FXML public ProgressIndicator progress;
 
-    Match match;
+    public static Match match;
 
     /**
      * Initialization function of the controller.
@@ -57,9 +57,7 @@ public class WaitingRoomController implements Initializable {
             e.printStackTrace();
         }
         if(match == null){ // Server
-            MatchApi.addMatch(
-                    LoginController.user.getUsername()
-            );
+            MatchApi.addMatch();
             Thread t = new Thread(() -> {
                 do {
                     try {

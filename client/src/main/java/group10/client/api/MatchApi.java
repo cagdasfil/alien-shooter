@@ -10,6 +10,10 @@ import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -20,12 +24,27 @@ public class MatchApi {
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final String apiAddress = LoginController.apiAddress;
 
-    public static ResponseEntity<JSONObject> addMatch(String username){
+    public static ResponseEntity<JSONObject> addMatch(){
+
+        String serverIP = "";
+        try {
+            URL whatismyip = new URL("http://checkip.amazonaws.com");
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    whatismyip.openStream()));
+            serverIP = in.readLine(); //you get the IP as a String
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String username = LoginController.user.getUsername();
+        String serverPort = "9876";
+
 
         String jsonString = new JSONObject()
                 .put("serverUsername", username)
-                .put("serverIP", "")
-                .put("serverPort", "")
+                .put("serverIP", serverIP)
+                .put("serverPort", serverPort)
                 .put("serverStatus", "wait")
                 .put("clientUsername", "")
                 .put("clientIP", "")
