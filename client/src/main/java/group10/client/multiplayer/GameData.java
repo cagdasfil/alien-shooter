@@ -16,6 +16,9 @@ public class GameData {
     //remaining health of the player
     Integer playerHealth;
 
+    // remaining health of the boss
+    Integer bossHealth;
+
     // flag whether game is finished or not
     Boolean isGameFinished;
 
@@ -41,14 +44,16 @@ public class GameData {
      * @param bossX x coordinate of the boss
      * @param bossHit number of boss hits
      * @param playerHealth remaining health of the player
+     * @param bossHealth remaining health of the boss
      */
 
-    public GameData(Double playerX, Double playerY,Double bossX, Integer bossHit, Integer playerHealth) {
+    public GameData(Double playerX, Double playerY,Double bossX, Integer bossHit, Integer playerHealth, Integer bossHealth) {
         this.playerX = playerX;
         this.playerY = playerY;
         this.bossX = bossX;
         this.bossHit = bossHit;
         this.playerHealth = playerHealth;
+        this.bossHealth = bossHealth;
         this.isGameFinished = false;
     }
 
@@ -106,5 +111,14 @@ public class GameData {
      */
     public Double getBossX() {
         return bossX;
+    }
+
+    /**
+     * Getter method to be able to access remaining health of the boss
+     * @return remaining health of the boss
+     */
+
+    public Integer getBossHealth() {
+        return bossHealth;
     }
 }

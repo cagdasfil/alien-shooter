@@ -522,11 +522,11 @@ public class MultiplayerGame extends Pane {
         // calculate base scores of the player and pair
         int playerScore = player.getHitBoss() * 100;
         int playerBonus = 0;
-        int pairScore = (bossHealth - player.getHitBoss()) * 100;
+        int pairScore = (boss.getHealth() - player.getHitBoss()) * 100;
         int pairBonus = 0;
 
         // set mostHitBonus(1000) to the user that have most hits.
-        if(player.getHitBoss() > (bossHealth - player.getHitBoss())){
+        if(player.getHitBoss() > (boss.getHealth() - player.getHitBoss())){
             playerBonus = mostHitBonus;
         }
         else{
@@ -606,6 +606,7 @@ public class MultiplayerGame extends Pane {
 
                                 player.setHitBoss(gameData.getBossHit());
                                 player.setHealth(gameData.getPlayerHealth());
+                                boss.setHealth(gameData.getBossHealth());
                                 gameStatus.setHitBoss(gameData.getBossHit());
                                 gameStatus.setRemainingHealth(gameData.getPlayerHealth());
                             }
@@ -641,8 +642,9 @@ public class MultiplayerGame extends Pane {
 
                 Integer pairBossHits = pair.getHitBoss();
                 Integer pairHealth = pair.getHealth();
+                Integer bossHealth = boss.getHealth();
 
-                GameData gameData = new GameData(playerX,playerY,bossX,pairBossHits,pairHealth);
+                GameData gameData = new GameData(playerX,playerY,bossX,pairBossHits,pairHealth,bossHealth);
                 this.server.sendToAllTCP(gameData);
             }
             catch (Exception e){
